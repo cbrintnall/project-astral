@@ -10,9 +10,9 @@ uniform vec4 fill_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
 
 void fragment() {
 	// Calculate world position
-	vec3 world_pos = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	vec3 world_pos = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz+(vec3(0.5, 0.0, 0.5));
   float n = texture(noise, (world_pos.xz*0.05)+vec2(TIME*0.01, 0.0)).x;
-  float n2 = texture(noise, (world_pos.xz*0.05)+vec2(TIME*0.03, 0.0)).x;
+  float n2 = texture(noise, ((world_pos.xz+vec2(15.0))*0.1)+vec2(TIME*0.05, 0.0)).x;
 
 	// Apply grid effect
   float step_range = 0.5;

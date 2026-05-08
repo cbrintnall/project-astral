@@ -1,0 +1,14 @@
+[gd_resource type="Theme" format=3 uid="uid://dlolu7lgngfwn"]
+
+[ext_resource type="Texture2D" uid="uid://btssmktuu8u36" path="res://assets/ui/nine-patch-right-corners.png" id="1_nixot"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_frq1j"]
+texture = ExtResource("1_nixot")
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+region_rect = Rect2(0, 0, 1024, 1024)
+
+[resource]
+PanelRightCorners/base_type = &"Panel"
+PanelRightCorners/styles/panel = SubResource("StyleBoxTexture_frq1j")

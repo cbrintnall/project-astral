@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cr31ui8b680hb"]
+
+[ext_resource type="Script" uid="uid://cvepy4rsfup2v" path="res://scenes/tile.gd" id="1_bfaab"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_feb5d"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fc0e3"]
+
+[node name="Tile" type="StaticBody3D" unique_id=1995656874]
+transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.99999994, 0, 0, 0)
+script = ExtResource("1_bfaab")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=471219191]
+layers = 2
+mesh = SubResource("BoxMesh_feb5d")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1324696323]
+shape = SubResource("BoxShape3D_fc0e3")

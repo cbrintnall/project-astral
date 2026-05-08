@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://8sxx0hpgqic1"]
 
 [ext_resource type="Shader" uid="uid://bwvtcdhd0hfny" path="res://materials/shaders/grid_shader.gdshader" id="1_80nbo"]
+[ext_resource type="Theme" uid="uid://dlolu7lgngfwn" path="res://default.tres" id="1_e2o6t"]
+[ext_resource type="Script" uid="uid://crdioq146uotd" path="res://scenes/game_manager.gd" id="1_fc0e3"]
+[ext_resource type="Script" uid="uid://dr5n0lkg56otf" path="res://scenes/grid_manager.gd" id="2_feb5d"]
+[ext_resource type="PackedScene" uid="uid://cr31ui8b680hb" path="res://scenes/board/tile.tscn" id="6_ryrav"]
 
 [sub_resource type="Environment" id="Environment_mwb40"]
 ssao_enabled = true
@@ -18,7 +22,7 @@ size = Vector2(25000, 25000)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_80nbo"]
 noise_type = 2
-frequency = 0.0046
+frequency = 0.0009
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_80nbo"]
 noise = SubResource("FastNoiseLite_80nbo")
@@ -29,8 +33,8 @@ render_priority = 0
 shader = ExtResource("1_80nbo")
 shader_parameter/noise = SubResource("NoiseTexture2D_80nbo")
 shader_parameter/line_width = 0.010000000475
-shader_parameter/grid_size = 5.0000002375
-shader_parameter/line_color = Color(1, 1, 1, 1)
+shader_parameter/grid_size = 1.0000000475
+shader_parameter/line_color = Color(0.9843137, 0.9607843, 0.9372549, 1)
 shader_parameter/fill_color = Color(0, 0, 0, 0)
 
 [sub_resource type="QuadMesh" id="QuadMesh_mwb40"]
@@ -39,10 +43,38 @@ size = Vector2(25000, 25000)
 
 [node name="Game" type="Node3D" unique_id=309939235]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1757800547]
-transform = Transform3D(1, 0, 0, 0, 0.23705596, 0.971496, 0, -0.971496, 0.23705596, 0, 18.659317, 0)
+[node name="SubViewport" type="SubViewport" parent="." unique_id=1925063881]
+
+[node name="GameManager" type="Node" parent="." unique_id=1080588153 node_paths=PackedStringArray("camera")]
+script = ExtResource("1_fc0e3")
+camera = NodePath("../Camera3D")
 
 [node name="GridManager" type="Node" parent="." unique_id=735757972]
+script = ExtResource("2_feb5d")
+size = Vector2i(50, 50)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=946420198]
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer" unique_id=1315741077]
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="CanvasLayer/MarginContainer" unique_id=1627317638]
+self_modulate = Color(0.28627452, 0.3019608, 0.49411765, 0.6745098)
+layout_mode = 2
+theme = ExtResource("1_e2o6t")
+theme_type_variation = &"PanelRightCorners"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MarginContainer" unique_id=403856959]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 64
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1757800547]
+transform = Transform3D(1, 0, 0, 0, 0.23705596, 0.971496, 0, -0.971496, 0.23705596, 0, 18.659317, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=422605085]
 environment = SubResource("Environment_mwb40")
@@ -56,4 +88,31 @@ transform = Transform3D(1, 0, 0, 0, -5.9604645e-08, 1, 0, -1, -5.9604645e-08, 0,
 mesh = SubResource("QuadMesh_mwb40")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=517060095]
-transform = Transform3D(0.9131409, -0.3531049, 0.20369245, -7.450581e-09, 0.49968213, 0.8662089, -0.40764406, -0.7909707, 0.45628017, -0.9910228, 14.6787195, 8.2953)
+transform = Transform3D(0.9131409, -0.3531049, 0.20369245, -7.450581e-09, 0.49968213, 0.8662089, -0.40764406, -0.7909707, 0.45628017, -3.4353323, 4.284213, 2.8199377)
+cull_mask = 1048573
+
+[node name="TileSelectCamera" type="Camera3D" parent="Camera3D" unique_id=890270172]
+transform = Transform3D(1, 0, 1.4901161e-08, 0, 1, 0, 1.4901161e-08, 0, 0.99999994, 0, 0, 0)
+cull_mask = 2
+projection = 1
+size = 2.882
+
+[node name="TileScalar" type="Node3D" parent="Camera3D/TileSelectCamera" unique_id=1587664697]
+transform = Transform3D(0.49999994, -1.4901161e-08, 0, 0, 0.49999994, 2.9802322e-08, 7.450581e-09, 0, 0.49999994, 0, -0.5, -0.99999976)
+
+[node name="Marker3D" type="Marker3D" parent="Camera3D/TileSelectCamera/TileScalar" unique_id=1351051179]
+transform = Transform3D(1, -2.9802322e-08, 0, 0, 1, 2.9802322e-08, 1.4901161e-08, 0, 0.9999999, 0, -0.6, -2)
+
+[node name="Tile2" parent="Camera3D/TileSelectCamera/TileScalar/Marker3D" unique_id=1995656874 instance=ExtResource("6_ryrav")]
+transform = Transform3D(1.0000001, -2.9802322e-08, 0, 2.9802322e-08, 0.9999999, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Marker3D2" type="Marker3D" parent="Camera3D/TileSelectCamera/TileScalar" unique_id=401615941]
+transform = Transform3D(1, -2.9802322e-08, 0, 0, 1, 2.9802322e-08, 1.4901161e-08, 0, 0.9999999, 2, -0.6, -2)
+
+[node name="Tile2" parent="Camera3D/TileSelectCamera/TileScalar/Marker3D2" unique_id=164865293 instance=ExtResource("6_ryrav")]
+transform = Transform3D(1.0000001, -2.9802322e-08, 0, 2.9802322e-08, 0.9999999, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Marker3D3" type="Marker3D" parent="Camera3D/TileSelectCamera/TileScalar" unique_id=80128085]
+transform = Transform3D(1, -2.9802322e-08, 0, 0, 1, 2.9802322e-08, 1.4901161e-08, 0, 0.9999999, -2, -0.6, -2)
+
+[node name="Tile" parent="Camera3D/TileSelectCamera/TileScalar/Marker3D3" unique_id=1184711591 instance=ExtResource("6_ryrav")]
