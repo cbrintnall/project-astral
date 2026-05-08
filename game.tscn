@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://8sxx0hpgqic1"]
+[gd_scene format=4 uid="uid://8sxx0hpgqic1"]
 
 [ext_resource type="Shader" uid="uid://bwvtcdhd0hfny" path="res://materials/shaders/grid_shader.gdshader" id="1_80nbo"]
 [ext_resource type="Theme" uid="uid://dlolu7lgngfwn" path="res://default.tres" id="1_e2o6t"]
@@ -7,23 +7,46 @@
 [ext_resource type="Script" uid="uid://chs7hvvvqn863" path="res://scenes/gridcast.gd" id="3_j5wjh"]
 [ext_resource type="Script" uid="uid://blphjbp21vxu2" path="res://scenes/music_manager.gd" id="3_ryrav"]
 [ext_resource type="AudioStream" uid="uid://dh2020w12fpnh" path="res://audio/music/Underwater Passage (Lake Lamode) - Super Mario Odyssey OST [WUG0PNB6pMo].mp3" id="4_eow3j"]
+[ext_resource type="Material" uid="uid://08ngit6xcjnn" path="res://materials/material_grid_selection_box.tres" id="4_vef74"]
 [ext_resource type="PackedScene" uid="uid://cr31ui8b680hb" path="res://scenes/board/tile.tscn" id="6_ryrav"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_eow3j"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_tkr8f"]
+_surfaces = [{
+"aabb": AABB(-0.6835235, 0, -0.6835235, 1.367047, 0.97200006, 1.367047),
+"format": 34896613377,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAAAEAAEAAgADAAUABgAEAAAABQADAAcABgAHAAQABQAHAAYA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/SQAAP0kAAD/////AAAAAAHbAAD9JAAA////////AAAAAP//AAAAAAHbAAAB2wAA/SQAAAHbAAAAAP////8AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_6ucq4"]
+resource_name = "vfxSelectionBox_Plane"
+_surfaces = [{
+"aabb": AABB(-0.6835235, 0, -0.6835235, 1.367047, 0.97200006, 1.367047),
+"attribute_data": PackedByteArray("AAD/////AAD/////AAAAAAAA/////wAA/////wAAAAAAAP////8AAP////8AAAAAAAD/////AAD/////AAAAAA=="),
+"format": 34896613399,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0A"),
+"material": ExtResource("4_vef74"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 16,
+"vertex_data": PackedByteArray("/SQAAP0kKoj/////AAAqiAHbAAD9JCqIAAD//wAAKogB2wAAAdv//wAA/////////SQAAAHb/////////////wHbAAD9JGfA////////Z8AB2wAAAdtnwP////8AAGfA/SQAAAHbZ8AAAP//AABnwP0kAAD9JGfAAAD/////Z8D///9/////f////3////9//39N9P9/TfT/f030/39N9LaKkOq2ipDqtoqQ6raKkOptlbcKbZW3Cm2VtwptlbcK")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_tkr8f")
 
 [sub_resource type="Environment" id="Environment_mwb40"]
 ssao_enabled = true
 glow_enabled = true
 glow_normalized = true
 glow_bloom = 0.99
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mwb40"]
-albedo_color = Color(0.15294118, 0.15294118, 0.26666668, 1)
-disable_receive_shadows = true
-
-[sub_resource type="QuadMesh" id="QuadMesh_80nbo"]
-material = SubResource("StandardMaterial3D_mwb40")
-size = Vector2(25000, 25000)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_80nbo"]
 noise_type = 2
@@ -46,6 +69,14 @@ shader_parameter/fill_color = Color(0, 0, 0, 0)
 material = SubResource("ShaderMaterial_e2o6t")
 size = Vector2(25000, 25000)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mwb40"]
+albedo_color = Color(0.15294118, 0.15294118, 0.26666668, 1)
+disable_receive_shadows = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_80nbo"]
+material = SubResource("StandardMaterial3D_mwb40")
+size = Vector2(25000, 25000)
+
 [node name="Game" type="Node3D" unique_id=309939235]
 
 [node name="SubViewport" type="SubViewport" parent="." unique_id=1925063881]
@@ -57,10 +88,15 @@ selection_svp = NodePath("../CanvasLayer2/SubViewportContainer/SubViewport")
 
 [node name="GridManager" type="Node" parent="." unique_id=735757972]
 script = ExtResource("2_feb5d")
-size = Vector2i(50, 50)
 
 [node name="Gridcast" type="Node3D" parent="GridManager" unique_id=1771723510]
 script = ExtResource("3_j5wjh")
+
+[node name="GridMap" type="GridMap" parent="GridManager" unique_id=243945518]
+cell_size = Vector3(1, 1, 1)
+cell_center_x = false
+cell_center_y = false
+cell_center_z = false
 
 [node name="StaticBody3D" type="StaticBody3D" parent="GridManager" unique_id=860103220]
 collision_layer = 2147483648
@@ -68,6 +104,13 @@ collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GridManager/StaticBody3D" unique_id=156332709]
 shape = SubResource("WorldBoundaryShape3D_eow3j")
+
+[node name="SelectionBox" type="Node3D" parent="GridManager" unique_id=266429057]
+
+[node name="vfxSelectionBox" type="Node3D" parent="GridManager/SelectionBox" unique_id=1874730308]
+
+[node name="SelectionBox" type="MeshInstance3D" parent="GridManager/SelectionBox/vfxSelectionBox" unique_id=1626235669]
+mesh = SubResource("ArrayMesh_6ucq4")
 
 [node name="MusicManager" type="Node" parent="." unique_id=1434635219 node_paths=PackedStringArray("player")]
 script = ExtResource("3_ryrav")
@@ -104,13 +147,13 @@ layers = 3
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=422605085]
 environment = SubResource("Environment_mwb40")
 
-[node name="BackgroundMesh" type="MeshInstance3D" parent="." unique_id=1097233135]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
-mesh = SubResource("QuadMesh_80nbo")
-
 [node name="GridVisual" type="MeshInstance3D" parent="." unique_id=1358639419]
-transform = Transform3D(1, 0, 0, 0, -5.9604645e-08, 1, 0, -1, -5.9604645e-08, 0, 0.1713295, 0)
+transform = Transform3D(1, 0, 0, 0, -5.9604645e-08, 1, 0, -1, -5.9604645e-08, 0, 0, 0)
 mesh = SubResource("QuadMesh_mwb40")
+
+[node name="BackgroundMesh" type="MeshInstance3D" parent="GridVisual" unique_id=1097233135]
+transform = Transform3D(1, 0, 0, 0, 1, -1.5893256e-08, 0, 1.5893256e-08, 1, 0, 1.5893257e-09, -0.1)
+mesh = SubResource("QuadMesh_80nbo")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=517060095]
 transform = Transform3D(0.9131409, -0.3531049, 0.20369245, -7.450581e-09, 0.49968213, 0.8662089, -0.40764406, -0.7909707, 0.45628017, -3.4353323, 4.284213, 2.8199377)

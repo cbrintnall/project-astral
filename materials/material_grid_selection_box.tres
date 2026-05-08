@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://08ngit6xcjnn"]
+
+[ext_resource type="Shader" uid="uid://b2wjybdgpcsp8" path="res://materials/shaders/grid_selection_box.gdshader" id="1_p2xhe"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_p2xhe"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xybhg"]
+noise = SubResource("FastNoiseLite_p2xhe")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_p2xhe")
+shader_parameter/noise = SubResource("NoiseTexture2D_xybhg")

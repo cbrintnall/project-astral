@@ -8,11 +8,15 @@ class_name Tile
 
 var _state := CallableStateMachine.new()
 var _mouse_entered := false
+var _selection: Selection
 
 func unselect():
   if _state.current == "placing":
     _state.current = "selecting"
     AudioManager3d.play({ "stream": preload("res://audio/Light Drone Sound (button hover) 9.wav"), "pitch_additional": -0.1 })
+    if _selection:
+      _selection.cancel()
+      _selection = null
 
 func _ready() -> void:
   add_child(_state)
@@ -20,6 +24,7 @@ func _ready() -> void:
   
   _state.register("selecting", _selecting)
   _state.register("placing", _placing)
+  _state.register("placed", _placed)
 
 func _selecting(machine: CallableStateMachine, delta: float):
   mesh.rotate(rotation_axis, delta)
@@ -28,6 +33,9 @@ func _selecting(machine: CallableStateMachine, delta: float):
 func _placing(machine: CallableStateMachine, delta: float):
   mesh.rotate(rotation_axis, delta*0.25)
   position = position.lerp(Vector3.UP, delta*10.0)
+
+func _placed(machine: CallableStateMachine, delta: float):
+  mesh.rotation = Vector3.ZERO
 
 func _mouse_enter() -> void:
   _mouse_entered = true
@@ -43,18 +51,29 @@ func _mouse_exit() -> void:
 func _on_select():
   match _state.current:
     "selecting":
-      stretcher.punch(3.0, 5.0)
-      for tile: Tile in get_tree().get_nodes_in_group("tile"):
-        tile.unselect()
-      _state.current = "placing"
-      AudioManager3d.play({ "stream": preload("res://audio/Light Drone Sound (button hover) 9.wav") })
+      var selection := Selection.new()
+      selection.started.connect(
+        func():
+          stretcher.punch(3.0, 5.0)
+          _state.current = "placing"
+          AudioManager3d.play({ "stream": preload("res://audio/Light Drone Sound (button hover) 9.wav") })
+          _selection = selection
+      )
+      selection.canceled.connect(unselect)
+      selection.on_choose = _try_place_self.bind(selection)
+
+      GridManager.inst.try_start_selection(selection)
     "placing":
       unselect()
+      
+func _try_place_self(selection: Selection):
+  if GridManager.inst.try_place_tile(self, GridManager.inst.grid_position_3d):
+    _state.current = "placed"
+    mesh.layers = 1
+    rotation = Vector3.ZERO
+    selection.cancel()
 
 func _unhandled_input(event: InputEvent) -> void:
-  if _state.current == "placing" and event.is_action_pressed("ui_cancel"):
-    unselect()
-  
   if not _mouse_entered: return
   
   if event is InputEventMouseButton:
