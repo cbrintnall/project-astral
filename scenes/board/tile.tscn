@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cr31ui8b680hb"]
 
 [ext_resource type="Script" uid="uid://cvepy4rsfup2v" path="res://scenes/tile.gd" id="1_bfaab"]
+[ext_resource type="Script" uid="uid://b140lw26qadyg" path="res://otterlib/stretcher3d.gd" id="2_kx4x0"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_feb5d"]
 
@@ -10,7 +11,11 @@
 transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.99999994, 0, 0, 0)
 script = ExtResource("1_bfaab")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=471219191]
+[node name="Stretcher3D" type="Node3D" parent="." unique_id=928591441]
+script = ExtResource("2_kx4x0")
+metadata/_custom_type_script = "uid://b140lw26qadyg"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Stretcher3D" unique_id=471219191]
 layers = 2
 mesh = SubResource("BoxMesh_feb5d")
 

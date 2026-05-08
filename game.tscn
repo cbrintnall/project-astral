@@ -4,7 +4,12 @@
 [ext_resource type="Theme" uid="uid://dlolu7lgngfwn" path="res://default.tres" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://crdioq146uotd" path="res://scenes/game_manager.gd" id="1_fc0e3"]
 [ext_resource type="Script" uid="uid://dr5n0lkg56otf" path="res://scenes/grid_manager.gd" id="2_feb5d"]
+[ext_resource type="Script" uid="uid://chs7hvvvqn863" path="res://scenes/gridcast.gd" id="3_j5wjh"]
+[ext_resource type="Script" uid="uid://blphjbp21vxu2" path="res://scenes/music_manager.gd" id="3_ryrav"]
+[ext_resource type="AudioStream" uid="uid://dh2020w12fpnh" path="res://audio/music/Underwater Passage (Lake Lamode) - Super Mario Odyssey OST [WUG0PNB6pMo].mp3" id="4_eow3j"]
 [ext_resource type="PackedScene" uid="uid://cr31ui8b680hb" path="res://scenes/board/tile.tscn" id="6_ryrav"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_eow3j"]
 
 [sub_resource type="Environment" id="Environment_mwb40"]
 ssao_enabled = true
@@ -45,13 +50,32 @@ size = Vector2(25000, 25000)
 
 [node name="SubViewport" type="SubViewport" parent="." unique_id=1925063881]
 
-[node name="GameManager" type="Node" parent="." unique_id=1080588153 node_paths=PackedStringArray("camera")]
+[node name="GameManager" type="Node" parent="." unique_id=1080588153 node_paths=PackedStringArray("camera", "selection_svp")]
 script = ExtResource("1_fc0e3")
 camera = NodePath("../Camera3D")
+selection_svp = NodePath("../CanvasLayer2/SubViewportContainer/SubViewport")
 
 [node name="GridManager" type="Node" parent="." unique_id=735757972]
 script = ExtResource("2_feb5d")
 size = Vector2i(50, 50)
+
+[node name="Gridcast" type="Node3D" parent="GridManager" unique_id=1771723510]
+script = ExtResource("3_j5wjh")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="GridManager" unique_id=860103220]
+collision_layer = 2147483648
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GridManager/StaticBody3D" unique_id=156332709]
+shape = SubResource("WorldBoundaryShape3D_eow3j")
+
+[node name="MusicManager" type="Node" parent="." unique_id=1434635219 node_paths=PackedStringArray("player")]
+script = ExtResource("3_ryrav")
+player = NodePath("AudioStreamPlayer")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MusicManager" unique_id=869604729]
+stream = ExtResource("4_eow3j")
+volume_db = -30.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=946420198]
 
@@ -75,6 +99,7 @@ theme_override_constants/margin_bottom = 64
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1757800547]
 transform = Transform3D(1, 0, 0, 0, 0.23705596, 0.971496, 0, -0.971496, 0.23705596, 0, 18.659317, 0)
+layers = 3
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=422605085]
 environment = SubResource("Environment_mwb40")
@@ -91,28 +116,45 @@ mesh = SubResource("QuadMesh_mwb40")
 transform = Transform3D(0.9131409, -0.3531049, 0.20369245, -7.450581e-09, 0.49968213, 0.8662089, -0.40764406, -0.7909707, 0.45628017, -3.4353323, 4.284213, 2.8199377)
 cull_mask = 1048573
 
-[node name="TileSelectCamera" type="Camera3D" parent="Camera3D" unique_id=890270172]
-transform = Transform3D(1, 0, 1.4901161e-08, 0, 1, 0, 1.4901161e-08, 0, 0.99999994, 0, 0, 0)
+[node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=725824728]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer2" unique_id=2045874979]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="CanvasLayer2/SubViewportContainer" unique_id=458719368]
+transparent_bg = true
+handle_input_locally = false
+canvas_cull_mask = 4293918722
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="TileSelectCamera" type="Camera3D" parent="CanvasLayer2/SubViewportContainer/SubViewport" unique_id=890270172]
+transform = Transform3D(0.9131409, -0.3531049, 0.20369248, 5.456938e-09, 0.49968216, 0.86620885, -0.40764406, -0.79097074, 0.45628023, -3.4353323, 4.284213, 2.8199377)
 cull_mask = 2
 projection = 1
 size = 2.882
 
-[node name="TileScalar" type="Node3D" parent="Camera3D/TileSelectCamera" unique_id=1587664697]
+[node name="TileScalar" type="Node3D" parent="CanvasLayer2/SubViewportContainer/SubViewport/TileSelectCamera" unique_id=1587664697]
 transform = Transform3D(0.49999994, -1.4901161e-08, 0, 0, 0.49999994, 2.9802322e-08, 7.450581e-09, 0, 0.49999994, 0, -0.5, -0.99999976)
 
-[node name="Marker3D" type="Marker3D" parent="Camera3D/TileSelectCamera/TileScalar" unique_id=1351051179]
+[node name="Marker3D" type="Marker3D" parent="CanvasLayer2/SubViewportContainer/SubViewport/TileSelectCamera/TileScalar" unique_id=1351051179]
 transform = Transform3D(1, -2.9802322e-08, 0, 0, 1, 2.9802322e-08, 1.4901161e-08, 0, 0.9999999, 0, -0.6, -2)
 
-[node name="Tile2" parent="Camera3D/TileSelectCamera/TileScalar/Marker3D" unique_id=1995656874 instance=ExtResource("6_ryrav")]
+[node name="Tile2" parent="CanvasLayer2/SubViewportContainer/SubViewport/TileSelectCamera/TileScalar/Marker3D" unique_id=1995656874 instance=ExtResource("6_ryrav")]
 transform = Transform3D(1.0000001, -2.9802322e-08, 0, 2.9802322e-08, 0.9999999, 0, 0, 0, 1, 0, 0, 0)
 
-[node name="Marker3D2" type="Marker3D" parent="Camera3D/TileSelectCamera/TileScalar" unique_id=401615941]
+[node name="Marker3D2" type="Marker3D" parent="CanvasLayer2/SubViewportContainer/SubViewport/TileSelectCamera/TileScalar" unique_id=401615941]
 transform = Transform3D(1, -2.9802322e-08, 0, 0, 1, 2.9802322e-08, 1.4901161e-08, 0, 0.9999999, 2, -0.6, -2)
 
-[node name="Tile2" parent="Camera3D/TileSelectCamera/TileScalar/Marker3D2" unique_id=164865293 instance=ExtResource("6_ryrav")]
+[node name="Tile2" parent="CanvasLayer2/SubViewportContainer/SubViewport/TileSelectCamera/TileScalar/Marker3D2" unique_id=164865293 instance=ExtResource("6_ryrav")]
 transform = Transform3D(1.0000001, -2.9802322e-08, 0, 2.9802322e-08, 0.9999999, 0, 0, 0, 1, 0, 0, 0)
 
-[node name="Marker3D3" type="Marker3D" parent="Camera3D/TileSelectCamera/TileScalar" unique_id=80128085]
+[node name="Marker3D3" type="Marker3D" parent="CanvasLayer2/SubViewportContainer/SubViewport/TileSelectCamera/TileScalar" unique_id=80128085]
 transform = Transform3D(1, -2.9802322e-08, 0, 0, 1, 2.9802322e-08, 1.4901161e-08, 0, 0.9999999, -2, -0.6, -2)
 
-[node name="Tile" parent="Camera3D/TileSelectCamera/TileScalar/Marker3D3" unique_id=1184711591 instance=ExtResource("6_ryrav")]
+[node name="Tile" parent="CanvasLayer2/SubViewportContainer/SubViewport/TileSelectCamera/TileScalar/Marker3D3" unique_id=1184711591 instance=ExtResource("6_ryrav")]
