@@ -95,6 +95,9 @@ disable_receive_shadows = true
 material = SubResource("StandardMaterial3D_mwb40")
 size = Vector2(25000, 25000)
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_iotsf"]
+frequency = 0.0818
+
 [node name="Game" type="Node3D" unique_id=309939235]
 
 [node name="TileDisplayViewport" type="CanvasLayer" parent="." unique_id=725824728]
@@ -233,6 +236,7 @@ mesh = SubResource("QuadMesh_80nbo")
 
 [node name="CameraArm" type="Node3D" parent="." unique_id=515860464]
 script = ExtResource("11_mfdv2")
+noise = SubResource("FastNoiseLite_iotsf")
 
 [node name="Camera3D" type="Camera3D" parent="CameraArm" unique_id=517060095]
 transform = Transform3D(1, 0, 0, 0, 0.5652198, 0.8249403, 0, -0.8249403, 0.5652198, 0, 4.9, 3.1)

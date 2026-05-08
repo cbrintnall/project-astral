@@ -2,6 +2,7 @@ shader_type spatial;
 render_mode cull_disabled;
 
 uniform sampler2D noise: repeat_enable;
+uniform vec3 clr: source_color;
 
 void fragment() {
   float n = texture(noise, UV + vec2(0.0, TIME*0.2)).x;
@@ -11,6 +12,6 @@ void fragment() {
   float snapped = step(n, 0.5);
   float snapped3 = step(n3, 0.5);
   
-  ALBEDO = vec3(snapped3)*max(n,0.5)*250.0;
+  ALBEDO = vec3(snapped3)*clr*max(n,0.5)*250.0;
   ALPHA = pow(UV.y,3.0)*snapped*sin(n3);
 }

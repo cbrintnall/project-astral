@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cvepy4rsfup2v" path="res://scenes/tile.gd" id="1_bfaab"]
 [ext_resource type="Script" uid="uid://b140lw26qadyg" path="res://otterlib/stretcher3d.gd" id="2_kx4x0"]
-[ext_resource type="Resource" uid="uid://b627xyk02m145" path="res://data/tiles/tile_source_tile.tres" id="2_vpg4h"]
+[ext_resource type="Resource" uid="uid://dd6l3bd1seddo" path="res://data/tiles/tile_no_effects.tres" id="2_vpg4h"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_feb5d"]
 size = Vector3(1, 0.4, 1)

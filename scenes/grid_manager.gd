@@ -3,6 +3,10 @@ class_name GridManager
 
 static var inst: GridManager
 
+static var DEFAULT_COLOR := Color.from_string("#fbf5ef", Color.WHITE)
+static var WARNING_COLOR := Color.from_string("#f2d3ab", Color.WHITE)
+static var ERROR_COLOR := Color.from_string("#c69fa5", Color.WHITE)
+
 @export var size := Vector2i.ONE
 
 @onready var grid_map: GridMap = $GridMap
@@ -17,6 +21,9 @@ var _placements := {}
 var _tiles := {}
 
 var _tiles_dirty := false
+
+var _indicator_color := DEFAULT_COLOR
+var _grid_material: ShaderMaterial = preload("res://materials/material_grid_selection_box.tres")
 
 func collect_tiles_in_execution_order() -> Array:
   var tiles := []
@@ -40,8 +47,18 @@ func get_tile_loc(tile: Tile) -> Vector3i:
 func map_to_global(tile: Vector3i) -> Vector3:
   return grid_map.to_global(grid_map.map_to_local(tile))
 
+func has_tile(loc: Vector3i) -> bool:
+  return get_tile_at(loc) != null
+
 func try_place_tile(tile: Tile, pos: Vector3i) -> bool:
   if _placements.has(pos): return false
+
+  var has_neighbor = Tile.DIRECTION_EXECUTION_ORDER.any(
+    func(dir: Vector2i): return has_tile(pos+Vector3i(dir.x, 0, dir.y))
+  )
+  
+  if not has_neighbor and not tile.def.initiates:
+    return false
   
   _placements[pos] = tile
   NodeUtils.force_child(grid_map, tile)
@@ -131,6 +148,19 @@ func _process(delta: float) -> void:
   grid_position_3d = map_to_global(raw_tile)
   selection.global_position = grid_position_3d
   selection.visible = _current_selection != null
+  
+  if _current_selection:
+    var target = DEFAULT_COLOR
+    match _current_selection.state:
+      Selection.State.WARNING:
+        target = WARNING_COLOR
+      Selection.State.ERROR:
+        target = ERROR_COLOR
+        
+    _indicator_color = _indicator_color.lerp(target, 0.1)
+  
+  if selection.visible:
+    _grid_material.set_shader_parameter("clr", _indicator_color)
 
   DebugDraw2D.set_text("hovered tile", grid_position_3d)
   DebugDraw2D.set_text("hovered position", raw_pos)

@@ -12,7 +12,6 @@ const DIRECTION_EXECUTION_ORDER = [
 
 @onready var mesh: MeshInstance3D = $Stretcher3D/MeshInstance3D
 @onready var stretcher: Stretcher3D = $Stretcher3D
-
 @onready var rotation_axis := Vector3(randf(), randf(), randf()).normalized()
 
 var _state := CallableStateMachine.new()
@@ -36,8 +35,6 @@ func execute(ctx: ExecutionContext):
   _state.current = "execute"
   _ctx = ctx
   _ctx.current_tile = self
-  _ctx.current_execution_chain.push_back(self)
-  _remaining_execution_directions = DIRECTION_EXECUTION_ORDER.filter(func(dir: Vector2i): return def.execute_directions.has(dir))
 
 func unselect():
   if _state.current == "placing":
@@ -93,6 +90,20 @@ func _selecting(machine: CallableStateMachine, delta: float):
 func _placing(machine: CallableStateMachine, delta: float):
   mesh.rotate(rotation_axis, delta*0.25)
   position = position.lerp(Vector3.UP, delta*10.0)
+  
+  var state = Selection.State.DEFAULT
+  
+  if GridManager.inst.has_tile(GridManager.inst.grid_position_3d):
+    state = Selection.State.ERROR
+    
+  var has_neighbor = DIRECTION_EXECUTION_ORDER.any(
+    func(dir): 
+      return GridManager.inst.has_tile(GridManager.inst.grid_position_3d+Vector3i(dir.x, 0, dir.y))
+  ) 
+  if not has_neighbor:
+    state = Selection.State.WARNING
+    
+  _selection.state = state
 
 func _placed(machine: CallableStateMachine, delta: float):
   mesh.rotation = Vector3.ZERO
@@ -133,6 +144,7 @@ func _on_select():
       
 func _try_place_self(selection: Selection):
   if GridManager.inst.try_place_tile(self, GridManager.inst.grid_position_3d):
+    BoardCamera.inst.shake(0.2, 0.01)
     selection.cancel()
 
 func _unhandled_input(event: InputEvent) -> void:
