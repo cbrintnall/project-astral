@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://8sxx0hpgqic1"]
+
+[ext_resource type="Shader" uid="uid://bwvtcdhd0hfny" path="res://materials/shaders/grid_shader.gdshader" id="1_80nbo"]
+
+[sub_resource type="Environment" id="Environment_mwb40"]
+ssao_enabled = true
+glow_enabled = true
+glow_normalized = true
+glow_bloom = 0.99
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mwb40"]
+albedo_color = Color(0.15294118, 0.15294118, 0.26666668, 1)
+disable_receive_shadows = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_80nbo"]
+material = SubResource("StandardMaterial3D_mwb40")
+size = Vector2(25000, 25000)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_80nbo"]
+noise_type = 2
+frequency = 0.0046
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_80nbo"]
+noise = SubResource("FastNoiseLite_80nbo")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e2o6t"]
+render_priority = 0
+shader = ExtResource("1_80nbo")
+shader_parameter/noise = SubResource("NoiseTexture2D_80nbo")
+shader_parameter/line_width = 0.010000000475
+shader_parameter/grid_size = 5.0000002375
+shader_parameter/line_color = Color(1, 1, 1, 1)
+shader_parameter/fill_color = Color(0, 0, 0, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_mwb40"]
+material = SubResource("ShaderMaterial_e2o6t")
+size = Vector2(25000, 25000)
+
+[node name="Game" type="Node3D" unique_id=309939235]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1757800547]
+transform = Transform3D(1, 0, 0, 0, 0.23705596, 0.971496, 0, -0.971496, 0.23705596, 0, 18.659317, 0)
+
+[node name="GridManager" type="Node" parent="." unique_id=735757972]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=422605085]
+environment = SubResource("Environment_mwb40")
+
+[node name="BackgroundMesh" type="MeshInstance3D" parent="." unique_id=1097233135]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("QuadMesh_80nbo")
+
+[node name="GridVisual" type="MeshInstance3D" parent="." unique_id=1358639419]
+transform = Transform3D(1, 0, 0, 0, -5.9604645e-08, 1, 0, -1, -5.9604645e-08, 0, 0.1713295, 0)
+mesh = SubResource("QuadMesh_mwb40")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=517060095]
+transform = Transform3D(0.9131409, -0.3531049, 0.20369245, -7.450581e-09, 0.49968213, 0.8662089, -0.40764406, -0.7909707, 0.45628017, -0.9910228, 14.6787195, 8.2953)
