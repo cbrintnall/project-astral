@@ -2,22 +2,28 @@
 
 [ext_resource type="Script" uid="uid://cvepy4rsfup2v" path="res://scenes/tile.gd" id="1_bfaab"]
 [ext_resource type="Script" uid="uid://b140lw26qadyg" path="res://otterlib/stretcher3d.gd" id="2_kx4x0"]
+[ext_resource type="Resource" uid="uid://b627xyk02m145" path="res://data/tiles/tile_source_tile.tres" id="2_vpg4h"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_feb5d"]
+size = Vector3(1, 0.4, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fc0e3"]
 
 [node name="Tile" type="StaticBody3D" unique_id=1995656874]
 transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.99999994, 0, 0, 0)
 script = ExtResource("1_bfaab")
+def = ExtResource("2_vpg4h")
 
 [node name="Stretcher3D" type="Node3D" parent="." unique_id=928591441]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50000006, 0)
 script = ExtResource("2_kx4x0")
 metadata/_custom_type_script = "uid://b140lw26qadyg"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Stretcher3D" unique_id=471219191]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
 layers = 2
 mesh = SubResource("BoxMesh_feb5d")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1324696323]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50000006, 0)
 shape = SubResource("BoxShape3D_fc0e3")

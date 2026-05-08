@@ -14,13 +14,41 @@ var grid_position_3d: Vector3i
 var _choose_cd := BetterTimer.new(0.1)
 var _current_selection: Selection
 var _placements := {}
+var _tiles := {}
+
+var _tiles_dirty := false
+
+func collect_tiles_in_execution_order() -> Array:
+  var tiles := []
+  
+  var initiators = get_played_tiles().filter(func(tile: Tile): return tile.def.initiates)
+
+  for initiator in initiators:
+    _collect_tile(initiator, _tiles[initiator], tiles)
+  
+  return tiles
+
+func get_tile_at(pos: Vector3i) -> Tile:
+  return _placements.get(pos)
+
+func get_played_tiles() -> Array:
+  return _tiles.keys()
+
+func get_tile_loc(tile: Tile) -> Vector3i:
+  return _tiles.get(tile, Vector3i.MIN)
+
+func map_to_global(tile: Vector3i) -> Vector3:
+  return grid_map.to_global(grid_map.map_to_local(tile))
 
 func try_place_tile(tile: Tile, pos: Vector3i) -> bool:
   if _placements.has(pos): return false
   
   _placements[pos] = tile
-  tile.reparent(grid_map)
+  NodeUtils.force_child(grid_map, tile)
   tile.global_position = pos
+  tile.set_placed_at(pos)
+  _tiles[tile] = pos
+  _tiles_dirty = true
   
   return true
 
@@ -38,7 +66,7 @@ func try_start_selection(data: Selection) -> bool:
 
   return true
   
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
   if event.is_action_pressed("ui_cancel"):
     _cancel_current_selection()
     
@@ -50,7 +78,35 @@ func _unhandled_input(event: InputEvent) -> void:
     if event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
       if _current_selection and _current_selection.on_choose.is_valid():
         _current_selection.on_choose.call()
-      
+        get_viewport().set_input_as_handled()
+  
+func _collect_tile(current: Tile, current_pos: Vector3i, collection: Array):
+  if collection.has(current):
+    return
+
+  collection.push_back(current)
+
+  for dir: Vector2i in current.get_directions():
+    var world_tile = current_pos+Vector3i(dir.x, 0, dir.y)
+    var next = get_tile_at(world_tile)
+    if next:
+      _collect_tile(next, world_tile, collection)
+
+func _update_dirty_grid():
+  for node in get_tree().get_nodes_in_group("debug_path_text"):
+    node.queue_free()
+  
+  var execution_order = collect_tiles_in_execution_order()
+  for i in len(execution_order):
+    var text := Label3D.new()
+    var tile = execution_order[i]
+    
+    tile.add_child(text)
+    text.text = str(i+1)
+    text.position = Vector3.UP*1.5
+    text.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+    text.add_to_group("debug_path_text")
+
 func _cancel_current_selection():
   if _current_selection:
     if _current_selection.can_cancel:
@@ -62,10 +118,17 @@ func _ready() -> void:
   
 func _process(delta: float) -> void:
   _choose_cd.check(delta, false)
+  
+  if _tiles_dirty:
+    _update_dirty_grid()
+    _tiles_dirty = false
+  
+  if not grid_cast.ray_data: return
+
   var grid_pos: Vector3 = grid_cast.ray_data["position"]
   var raw_pos = grid_pos+grid_pos.sign()*0.5
   var raw_tile = Vector3i(raw_pos)
-  grid_position_3d = grid_map.to_global(grid_map.map_to_local(raw_tile))
+  grid_position_3d = map_to_global(raw_tile)
   selection.global_position = grid_position_3d
   selection.visible = _current_selection != null
 

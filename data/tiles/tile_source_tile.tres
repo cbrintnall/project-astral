@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://b627xyk02m145"]
+
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="1_a5bb1"]
+
+[resource]
+script = ExtResource("1_a5bb1")
+execute_directions = Array[Vector2i]([Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)])
+initiates = true
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"
