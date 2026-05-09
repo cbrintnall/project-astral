@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://4vjb6mhcmyxk"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_4ayie"]
+[ext_resource type="Script" uid="uid://cdselfcrv6cg4" path="res://otterlib/resources/stat_provider_def.gd" id="2_byfhv"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_hekpi"]
+[ext_resource type="Script" uid="uid://cpwdsdmetvsul" path="res://scenes/tiles/effects/tile_effect_modify_stat.gd" id="3_k3sfb"]
+[ext_resource type="Resource" uid="uid://cwfsgmakqguhu" path="res://data/stats/stat_ticks.tres" id="4_jlv38"]
+[ext_resource type="Script" uid="uid://d38l0nlvyjxhe" path="res://scenes/tiles/effects/tile_effect_destroy_if_stat.gd" id="5_k3sfb"]
+[ext_resource type="Script" uid="uid://b8w5q1k7is7sg" path="res://scenes/tiles/effects/tile_effect_give_points.gd" id="6_jlv38"]
+
+[sub_resource type="Resource" id="Resource_byfhv"]
+script = ExtResource("2_byfhv")
+metadata/_custom_type_script = "uid://cdselfcrv6cg4"
+
+[sub_resource type="Resource" id="Resource_k3sfb"]
+script = ExtResource("3_k3sfb")
+stat = ExtResource("4_jlv38")
+provider = SubResource("Resource_byfhv")
+description_verbiage = "Increase"
+metadata/_custom_type_script = "uid://cpwdsdmetvsul"
+
+[sub_resource type="Resource" id="Resource_jlv38"]
+script = ExtResource("5_k3sfb")
+stat = ExtResource("4_jlv38")
+value = 5
+metadata/_custom_type_script = "uid://d38l0nlvyjxhe"
+
+[sub_resource type="Resource" id="Resource_xclym"]
+script = ExtResource("6_jlv38")
+points_given = 10
+metadata/_custom_type_script = "uid://b8w5q1k7is7sg"
+
+[resource]
+script = ExtResource("2_hekpi")
+effects = Array[ExtResource("1_4ayie")]([SubResource("Resource_k3sfb"), SubResource("Resource_jlv38"), SubResource("Resource_xclym")])
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"

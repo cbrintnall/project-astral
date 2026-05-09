@@ -7,7 +7,10 @@ const MAX_RANGE = [Vector3(-MAX_HAND_WIDTH, -0.7, 2.0), Vector3(MAX_HAND_WIDTH, 
 
 static var inst: TileHand
 static var tiles = [
-  load("res://data/tiles/tile_basic_points.tres")
+  load("res://data/tiles/tile_basic_points.tres"),
+  load("res://data/tiles/tile_basic_multiply_area.tres"),
+  load("res://data/tiles/tile_basic_points_no_neighbors.tres"),
+  load("res://data/tiles/tile_high_point_tick.tres")
 ]
 
 var _markers := []

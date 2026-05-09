@@ -42,7 +42,7 @@ func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
             "pitch_variance": 0.05,
             "location": tile.global_position
           })
-          tile.queue_free()
+          tile.destroy()
           print("TODO: destroy fx, maybe dissolve shader?")
     )
     var tile: Tile = GridManager.inst.get_tile_at(target)

@@ -3,6 +3,7 @@
 [ext_resource type="Shader" uid="uid://b2wjybdgpcsp8" path="res://materials/shaders/grid_selection_box.gdshader" id="1_p2xhe"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_p2xhe"]
+frequency = 0.0041
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xybhg"]
 noise = SubResource("FastNoiseLite_p2xhe")

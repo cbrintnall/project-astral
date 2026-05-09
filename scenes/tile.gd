@@ -14,6 +14,7 @@ const DIRECTION_EXECUTION_ORDER = [
 @onready var rotation_axis := Vector3(randf(), randf(), randf()).normalized()
 
 var stat := StatStore.new()
+var placed := false
 
 var _state := CallableStateMachine.new()
 var _mouse_entered := false
@@ -25,6 +26,22 @@ var _current_effect_task: Task
 var _meshes := []
 var _face_mesh: MeshInstance3D
 var _face_material = preload("res://materials/extracted/Material_TileFace.material")
+
+func destroy():
+  AudioManager3d.play({
+    "stream": preload("res://audio/break-tile.ogg"),
+    "pitch_variance": 0.05,
+    "parent": self
+  })
+  
+  var p = NodeUtils.fire_particles_at(
+    get_tree().current_scene,
+    load("res://scenes/fx/smoke_stack_particles.tscn").instantiate()
+  )
+  
+  p.global_position = global_position
+  
+  queue_free()
 
 func select():
   _on_select()
@@ -80,6 +97,11 @@ func set_placed_at(_tile: Vector3i):
     m.layers = 1
   rotation = Vector3.ZERO
   scale = Vector3.ONE
+  placed = true
+  
+  for effect: TileEffect in get_effects():
+    if effect.event == TileEffect.Event.ON_PLACE:
+      GameManager.inst.player_tasks.run(effect.execute.bind(_get_effect_ctx(), GameManager.inst.active_execution))
 
 func _ready() -> void:
   add_child(_state)
@@ -108,7 +130,6 @@ func _ready() -> void:
   
   if def.texture:
     _face_material.albedo_texture = def.texture
-    print("yus")
   
   for m in _meshes:
     m.layers = 2

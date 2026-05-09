@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatDef" format=3 uid="uid://cwfsgmakqguhu"]
+
+[ext_resource type="Script" uid="uid://bemrh2m32ehhl" path="res://otterlib/resources/stat_def.gd" id="1_as6t2"]
+
+[resource]
+script = ExtResource("1_as6t2")
+name = "[color=#8b6d9c]wrath[/color]"
+description = "How many ticks until this tile is destroyed."
+base_value = 0.0
+metadata/_custom_type_script = "uid://bemrh2m32ehhl"

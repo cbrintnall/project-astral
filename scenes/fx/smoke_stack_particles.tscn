@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://8vlwfy8rp6rx"]
+
+[ext_resource type="Texture2D" uid="uid://o32plcqkqpsj" path="res://assets/particles/cloud1.png" id="1_h2r24"]
+
+[sub_resource type="Curve" id="Curve_abphe"]
+_data = [Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_npgv3"]
+curve = SubResource("Curve_abphe")
+
+[sub_resource type="Curve" id="Curve_w7oh7"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.24848486, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_abphe"]
+curve = SubResource("Curve_w7oh7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_w7oh7"]
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 1, 0)
+spread = 1.0
+initial_velocity_min = 1.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, -2, 0)
+scale_min = 0.5
+scale_curve = SubResource("CurveTexture_abphe")
+alpha_curve = SubResource("CurveTexture_npgv3")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xm3w6"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_h2r24")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_w7oh7"]
+material = SubResource("StandardMaterial3D_xm3w6")
+
+[node name="SmokeStackParticles" type="GPUParticles3D" unique_id=2027563678]
+amount = 20
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_w7oh7")
+draw_pass_1 = SubResource("QuadMesh_w7oh7")

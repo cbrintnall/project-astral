@@ -8,6 +8,7 @@ static var WARNING_COLOR := Color.from_string("#f2d3ab", Color.WHITE)
 static var ERROR_COLOR := Color.from_string("#c69fa5", Color.WHITE)
 
 signal board_changed
+signal mods_changed
 
 @export var size := Vector2i.ONE
 
@@ -26,11 +27,22 @@ var _choose_cd := BetterTimer.new(0.1)
 var _current_selection: Selection
 var _placements := {}
 var _tiles := {}
+var _pos_modifications := {}
 
 var _tiles_dirty := false
 
 var _indicator_color := DEFAULT_COLOR
 var _grid_material: ShaderMaterial = preload("res://materials/material_grid_selection_box.tres")
+
+func get_mods_at_point(loc: Vector3i) -> GridContext:
+  return _pos_modifications.get(loc, GridContext.new())
+  
+func get_mods() -> Dictionary:
+  return _pos_modifications
+  
+func upgrade_grid_context(loc: Vector3i, ctx: GridContext):
+  _pos_modifications[loc] = ctx
+  mods_changed.emit()
 
 func tiles_dirty() -> bool:
   return _tiles_dirty
@@ -71,10 +83,11 @@ func try_place_tile(tile: Tile, pos: Vector3i) -> bool:
     return false
   
   _placements[pos] = tile
+  _tiles[tile] = pos
+
   NodeUtils.force_child(grid_map, tile)
   tile.global_position = pos
   tile.set_placed_at(pos)
-  _tiles[tile] = pos
   _tiles_dirty = true
   tile.tree_exiting.connect(
     func():

@@ -12,6 +12,7 @@ expand_margin_right = 12.0
 
 [node name="TileEffectDisplay" type="MarginContainer" unique_id=1392376793]
 custom_minimum_size = Vector2(300, 0)
+custom_maximum_size = Vector2(300, -1)
 script = ExtResource("1_nut02")
 
 [node name="Panel" type="Panel" parent="." unique_id=1077783201]
@@ -61,4 +62,3 @@ bbcode_enabled = true
 text = "give 5 dawn."
 fit_content = true
 scroll_active = false
-autowrap_mode = 0

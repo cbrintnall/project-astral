@@ -18,6 +18,8 @@ var active_execution: ExecutionContext:
 var cycle := 0
 var turn := 0
 
+var player_tasks := TaskGroup.new()
+
 var _state := CallableStateMachine.new()
 var _deal_timer := BetterTimer.new(0.1)
 
@@ -43,6 +45,7 @@ func do_receive_points_fx():
 
 func try_execute_turn():
   _state.current = "begin_execution"
+  TileHand.inst.discard_hand()
 
 func _unhandled_input(event: InputEvent) -> void:
   if event.is_action_pressed("toggle_debug"):
@@ -53,6 +56,7 @@ func _ready() -> void:
   
   inst = self
   add_child(_state)
+  add_child(player_tasks)
   
   _state.register("deal", _deal)
   _state.register("wait_for_player", _wait_for_player)
@@ -117,11 +121,13 @@ func _post_round(machine: CallableStateMachine, delta: float):
   _current_context.active_round = false
   
 func _begin_execution(machine: CallableStateMachine, delta: float):
+  if not player_tasks.finished:
+    return
+  
   var tiles = GridManager.inst.get_played_tiles()
   _initiate_tiles = tiles.filter(func(tile: Tile): return tile.def.initiates)
   _current_context = ExecutionContext.new()
   _current_context.active_round = true
-  TileHand.inst.discard_hand()
   _execution_order = GridManager.inst.collect_tiles_in_execution_order()
   _pre_execution_order = _execution_order.filter(func(tile: Tile): return tile.has_pre_round_effects())
   _post_execution_order = _execution_order.filter(func(tile: Tile): return tile.has_post_round_effects())
