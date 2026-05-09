@@ -6,6 +6,10 @@ const MAX_HAND_WIDTH = 7.0
 const MAX_RANGE = [Vector3(-MAX_HAND_WIDTH, -0.7, 2.0), Vector3(MAX_HAND_WIDTH, -0.7, 2.0)]
 
 static var inst: TileHand
+static var tiles = [
+  load("res://scenes/tiles/effects/basic_destroy_tile.tscn"),
+  load("res://scenes/tiles/basic_give_points_tile.tscn")
+]
 
 var _markers := []
 
@@ -26,7 +30,7 @@ func _create_hand():
     var marker := Marker3D.new()
     add_child(marker)
     _markers.push_back(marker)
-    var tile = load("res://scenes/board/tile.tscn").instantiate()
+    var tile = tiles.pick_random().instantiate()
     marker.add_child(tile)
     
 func _process(delta: float) -> void:

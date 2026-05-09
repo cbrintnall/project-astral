@@ -19,6 +19,22 @@ var _deal_timer := BetterTimer.new(0.1)
 var _initiate_tiles := []
 var _current_context: ExecutionContext
 var _execution_order := []
+var _pre_execution_order := []
+var _post_execution_order := []
+
+var _sound_counter := 0.0
+var _reset_sound_timer := BetterTimer.new(1.0)
+
+func do_receive_points_fx():
+  _sound_counter += 0.01
+  
+  AudioManager3d.play({
+    "stream": preload("res://audio/Light Drone Sound (button hover) 9.wav"),
+    "pitch_additional": _sound_counter,
+    "debounce": 0.05
+  })
+  
+  _reset_sound_timer.reset()
 
 func try_execute_turn():
   _state.current = "begin_execution"
@@ -30,16 +46,24 @@ func _ready() -> void:
   _state.register("deal", _deal)
   _state.register("wait_for_player", _wait_for_player)
   _state.register("begin_execution", _begin_execution)
+  _state.register("pre_execute", _pre_execute)
   _state.register("execute", _execute_turn)
+  _state.register("post_execute", _post_execute)
   _state.register("post_round", _post_round)
   
   selection_svp.world_3d = get_viewport().find_world_3d()
+  
+  _state.state_changed.connect(
+    func(state):
+      print("game state changed: %s" % state)
+  )
   
   await Utils.wait_until(func(): return GridManager.inst != null)
   
   var start_tile = load("res://scenes/board/tile.tscn").instantiate()
   start_tile.def = load("res://data/tiles/tile_source_tile.tres")
   assert(GridManager.inst.try_place_tile(start_tile, Vector3i.ZERO), "This should never fail")
+  GridManager.inst.center_tile = start_tile
   BoardCamera.inst.try_set_focus(GridManager.inst.map_to_global(Vector3i.ZERO))
   var start_mesh: MeshInstance3D = NodeUtils.find_child_with_predicate(start_tile, func(node): return node is MeshInstance3D)
   start_mesh.material_override = preload("res://materials/material_debug.tres")
@@ -53,6 +77,10 @@ func _ready() -> void:
       #values.shuffle()
       #current += Vector3i(values.pop_back(), 0, values.pop_back())
       #GridManager.inst.try_place_tile(next, current)
+  
+func _process(delta: float) -> void:
+  if _reset_sound_timer.check(delta):
+    _sound_counter = 0.0
   
 func _deal(machine: CallableStateMachine, delta: float):
   TileHand.inst.distribute_hand()
@@ -70,18 +98,33 @@ func _begin_execution(machine: CallableStateMachine, delta: float):
   _current_context = ExecutionContext.new()
   TileHand.inst.discard_hand()
   _execution_order = GridManager.inst.collect_tiles_in_execution_order()
-  _state.current = "execute"
+  _pre_execution_order = tiles.filter(func(tile: Tile): return tile.has_pre_round_effects())
+  _post_execution_order = tiles.filter(func(tile: Tile): return tile.has_post_round_effects())
+  print("executing [pre=%d,mid=%d,post=%d]" % [ len(_pre_execution_order), len(_execution_order), len(_post_execution_order) ])
+  _state.current = "pre_execute"
+  
+func _pre_execute(machine: CallableStateMachine, delta: float):
+  _execute_tiles_from(_pre_execution_order, "execute", TileEffect.Event.ON_ROUND_START, func(): pass)
+  
+func _post_execute(machine: CallableStateMachine, delta: float):
+  _execute_tiles_from(_post_execution_order, "post_round", TileEffect.Event.ON_ROUND_END, func(): _current_context = null)
   
 func _execute_turn(machine: CallableStateMachine, delta: float):
+  _execute_tiles_from(_execution_order, "post_execute", TileEffect.Event.ON_ACTIVATE, func(): pass)
+      
+func _execute_tiles_from(order: Array, next_state: String, event: TileEffect.Event, on_finished: Callable):
   if _current_context.current_tile:
     var loc = GridManager.inst.get_tile_loc(_current_context.current_tile)
     if loc != Vector3i.MIN:
       BoardCamera.inst.try_set_focus(loc)
   
   if _current_context.current_tile == null:
-    if _execution_order:
-      _current_context.current_tile = _execution_order.pop_front()
-      _current_context.current_tile.execute(_current_context)
+    if order:
+      var next = order.pop_front()
+      if is_instance_valid(next):
+        _current_context.current_tile = next
+        _current_context.current_tile.execute(_current_context, event)
     else:
-      _state.current = "post_round"
-      _current_context = null
+      _state.current = next_state
+      if on_finished.is_valid():
+        on_finished.call()

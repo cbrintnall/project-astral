@@ -14,6 +14,7 @@ static var ERROR_COLOR := Color.from_string("#c69fa5", Color.WHITE)
 @onready var selection: Node3D = $SelectionBox
 
 var grid_position_3d: Vector3i
+var center_tile: Tile
 
 var _choose_cd := BetterTimer.new(0.1)
 var _current_selection: Selection
@@ -66,6 +67,12 @@ func try_place_tile(tile: Tile, pos: Vector3i) -> bool:
   tile.set_placed_at(pos)
   _tiles[tile] = pos
   _tiles_dirty = true
+  tile.tree_exiting.connect(
+    func():
+      _tiles.erase(tile)
+      _placements.erase(pos),
+    CONNECT_ONE_SHOT
+  )
   
   return true
 

@@ -25,26 +25,31 @@ var _effects := []
 var _remaining_effects := []
 var _current_effect_task: Task
 
+func has_pre_round_effects() -> bool:
+  return _effects.any(func(effect: TileEffect): return effect.event == TileEffect.Event.ON_ROUND_START)
+
+func has_post_round_effects() -> bool:
+  return _effects.any(func(effect: TileEffect): return effect.event == TileEffect.Event.ON_ROUND_END)
+
 func register_effect(effect: TileEffect):
   _effects.push_back(effect)
 
+## NOTE: do we want tiles to define directions? or should they just always be all four?
 func get_directions() -> Array:
-  return DIRECTION_EXECUTION_ORDER.filter(func(dir: Vector2i): return def.execute_directions.has(dir))
+  #return DIRECTION_EXECUTION_ORDER.filter(func(dir: Vector2i): return def.execute_directions.has(dir))
+  return DIRECTION_EXECUTION_ORDER
 
 func is_executing() -> bool:
   return _state.current == "execute"
-  
-func resume_execution():
-  assert(_state.current == "deferred")
-  _state.current = "execute"
 
-func execute(ctx: ExecutionContext):
+func execute(ctx: ExecutionContext, event: TileEffect.Event):
   _state.current = "execute"
   _ctx = ctx
   _ctx.current_tile = self
   
   for effect: TileEffect in _effects:
-    _remaining_effects.push_back(effect)
+    if effect.event == event:
+      _remaining_effects.push_back(effect)
 
 func unselect():
   if _state.current == "placing":
@@ -75,9 +80,6 @@ func _ready() -> void:
   
   add_child(stat)
   
-  if not def.initiates:
-    add_child(TileEffectGivePoints.new())
-  
   for effect: TileEffect in NodeUtils.get_nodes_with_predicate(self, func(node): return node is TileEffect):
     register_effect(effect)
   
@@ -90,13 +92,20 @@ func _on_state_changed(state: String):
     "placing":
       input_ray_pickable = false
 
+func _get_effect_ctx() -> EffectContext:
+  var ctx := EffectContext.new()
+  
+  ctx.tile = self
+  
+  return ctx
+
 func _deferred(machine: CallableStateMachine, delta: float):
   pass
 
 func _executing(machine: CallableStateMachine, delta: float):
   if not _current_effect_task:
     if _remaining_effects:
-      _current_effect_task = Task.wait_for(_remaining_effects.pop_front().execute.bind(null, _ctx))
+      _current_effect_task = Task.wait_for(_remaining_effects.pop_front().execute.bind(_get_effect_ctx(), _ctx))
     else:
       _state.current = "waiting_for_end"
       _ctx.current_tile = null

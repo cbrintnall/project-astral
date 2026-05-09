@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://buouk13woe7nm"]
+
+[ext_resource type="PackedScene" uid="uid://cr31ui8b680hb" path="res://scenes/board/tile.tscn" id="1_wsbdp"]
+[ext_resource type="Script" uid="uid://b46kvv56s6s63" path="res://scenes/tiles/effects/tile_effect_destroy_nearby.gd" id="2_2kxft"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_4vka5"]
+
+[sub_resource type="Resource" id="Resource_o70oe"]
+script = ExtResource("2_4vka5")
+execute_directions = Array[Vector2i]([Vector2i(0, 1), Vector2i(0, -1)])
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4vka5"]
+
+[node name="Tile" unique_id=1995656874 instance=ExtResource("1_wsbdp")]
+def = SubResource("Resource_o70oe")
+
+[node name="TileEffectDestroyNearby" type="Node3D" parent="." index="2" unique_id=738518078]
+script = ExtResource("2_2kxft")
+directions = Array[Vector3i]([Vector3i(1, 0, 0), Vector3i(-1, 0, 0)])
+event = 1
+metadata/_custom_type_script = "uid://b46kvv56s6s63"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="3" unique_id=550506962]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.10000004, 0)
+mesh = SubResource("CapsuleMesh_4vka5")

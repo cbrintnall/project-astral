@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://d4hlb6citdvse"]
+
+[ext_resource type="Texture2D" uid="uid://02euhmyf5ukn" path="res://assets/star.png" id="1_hkrfp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e8heu"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_color = Color(0.9490196, 0.827451, 0.67058825, 1)
+albedo_texture = ExtResource("1_hkrfp")
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+billboard_mode = 1
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_7sc4i"]
+material = SubResource("StandardMaterial3D_e8heu")
+
+[sub_resource type="MultiMesh" id="MultiMesh_7sc4i"]
+transform_format = 1
+mesh = SubResource("QuadMesh_7sc4i")
+
+[node name="StarsMultimesh" type="MultiMeshInstance3D" unique_id=185297430]
+multimesh = SubResource("MultiMesh_7sc4i")
