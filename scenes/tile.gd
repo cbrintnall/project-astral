@@ -14,12 +14,19 @@ const DIRECTION_EXECUTION_ORDER = [
 @onready var stretcher: Stretcher3D = $Stretcher3D
 @onready var rotation_axis := Vector3(randf(), randf(), randf()).normalized()
 
+var stat := StatStore.new()
+
 var _state := CallableStateMachine.new()
 var _mouse_entered := false
 var _selection: Selection
 var _ctx: ExecutionContext
-var _remaining_execution_directions := []
 var _timer := BetterTimer.new(0.5)
+var _effects := []
+var _remaining_effects := []
+var _current_effect_task: Task
+
+func register_effect(effect: TileEffect):
+  _effects.push_back(effect)
 
 func get_directions() -> Array:
   return DIRECTION_EXECUTION_ORDER.filter(func(dir: Vector2i): return def.execute_directions.has(dir))
@@ -35,6 +42,9 @@ func execute(ctx: ExecutionContext):
   _state.current = "execute"
   _ctx = ctx
   _ctx.current_tile = self
+  
+  for effect: TileEffect in _effects:
+    _remaining_effects.push_back(effect)
 
 func unselect():
   if _state.current == "placing":
@@ -63,6 +73,14 @@ func _ready() -> void:
   
   _state.state_changed.connect(_on_state_changed)
   
+  add_child(stat)
+  
+  if not def.initiates:
+    add_child(TileEffectGivePoints.new())
+  
+  for effect: TileEffect in NodeUtils.get_nodes_with_predicate(self, func(node): return node is TileEffect):
+    register_effect(effect)
+  
 func _on_state_changed(state: String):
   match state:
     "selecting":
@@ -76,12 +94,16 @@ func _deferred(machine: CallableStateMachine, delta: float):
   pass
 
 func _executing(machine: CallableStateMachine, delta: float):
-  # TODO: Add effect code here
-  
-  if _timer.check(delta):
-    _state.current = "waiting_for_end"
-    _ctx.current_tile = null
-    _ctx = null
+  if not _current_effect_task:
+    if _remaining_effects:
+      _current_effect_task = Task.wait_for(_remaining_effects.pop_front().execute.bind(null, _ctx))
+    else:
+      _state.current = "waiting_for_end"
+      _ctx.current_tile = null
+      _ctx = null
+      
+  elif _current_effect_task.finished:
+    _current_effect_task = null
 
 func _selecting(machine: CallableStateMachine, delta: float):
   mesh.rotate(rotation_axis, delta)

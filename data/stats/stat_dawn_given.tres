@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatDef" format=3 uid="uid://mi1355rckj4g"]
+
+[ext_resource type="Script" uid="uid://bemrh2m32ehhl" path="res://otterlib/resources/stat_def.gd" id="1_kv5j6"]
+
+[resource]
+script = ExtResource("1_kv5j6")
+name = "Dawn"
+description = "How much dawn is provided from this tile."
+base_value = 0.0
+metadata/_custom_type_script = "uid://bemrh2m32ehhl"

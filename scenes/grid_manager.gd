@@ -143,6 +143,7 @@ func _process(delta: float) -> void:
   if not grid_cast.ray_data: return
 
   var grid_pos: Vector3 = grid_cast.ray_data["position"]
+  RenderingServer.global_shader_parameter_set("global_mouse_position", grid_pos)
   var raw_pos = grid_pos+grid_pos.sign()*0.5
   var raw_tile = Vector3i(raw_pos)
   grid_position_3d = map_to_global(raw_tile)

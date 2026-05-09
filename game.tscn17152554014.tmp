@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://8sxx0hpgqic1"]
 
 [ext_resource type="Shader" uid="uid://bwvtcdhd0hfny" path="res://materials/shaders/grid_shader.gdshader" id="1_80nbo"]
+[ext_resource type="Theme" uid="uid://dlolu7lgngfwn" path="res://default.tres" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://crdioq146uotd" path="res://scenes/game_manager.gd" id="1_fc0e3"]
 [ext_resource type="Script" uid="uid://dr5n0lkg56otf" path="res://scenes/grid_manager.gd" id="2_feb5d"]
 [ext_resource type="Script" uid="uid://chs7hvvvqn863" path="res://scenes/gridcast.gd" id="3_j5wjh"]
@@ -9,7 +10,6 @@
 [ext_resource type="Material" uid="uid://08ngit6xcjnn" path="res://materials/material_grid_selection_box.tres" id="4_vef74"]
 [ext_resource type="Texture2D" uid="uid://ctpk2jeg5pts8" path="res://assets/ui/small-nine-patch.png" id="8_hve3p"]
 [ext_resource type="Script" uid="uid://bb86qx2048csu" path="res://scenes/ui.gd" id="8_iotsf"]
-[ext_resource type="Texture2D" uid="uid://b7l6burxk7544" path="res://assets/ui/nine-patch-bottom.png" id="9_215e1"]
 [ext_resource type="Script" uid="uid://cbsof0i8gmrfi" path="res://scenes/tile_hand.gd" id="9_vef74"]
 [ext_resource type="Script" uid="uid://b88mkbokfc4re" path="res://scenes/board_camera.gd" id="11_mfdv2"]
 [ext_resource type="Shader" uid="uid://cbmhcoe13d8g4" path="res://materials/shaders/grid_backing_shader.gdshader" id="12_lc2xo"]
@@ -45,13 +45,6 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_tkr8f")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7sc4i"]
-texture = ExtResource("9_215e1")
-texture_margin_left = 64.0
-texture_margin_right = 64.0
-texture_margin_bottom = 64.0
-region_rect = Rect2(0, 0, 1024, 1024)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hve3p"]
 texture = ExtResource("8_hve3p")
@@ -113,7 +106,6 @@ render_priority = 0
 shader = ExtResource("12_lc2xo")
 shader_parameter/clr_a = Color(0.9490196, 0.827451, 0.67058825, 1)
 shader_parameter/clr_b = Color(0.15294118, 0.15294118, 0.26666668, 1)
-shader_parameter/base_edge = 0.1
 shader_parameter/noise = SubResource("NoiseTexture2D_215e1")
 
 [sub_resource type="QuadMesh" id="QuadMesh_80nbo"]
@@ -150,7 +142,7 @@ projection = 1
 size = 2.882
 
 [node name="TileScalar" type="Node3D" parent="TileDisplayViewport/SubViewportContainer/SubViewport/TileSelectCamera" unique_id=1587664697]
-transform = Transform3D(0.25, 0, -3.7252907e-09, 0, 0.25, 0, 3.7252907e-09, 0, 0.25, 0, -1, -0.99999976)
+transform = Transform3D(0.25, 0, -3.7252907e-09, 0, 0.25, 0, 3.7252907e-09, 0, 0.25, 0, -0.5, -0.99999976)
 script = ExtResource("9_vef74")
 
 [node name="GameManager" type="Node" parent="." unique_id=1080588153 node_paths=PackedStringArray("camera", "selection_svp")]
@@ -195,60 +187,47 @@ volume_db = -30.0
 [node name="UI" type="CanvasLayer" parent="." unique_id=946420198]
 script = ExtResource("8_iotsf")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI" unique_id=1337269720]
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 103.0
-grow_horizontal = 2
-theme_override_constants/separation = -32
+[node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=1315741077]
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="UI/VBoxContainer" unique_id=576643354]
+[node name="Panel" type="Panel" parent="UI/MarginContainer" unique_id=1627317638]
+self_modulate = Color(0.28627452, 0.3019608, 0.49411765, 0.6745098)
 layout_mode = 2
+theme = ExtResource("1_e2o6t")
+theme_type_variation = &"PanelRightCorners"
 
-[node name="Panel" type="Panel" parent="UI/VBoxContainer/MarginContainer2" unique_id=1654312415]
-modulate = Color(0.15294118, 0.15294118, 0.26666668, 1)
+[node name="MarginContainer" type="MarginContainer" parent="UI/MarginContainer" unique_id=403856959]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_7sc4i")
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 64
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/MarginContainer2" unique_id=2067133570]
+[node name="MarginContainer" type="MarginContainer" parent="UI/MarginContainer/MarginContainer" unique_id=996971321]
 layout_mode = 2
-
-[node name="ScoreLabel" type="Label" parent="UI/VBoxContainer/MarginContainer2/MarginContainer" unique_id=362333001]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 64
-text = "100/100"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MarginContainer3" type="MarginContainer" parent="UI/VBoxContainer" unique_id=105548196]
-z_index = -1
-layout_mode = 2
-
-[node name="MarginContainer2" type="MarginContainer" parent="UI/VBoxContainer/MarginContainer3" unique_id=996971321]
-layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 0
 
-[node name="Panel" type="Panel" parent="UI/VBoxContainer/MarginContainer3/MarginContainer2" unique_id=856053680]
-modulate = Color(0.15294118, 0.15294118, 0.26666668, 1)
+[node name="Panel" type="Panel" parent="UI/MarginContainer/MarginContainer/MarginContainer" unique_id=856053680]
+modulate = Color(0.15294118, 0.15294118, 0.26666668, 0.69803923)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_hve3p")
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/MarginContainer3/MarginContainer2" unique_id=1035190512]
+[node name="MarginContainer" type="MarginContainer" parent="UI/MarginContainer/MarginContainer/MarginContainer" unique_id=1035190512]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="Label" type="Label" parent="UI/VBoxContainer/MarginContainer3/MarginContainer2/MarginContainer" unique_id=1530798185]
+[node name="Label" type="Label" parent="UI/MarginContainer/MarginContainer/MarginContainer/MarginContainer" unique_id=1530798185]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9843137, 0.9607843, 0.9372549, 1)
 theme_override_font_sizes/font_size = 64
 text = "Play"
 
-[node name="PlayButton" type="Button" parent="UI/VBoxContainer/MarginContainer3/MarginContainer2" unique_id=679220892]
+[node name="PlayButton" type="Button" parent="UI/MarginContainer/MarginContainer/MarginContainer" unique_id=679220892]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_default_cursor_shape = 2

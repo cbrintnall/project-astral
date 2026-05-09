@@ -89,3 +89,10 @@ ui_down={
 
 rendering_device/driver.windows="d3d12"
 anti_aliasing/quality/msaa_3d=1
+
+[shader_globals]
+
+global_mouse_position={
+"type": "vec3",
+"value": Vector3(0, 0, 0)
+}

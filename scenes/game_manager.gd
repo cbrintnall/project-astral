@@ -6,6 +6,9 @@ static var inst: GameManager
 @export var camera: Camera3D
 @export var selection_svp: SubViewport
 
+var current_score := 0
+var required_score := 30
+
 var active_execution: ExecutionContext:
   get:
     return _current_context
@@ -40,16 +43,16 @@ func _ready() -> void:
   BoardCamera.inst.try_set_focus(GridManager.inst.map_to_global(Vector3i.ZERO))
   var start_mesh: MeshInstance3D = NodeUtils.find_child_with_predicate(start_tile, func(node): return node is MeshInstance3D)
   start_mesh.material_override = preload("res://materials/material_debug.tres")
-  
-  for x in 5:
-    var current := Vector3i.ZERO
-    for i in randi_range(10, 20):
-      var next = load("res://scenes/board/tile.tscn").instantiate()
-      next.def = load("res://data/tiles/tile_no_effects.tres")
-      var values = [0, 1]
-      values.shuffle()
-      current += Vector3i(values.pop_back(), 0, values.pop_back())
-      GridManager.inst.try_place_tile(next, current)
+
+  #for x in 5:
+    #var current := Vector3i.ZERO
+    #for i in randi_range(10, 20):
+      #var next = load("res://scenes/board/tile.tscn").instantiate()
+      #next.def = load("res://data/tiles/tile_no_effects.tres")
+      #var values = [0, 1]
+      #values.shuffle()
+      #current += Vector3i(values.pop_back(), 0, values.pop_back())
+      #GridManager.inst.try_place_tile(next, current)
   
 func _deal(machine: CallableStateMachine, delta: float):
   TileHand.inst.distribute_hand()
