@@ -2,17 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c14gljjk7utw5"
-path.s3tc="res://.godot/imported/tilegridMEH.png-54ca7dbe594599658f9f689291280515.s3tc.ctex"
+uid="uid://4av03tr6h635"
+path.s3tc="res://.godot/imported/objectTile_oil-6-1x.png-3a0c49808bd19ec8d3e08feb0330d05f.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={
+"md5": "122c0a24fa70eef239bb27f81e5c03c7"
+}
 
 [deps]
 
-source_file="res://assets/blender/tilegridMEH.png"
-dest_files=["res://.godot/imported/tilegridMEH.png-54ca7dbe594599658f9f689291280515.s3tc.ctex"]
+source_file="res://assets/blender/objects/objectTile_oil-6-1x.png"
+dest_files=["res://.godot/imported/objectTile_oil-6-1x.png-3a0c49808bd19ec8d3e08feb0330d05f.s3tc.ctex"]
 
 [params]
 

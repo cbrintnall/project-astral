@@ -10,7 +10,6 @@ const DIRECTION_EXECUTION_ORDER = [
 
 @export var def: TileDef
 
-@onready var mesh: MeshInstance3D = $Stretcher3D/MeshInstance3D
 @onready var stretcher: Stretcher3D = $Stretcher3D
 @onready var rotation_axis := Vector3(randf(), randf(), randf()).normalized()
 
@@ -23,6 +22,9 @@ var _ctx: ExecutionContext
 var _timer := BetterTimer.new(0.5)
 var _remaining_effects := []
 var _current_effect_task: Task
+var _meshes := []
+var _face_mesh: MeshInstance3D
+var _face_material = preload("res://materials/extracted/Material_TileFace.material")
 
 func select():
   _on_select()
@@ -45,6 +47,14 @@ func is_executing() -> bool:
   return _state.current == "execute"
 
 func execute(ctx: ExecutionContext, event: TileEffect.Event):
+  AudioManager3d.play({
+    "stream": preload("res://audio/knock.ogg"),
+    "pitch_variance": 0.1,
+    "parent": self
+  })
+  
+  stretcher.punch(2.0, 5.0)
+  
   _state.current = "execute"
   _ctx = ctx
   _ctx.current_tile = self
@@ -66,7 +76,8 @@ func unselect():
       
 func set_placed_at(_tile: Vector3i):
   _state.current = "placed"
-  mesh.layers = 1
+  for m in _meshes:
+    m.layers = 1
   rotation = Vector3.ZERO
   scale = Vector3.ONE
 
@@ -85,12 +96,36 @@ func _ready() -> void:
   
   add_child(stat)
   
+  _meshes = NodeUtils.get_nodes_with_predicate(self, func(node): return node is MeshInstance3D)
+  _face_mesh = NodeUtils.find_child_with_predicate(
+    self, 
+    func(node): return node is MeshInstance3D and node.mesh.surface_get_material(1) == preload("res://materials/extracted/Material_TileFace.material")
+  )
+  
+  _face_material = preload("res://materials/extracted/Material_TileFace.material").duplicate()
+  if _face_mesh:
+    _face_mesh.set_surface_override_material(1, _face_material)
+  
+  if def.texture:
+    _face_material.albedo_texture = def.texture
+    print("yus")
+  
+  for m in _meshes:
+    m.layers = 2
+  
 func _on_state_changed(state: String):
   match state:
+    "placing":
+      for m in _meshes:
+        m.layers = 2
     "selecting":
       input_ray_pickable = true
+      for m in _meshes:
+        m.layers = 2
     "placed":
       input_ray_pickable = false
+      for m in _meshes:
+        m.layers = 1
     "placing":
       input_ray_pickable = false
 
@@ -117,11 +152,11 @@ func _executing(machine: CallableStateMachine, delta: float):
     _current_effect_task = null
 
 func _selecting(machine: CallableStateMachine, delta: float):
-  mesh.rotate(rotation_axis, delta)
+  stretcher.rotate(rotation_axis, delta)
   position = position.lerp(Vector3.ZERO, delta*10.0)
 
 func _placing(machine: CallableStateMachine, delta: float):
-  mesh.rotate(rotation_axis, delta*0.25)
+  stretcher.rotate(rotation_axis, delta*0.25)
   position = position.lerp(Vector3.UP, delta*10.0)
   
   var state = Selection.State.DEFAULT
@@ -139,7 +174,7 @@ func _placing(machine: CallableStateMachine, delta: float):
   _selection.state = state
 
 func _placed(machine: CallableStateMachine, delta: float):
-  mesh.rotation = Vector3.ZERO
+  stretcher.rotation = Vector3.ZERO
 
 func _waiting_for_end(machine: CallableStateMachine, delta: float):
   pass
