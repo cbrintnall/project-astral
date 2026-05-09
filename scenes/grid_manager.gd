@@ -7,6 +7,8 @@ static var DEFAULT_COLOR := Color.from_string("#fbf5ef", Color.WHITE)
 static var WARNING_COLOR := Color.from_string("#f2d3ab", Color.WHITE)
 static var ERROR_COLOR := Color.from_string("#c69fa5", Color.WHITE)
 
+signal board_changed
+
 @export var size := Vector2i.ONE
 
 @onready var grid_map: GridMap = $GridMap
@@ -15,6 +17,10 @@ static var ERROR_COLOR := Color.from_string("#c69fa5", Color.WHITE)
 
 var grid_position_3d: Vector3i
 var center_tile: Tile
+
+var grid_hovered_tile: Tile
+var hand_hovered_tile: Tile
+var hand_selected_tile: Tile
 
 var _choose_cd := BetterTimer.new(0.1)
 var _current_selection: Selection
@@ -25,6 +31,9 @@ var _tiles_dirty := false
 
 var _indicator_color := DEFAULT_COLOR
 var _grid_material: ShaderMaterial = preload("res://materials/material_grid_selection_box.tres")
+
+func tiles_dirty() -> bool:
+  return _tiles_dirty
 
 func collect_tiles_in_execution_order() -> Array:
   var tiles := []
@@ -70,7 +79,8 @@ func try_place_tile(tile: Tile, pos: Vector3i) -> bool:
   tile.tree_exiting.connect(
     func():
       _tiles.erase(tile)
-      _placements.erase(pos),
+      _placements.erase(pos)
+      _tiles_dirty = true,
     CONNECT_ONE_SHOT
   )
   
@@ -130,6 +140,8 @@ func _update_dirty_grid():
     text.position = Vector3.UP*1.5
     text.billboard = BaseMaterial3D.BILLBOARD_ENABLED
     text.add_to_group("debug_path_text")
+    
+  board_changed.emit()
 
 func _cancel_current_selection():
   if _current_selection:
@@ -157,6 +169,8 @@ func _process(delta: float) -> void:
   selection.global_position = grid_position_3d
   selection.visible = _current_selection != null
   
+  grid_hovered_tile = get_tile_at(grid_position_3d)
+  
   if _current_selection:
     var target = DEFAULT_COLOR
     match _current_selection.state:
@@ -170,5 +184,6 @@ func _process(delta: float) -> void:
   if selection.visible:
     _grid_material.set_shader_parameter("clr", _indicator_color)
 
-  DebugDraw2D.set_text("hovered tile", grid_position_3d)
+  DebugDraw2D.set_text("hovered path", grid_hovered_tile.get_path() if grid_hovered_tile else "n/a")
+  DebugDraw2D.set_text("hovered tile position", grid_position_3d)
   DebugDraw2D.set_text("hovered position", raw_pos)

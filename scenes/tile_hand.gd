@@ -7,7 +7,7 @@ const MAX_RANGE = [Vector3(-MAX_HAND_WIDTH, -0.7, 2.0), Vector3(MAX_HAND_WIDTH, 
 
 static var inst: TileHand
 static var tiles = [
-  load("res://scenes/tiles/effects/basic_destroy_tile.tscn"),
+  #load("res://scenes/tiles/basic_destroy_tile.tscn"),
   load("res://scenes/tiles/basic_give_points_tile.tscn")
 ]
 

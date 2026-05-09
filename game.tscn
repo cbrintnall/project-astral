@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://bb86qx2048csu" path="res://scenes/ui.gd" id="8_iotsf"]
 [ext_resource type="Texture2D" uid="uid://b7l6burxk7544" path="res://assets/ui/nine-patch-bottom.png" id="9_215e1"]
 [ext_resource type="Script" uid="uid://cbsof0i8gmrfi" path="res://scenes/tile_hand.gd" id="9_vef74"]
+[ext_resource type="FontFile" uid="uid://bwa1eluxk04vt" path="res://assets/fonts/Habibi-Regular.ttf" id="11_215e1"]
 [ext_resource type="Script" uid="uid://b88mkbokfc4re" path="res://scenes/board_camera.gd" id="11_mfdv2"]
 [ext_resource type="Shader" uid="uid://cbmhcoe13d8g4" path="res://materials/shaders/grid_backing_shader.gdshader" id="12_lc2xo"]
 
@@ -214,14 +215,35 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_7sc4i")
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/MarginContainer2" unique_id=2067133570]
 layout_mode = 2
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_right = 80
 
-[node name="ScoreLabel" type="Label" parent="UI/VBoxContainer/MarginContainer2/MarginContainer" unique_id=362333001]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/MarginContainer2/MarginContainer" unique_id=819270449]
+layout_mode = 2
+
+[node name="TurnLabel" type="Label" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer" unique_id=1163476972]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 64
+text = "Turn: 0/4"
+
+[node name="ScoreLabel" type="Label" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer" unique_id=362333001]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 64
 text = "100/100"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CycleLabel" type="Label" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer" unique_id=1396080300]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 64
+text = "Cycle: 1"
+horizontal_alignment = 2
 
 [node name="MarginContainer3" type="MarginContainer" parent="UI/VBoxContainer" unique_id=105548196]
 z_index = -1
@@ -258,6 +280,45 @@ theme_override_colors/font_color = Color(0.15127584, 0.1512762, 0.1512759, 1)
 theme_override_font_sizes/font_size = 64
 theme_override_styles/normal = SubResource("StyleBoxTexture_mfdv2")
 flat = true
+
+[node name="TileData" type="MarginContainer" parent="UI" unique_id=1551545257]
+unique_name_in_owner = true
+anchors_preset = -1
+anchor_left = 0.01
+anchor_top = 0.242
+anchor_right = 0.01
+anchor_bottom = 0.736
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/TileData" unique_id=1567435387]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/TileData/MarginContainer" unique_id=1614693962]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/TileData/MarginContainer/VBoxContainer" unique_id=1310165273]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="UI/TileData/MarginContainer/VBoxContainer/MarginContainer" unique_id=59150819]
+layout_mode = 2
+
+[node name="TileTitle" type="RichTextLabel" parent="UI/TileData/MarginContainer/VBoxContainer/MarginContainer" unique_id=533354277]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("11_215e1")
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "Tile Data"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+
+[node name="EffectsDisplayRoot" type="VBoxContainer" parent="UI/TileData/MarginContainer/VBoxContainer" unique_id=1328159812]
+unique_name_in_owner = true
+layout_mode = 2
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1757800547]
 transform = Transform3D(1, 0, 0, 0, 0.23705596, 0.971496, 0, -0.971496, 0.23705596, 0, 18.659317, 0)

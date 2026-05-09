@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://bnqtmlp86jrw8"]
+
+[ext_resource type="FontFile" uid="uid://bwa1eluxk04vt" path="res://assets/fonts/Habibi-Regular.ttf" id="1_3jea6"]
+[ext_resource type="Script" uid="uid://gxwopqlwyfos" path="res://scenes/ui/tile_effect_display.gd" id="1_nut02"]
+[ext_resource type="Texture2D" uid="uid://uox7cg17blt6" path="res://assets/arrow.png" id="2_ejhag"]
+[ext_resource type="FontFile" uid="uid://dw17dptw7rmyt" path="res://assets/static/MuseoModerno-Regular.ttf" id="3_ejhag"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ejhag"]
+bg_color = Color(0, 0, 0, 1)
+expand_margin_left = 12.0
+expand_margin_right = 12.0
+
+[node name="TileEffectDisplay" type="MarginContainer" unique_id=1392376793]
+custom_minimum_size = Vector2(300, 0)
+script = ExtResource("1_nut02")
+
+[node name="Panel" type="Panel" parent="." unique_id=1077783201]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ejhag")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=419230590]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=447447347]
+layout_mode = 2
+
+[node name="HFlowContainer" type="HFlowContainer" parent="VBoxContainer/VBoxContainer" unique_id=70248517]
+layout_mode = 2
+
+[node name="EventText" type="RichTextLabel" parent="VBoxContainer/VBoxContainer/HFlowContainer" unique_id=444445475]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_3jea6")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "[color=#f2d3ab]On Activate[/color]"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/VBoxContainer/HFlowContainer" unique_id=2065993340]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HFlowContainer/MarginContainer" unique_id=986774108]
+layout_mode = 2
+texture = ExtResource("2_ejhag")
+expand_mode = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/VBoxContainer" unique_id=532029242]
+layout_mode = 2
+theme_override_constants/margin_left = 36
+
+[node name="Description" type="RichTextLabel" parent="VBoxContainer/VBoxContainer/MarginContainer" unique_id=1549063393]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("3_ejhag")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "give 5 dawn."
+fit_content = true
+scroll_active = false
+autowrap_mode = 0

@@ -25,6 +25,9 @@ var _effects := []
 var _remaining_effects := []
 var _current_effect_task: Task
 
+func get_effects() -> Array:
+  return _effects
+
 func has_pre_round_effects() -> bool:
   return _effects.any(func(effect: TileEffect): return effect.event == TileEffect.Event.ON_ROUND_START)
 
@@ -52,6 +55,9 @@ func execute(ctx: ExecutionContext, event: TileEffect.Event):
       _remaining_effects.push_back(effect)
 
 func unselect():
+  if GridManager.inst.hand_selected_tile == self:
+    GridManager.inst.hand_selected_tile = null
+  
   if _state.current == "placing":
     _state.current = "selecting"
     AudioManager3d.play({ "stream": preload("res://audio/Light Drone Sound (button hover) 9.wav"), "pitch_additional": -0.1 })
@@ -143,6 +149,7 @@ func _waiting_for_end(machine: CallableStateMachine, delta: float):
   pass
 
 func _mouse_enter() -> void:
+  GridManager.inst.hand_hovered_tile = self
   _mouse_entered = true
   stretcher.punch(1.0, 3.0)
   AudioManager3d.play({
@@ -151,6 +158,8 @@ func _mouse_enter() -> void:
   })
   
 func _mouse_exit() -> void:
+  if GridManager.inst.hand_hovered_tile == self:
+    GridManager.inst.hand_hovered_tile = null
   _mouse_entered = false
   
 func _on_select():
@@ -167,11 +176,12 @@ func _on_select():
       selection.canceled.connect(unselect)
       selection.on_choose = _try_place_self.bind(selection)
 
-      GridManager.inst.try_start_selection(selection)
+      if GridManager.inst.try_start_selection(selection):
+        GridManager.inst.hand_selected_tile = self
     "placing":
       unselect()
     "placed":
-      pass
+      print("hello?")
       
 func _try_place_self(selection: Selection):
   if GridManager.inst.try_place_tile(self, GridManager.inst.grid_position_3d):

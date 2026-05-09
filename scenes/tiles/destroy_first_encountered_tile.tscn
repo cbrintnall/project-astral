@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://b60euc68qs0qy"]
+
+[ext_resource type="PackedScene" uid="uid://cr31ui8b680hb" path="res://scenes/board/tile.tscn" id="1_b7bmk"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_x4r76"]
+[ext_resource type="Script" uid="uid://cpb1i2jjtins2" path="res://scenes/tiles/tile_effect_destroy_first_encountered.gd" id="3_b7bmk"]
+
+[sub_resource type="Resource" id="Resource_o70oe"]
+script = ExtResource("2_x4r76")
+execute_directions = Array[Vector2i]([Vector2i(0, 1), Vector2i(0, -1)])
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4vka5"]
+
+[node name="Tile" unique_id=1995656874 instance=ExtResource("1_b7bmk")]
+def = SubResource("Resource_o70oe")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="2" unique_id=550506962]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.10000004, 0)
+mesh = SubResource("CapsuleMesh_4vka5")
+
+[node name="TileEffectDestroyFirstEncountered" type="Node3D" parent="." index="3" unique_id=960048941]
+script = ExtResource("3_b7bmk")

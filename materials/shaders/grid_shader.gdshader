@@ -30,6 +30,6 @@ void fragment() {
 
 	// Apply color and transparency
   vec3 clr = mix(line_color.rgb, fill_color.rgb, line);
-	ALBEDO = clr+(clr*(n*5.0));
+	ALBEDO = clr+(clr*(n*1.0));
 	ALPHA = mix(line_color.a, fill_color.a, line);
 }
