@@ -7,8 +7,7 @@ const MAX_RANGE = [Vector3(-MAX_HAND_WIDTH, -0.7, 2.0), Vector3(MAX_HAND_WIDTH, 
 
 static var inst: TileHand
 static var tiles = [
-  #load("res://scenes/tiles/basic_destroy_tile.tscn"),
-  load("res://scenes/tiles/basic_give_points_tile.tscn")
+  load("res://data/tiles/tile_basic_points.tres")
 ]
 
 var _markers := []
@@ -21,6 +20,20 @@ func discard_hand():
     marker.queue_free()
     
   _markers = []
+  
+func _unhandled_input(event: InputEvent) -> void:
+  if event is InputEventKey and event.pressed:
+    if event.keycode >= KEY_0 and event.keycode <= KEY_9:
+      var idx = event.keycode - KEY_0
+      var visible_markers = _markers.filter(func(marker): return marker.visible)
+      if idx == 0 and event.keycode == KEY_0:
+        idx = 9
+      else:
+        idx -= 1
+      if visible_markers and idx >= 0 and idx < len(visible_markers):
+        var child = NodeUtils.find_child_with_predicate(visible_markers[idx], func(node): return node is Tile)
+        if child:
+          child.select()
 
 func _ready() -> void:
   inst = self
@@ -30,10 +43,11 @@ func _create_hand():
     var marker := Marker3D.new()
     add_child(marker)
     _markers.push_back(marker)
-    var tile = tiles.pick_random().instantiate()
+    var tile = load("res://scenes/board/tile.tscn").instantiate()
+    tile.def = tiles.pick_random()
     marker.add_child(tile)
     
-func _process(delta: float) -> void:
+func _process(delta: float) -> void:  
   for marker: Marker3D in _markers:
     marker.visible = marker.get_child_count() > 0
     

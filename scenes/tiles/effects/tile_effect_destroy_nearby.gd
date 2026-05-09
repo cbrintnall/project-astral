@@ -24,7 +24,7 @@ func get_description(effect_ctx: EffectContext, exec_ctx: ExecutionContext) -> S
   
 func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
   var pos = GridManager.inst.get_tile_loc(effect_ctx.tile)
-  var t = create_tween()
+  var t = effect_ctx.tile.create_tween()
   for dir in directions:
     var target = pos+dir
     t.tween_property(

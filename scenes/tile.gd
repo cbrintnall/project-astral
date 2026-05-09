@@ -21,21 +21,20 @@ var _mouse_entered := false
 var _selection: Selection
 var _ctx: ExecutionContext
 var _timer := BetterTimer.new(0.5)
-var _effects := []
 var _remaining_effects := []
 var _current_effect_task: Task
 
+func select():
+  _on_select()
+
 func get_effects() -> Array:
-  return _effects
+  return def.effects
 
 func has_pre_round_effects() -> bool:
-  return _effects.any(func(effect: TileEffect): return effect.event == TileEffect.Event.ON_ROUND_START)
+  return get_effects().any(func(effect: TileEffect): return effect.event == TileEffect.Event.ON_ROUND_START)
 
 func has_post_round_effects() -> bool:
-  return _effects.any(func(effect: TileEffect): return effect.event == TileEffect.Event.ON_ROUND_END)
-
-func register_effect(effect: TileEffect):
-  _effects.push_back(effect)
+  return get_effects().any(func(effect: TileEffect): return effect.event == TileEffect.Event.ON_ROUND_END)
 
 ## NOTE: do we want tiles to define directions? or should they just always be all four?
 func get_directions() -> Array:
@@ -50,7 +49,7 @@ func execute(ctx: ExecutionContext, event: TileEffect.Event):
   _ctx = ctx
   _ctx.current_tile = self
   
-  for effect: TileEffect in _effects:
+  for effect: TileEffect in get_effects():
     if effect.event == event:
       _remaining_effects.push_back(effect)
 
@@ -85,9 +84,6 @@ func _ready() -> void:
   _state.state_changed.connect(_on_state_changed)
   
   add_child(stat)
-  
-  for effect: TileEffect in NodeUtils.get_nodes_with_predicate(self, func(node): return node is TileEffect):
-    register_effect(effect)
   
 func _on_state_changed(state: String):
   match state:

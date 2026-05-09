@@ -7,5 +7,5 @@ func get_description(effect_ctx: EffectContext, exec_ctx: ExecutionContext) -> S
   return "Destroys the first %d destruction tiles it encounters after itself." % amount_destroyed
   
 func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
-  await get_tree().create_timer(1.0).timeout
+  await effect_ctx.tile.get_tree().create_timer(1.0).timeout
   print("TODO :)")

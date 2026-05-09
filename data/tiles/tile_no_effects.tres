@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://dd6l3bd1seddo"]
 
 [ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="1_fwk8g"]
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_fypmo"]
 
 [resource]
 script = ExtResource("1_fwk8g")

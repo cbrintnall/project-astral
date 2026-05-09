@@ -203,7 +203,7 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 103.0
 grow_horizontal = 2
-theme_override_constants/separation = -32
+theme_override_constants/separation = -34
 
 [node name="MarginContainer2" type="MarginContainer" parent="UI/VBoxContainer" unique_id=576643354]
 layout_mode = 2
@@ -225,14 +225,14 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 32
 text = "Turn: 0/4"
 
 [node name="ScoreLabel" type="Label" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer" unique_id=362333001]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 32
 text = "100/100"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -241,7 +241,7 @@ vertical_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 32
 text = "Cycle: 1"
 horizontal_alignment = 2
 
@@ -262,14 +262,14 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_hve3p")
 [node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/MarginContainer3/MarginContainer2" unique_id=1035190512]
 layout_mode = 2
 theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
+theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
 [node name="Label" type="Label" parent="UI/VBoxContainer/MarginContainer3/MarginContainer2/MarginContainer" unique_id=1530798185]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9843137, 0.9607843, 0.9372549, 1)
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 48
 text = "Play"
 
 [node name="PlayButton" type="Button" parent="UI/VBoxContainer/MarginContainer3/MarginContainer2" unique_id=679220892]

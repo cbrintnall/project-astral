@@ -1,11 +1,5 @@
 [gd_scene format=3 uid="uid://cjs6ig13ic2ln"]
 
 [ext_resource type="PackedScene" uid="uid://cr31ui8b680hb" path="res://scenes/board/tile.tscn" id="1_m6yn0"]
-[ext_resource type="Script" uid="uid://b8w5q1k7is7sg" path="res://scenes/tiles/effects/tile_effect_give_points.gd" id="2_nm3a1"]
 
 [node name="Tile" unique_id=1995656874 instance=ExtResource("1_m6yn0")]
-
-[node name="TileEffectGivePoints" type="Node3D" parent="." index="2" unique_id=695879937]
-script = ExtResource("2_nm3a1")
-points_given = 5
-metadata/_custom_type_script = "uid://b8w5q1k7is7sg"
