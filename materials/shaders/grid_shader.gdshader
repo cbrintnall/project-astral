@@ -23,7 +23,7 @@ void fragment() {
 	vec2 grid_pos = mod(world_pos.xz + grid_size * 0.5, grid_size) / grid_size - 0.5;
 	grid_pos = (abs(grid_pos) * 2.0);
   float width = line_width+(pow(n2, 15.0)*0.3);
-  width += (mouse_distance-min(distance(world_pos,global_mouse_position), mouse_distance))*0.005;
+  //width += (mouse_distance-min(distance(world_pos,global_mouse_position), mouse_distance))*0.005;
   //float width = line_width;
 	//float line = min(smoothstep(width, width+step_range, grid_pos.x), smoothstep(width, width+step_range, grid_pos.y));
   float line = min(step(width, grid_pos.x), step(width, grid_pos.y));

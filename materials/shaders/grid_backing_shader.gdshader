@@ -16,7 +16,7 @@ void vertex() {
 
 void fragment() {
   vec2 offset = vec2(TIME*0.00);
-  float n = texture(noise, SCREEN_UV+offset).x;
+  float n = texture(noise, SCREEN_UV+offset+vec2(TIME*0.005)).x;
   float size = ((sin(TIME+coords.x)+1.0)*0.5)*250.0;
   float star = step(n, 0.9);
   

@@ -8,10 +8,12 @@ static var inst: BoardCamera
 @export var noise: FastNoiseLite
 
 @onready var camera : Camera3D = $Camera3D
+@onready var default_rotation := camera.rotation
 
 var _shake_intensity := 0.0
 var _shake_remaining := 0.0
 var _focus := Vector3.ZERO
+
 
 func shake(amt: float, time: float):
   _shake_intensity = amt
@@ -27,6 +29,13 @@ func _ready() -> void:
   _focus = global_position
   
 func _process(delta: float) -> void:
+  var rect := get_viewport().get_visible_rect()
+  var mouse := get_viewport().get_mouse_position()
+  var normalized := Vector2(mouse.x/rect.size.x, mouse.y/rect.size.y)
+  var offset := (normalized-Vector2(0.5, 0.5))*0.01
+  
+  camera.rotation = camera.rotation.lerp(default_rotation+Vector3(-offset.y, offset.x, 0.0), 0.02)
+  
   if _shake_remaining:
     camera.h_offset = noise.get_noise_1d(Time.get_ticks_msec()*0.09)*_shake_intensity
     camera.v_offset = noise.get_noise_1d(550.0 + (Time.get_ticks_msec()*0.09))*_shake_intensity
@@ -38,5 +47,6 @@ func _process(delta: float) -> void:
   
   global_position = global_position.lerp(_focus, 0.1)
   
-  var input := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down").normalized()
-  _focus += Vector3(input.x, 0.0, input.y)*MOVE_SPEED
+  var input = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+  var dir = (input.y * global_basis.z) + (input.x * global_basis.x)
+  _focus += dir*MOVE_SPEED

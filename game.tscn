@@ -69,6 +69,8 @@ texture_margin_bottom = 32.0
 region_rect = Rect2(0, 0, 1024, 1024)
 
 [sub_resource type="Environment" id="Environment_mwb40"]
+tonemap_mode = 3
+tonemap_white = 2.0
 ssao_enabled = true
 glow_enabled = true
 glow_normalized = true
@@ -144,7 +146,7 @@ size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="TileSelectCamera" type="Camera3D" parent="TileDisplayViewport/SubViewportContainer/SubViewport" unique_id=890270172]
-transform = Transform3D(1, 0, 0, 0, 0.5652198, 0.8249403, 0, -0.8249403, 0.5652198, 0, 4.9, 3.1)
+transform = Transform3D(0.9396927, -0.28214622, 0.19331655, 0, 0.5652198, 0.8249403, -0.34202015, -0.77519035, 0.5311329, 3.6313727, 15.871706, 9.977115)
 cull_mask = 2
 projection = 1
 size = 2.882
@@ -273,12 +275,14 @@ transform = Transform3D(1, 0, 0, 0, 1, -1.5893256e-08, 0, 1.5893256e-08, 1, 0, 1
 mesh = SubResource("QuadMesh_80nbo")
 
 [node name="CameraArm" type="Node3D" parent="." unique_id=515860464]
+transform = Transform3D(0.9396926, 0, 0.34202012, 0, 1, 0, -0.34202012, 0, 0.9396926, 0, 0, 0)
 script = ExtResource("11_mfdv2")
 noise = SubResource("FastNoiseLite_iotsf")
 
 [node name="Camera3D" type="Camera3D" parent="CameraArm" unique_id=517060095]
-transform = Transform3D(1, 0, 0, 0, 0.5652198, 0.8249403, 0, -0.8249403, 0.5652198, 0, 4.9, 3.1)
+transform = Transform3D(1, 0, 0, 0, 0.5652198, 0.8249403, 0, -0.8249403, 0.5652198, 0, 15.871706, 10.617424)
 cull_mask = 1048573
+fov = 30.0
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="CameraArm/Camera3D" unique_id=372956858]
 remote_path = NodePath("../../../TileDisplayViewport/SubViewportContainer/SubViewport/TileSelectCamera")
