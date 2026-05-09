@@ -18,6 +18,7 @@ func _sync_displayed():
   NodeUtils.clear_children(%EffectsDisplayRoot)
   
   if displayed_tile:
+    %TileTitle.text = displayed_tile.def.name
     var ctx := EffectContext.new()
     ctx.tile = displayed_tile
     for effect in displayed_tile.get_effects():

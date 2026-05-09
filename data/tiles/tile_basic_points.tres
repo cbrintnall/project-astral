@@ -3,14 +3,11 @@
 [ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_ju7cw"]
 [ext_resource type="Resource" uid="uid://2dgbbhqcwj1f" path="res://data/effects/effect_basic_give_points.tres" id="2_a2168"]
 [ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_ugu2s"]
-[ext_resource type="Texture2D" uid="uid://c14gljjk7utw5" path="res://assets/blender/tilegridMEH.png" id="4_a2168"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xlkub"]
-atlas = ExtResource("4_a2168")
-region = Rect2(0, 0, 832, 832)
+[ext_resource type="Texture2D" uid="uid://dtk1xp60chggh" path="res://assets/particles/star1.png" id="4_a2168"]
 
 [resource]
 script = ExtResource("2_ugu2s")
+name = "Dawn"
 effects = Array[ExtResource("1_ju7cw")]([ExtResource("2_a2168")])
-texture = SubResource("AtlasTexture_xlkub")
+texture = ExtResource("4_a2168")
 metadata/_custom_type_script = "uid://cssx7lcdl5o45"

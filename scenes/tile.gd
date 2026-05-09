@@ -26,6 +26,7 @@ var _current_effect_task: Task
 var _meshes := []
 var _face_mesh: MeshInstance3D
 var _face_material = preload("res://materials/extracted/Material_TileFace.material")
+var _effects := []
 
 func destroy():
   AudioManager3d.play({
@@ -47,7 +48,7 @@ func select():
   _on_select()
 
 func get_effects() -> Array:
-  return def.effects
+  return _effects
 
 func has_pre_round_effects() -> bool:
   return get_effects().any(func(effect: TileEffect): return effect.event == TileEffect.Event.ON_ROUND_START)
@@ -127,6 +128,9 @@ func _ready() -> void:
   _face_material = preload("res://materials/extracted/Material_TileFace.material").duplicate()
   if _face_mesh:
     _face_mesh.set_surface_override_material(1, _face_material)
+  
+  for effect: TileEffect in def.effects:
+    _effects.push_back(effect)
   
   if def.texture:
     _face_material.albedo_texture = def.texture
