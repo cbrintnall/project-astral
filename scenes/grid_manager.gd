@@ -51,14 +51,7 @@ func tiles_dirty() -> bool:
   return _tiles_dirty
 
 func collect_tiles_in_execution_order() -> Array:
-  var tiles := []
-  
-  var initiators = get_played_tiles().filter(func(tile: Tile): return tile.def.initiates)
-
-  for initiator in initiators:
-    _collect_tile(initiator, _tiles[initiator], tiles)
-  
-  return tiles
+  return get_played_tiles()
 
 func get_tile_at(pos: Vector3i) -> Tile:
   return _placements.get(pos)
@@ -77,13 +70,6 @@ func has_tile(loc: Vector3i) -> bool:
 
 func try_place_tile(tile: Tile, pos: Vector3i) -> bool:
   if _placements.has(pos): return false
-
-  var has_neighbor = Tile.DIRECTION_EXECUTION_ORDER.any(
-    func(dir: Vector2i): return has_tile(pos+Vector3i(dir.x, 0, dir.y))
-  )
-  
-  if not has_neighbor and not tile.def.initiates:
-    return false
   
   _placements[pos] = tile
   _tiles[tile] = pos
@@ -146,16 +132,16 @@ func _update_dirty_grid():
   for node in get_tree().get_nodes_in_group("debug_path_text"):
     node.queue_free()
   
-  var execution_order = collect_tiles_in_execution_order()
-  for i in len(execution_order):
-    var text := Label3D.new()
-    var tile = execution_order[i]
-    
-    tile.add_child(text)
-    text.text = str(i+1)
-    text.position = Vector3.UP*1.5
-    text.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-    text.add_to_group("debug_path_text")
+  #var execution_order = collect_tiles_in_execution_order()
+  #for i in len(execution_order):
+    #var text := Label3D.new()
+    #var tile = execution_order[i]
+    #
+    #tile.add_child(text)
+    #text.text = str(i+1)
+    #text.position = Vector3.UP*1.5
+    #text.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+    #text.add_to_group("debug_path_text")
     #
   #for path in _execution_paths:
     #path.queue_free()

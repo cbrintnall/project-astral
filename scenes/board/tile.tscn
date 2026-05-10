@@ -4,8 +4,13 @@
 [ext_resource type="Script" uid="uid://b140lw26qadyg" path="res://otterlib/stretcher3d.gd" id="2_kx4x0"]
 [ext_resource type="Resource" uid="uid://dd6l3bd1seddo" path="res://data/tiles/tile_no_effects.tres" id="2_vpg4h"]
 [ext_resource type="PackedScene" uid="uid://bi54uvkurhgh2" path="res://assets/blender/objects/objectTile.glb" id="4_xm3w6"]
+[ext_resource type="ArrayMesh" uid="uid://dufdhd4rdr3uv" path="res://assets/extracted_mesh/vfxConstellationBox.tres" id="5_w7oh7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fc0e3"]
+
+[sub_resource type="MultiMesh" id="MultiMesh_xm3w6"]
+transform_format = 1
+mesh = ExtResource("5_w7oh7")
 
 [node name="Tile" type="StaticBody3D" unique_id=1995656874]
 transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.99999994, 0, 0, 0)
@@ -22,3 +27,7 @@ metadata/_custom_type_script = "uid://b140lw26qadyg"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1324696323]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.10000005, 0)
 shape = SubResource("BoxShape3D_fc0e3")
+
+[node name="Constellations" type="MultiMeshInstance3D" parent="." unique_id=1454948822]
+unique_name_in_owner = true
+multimesh = SubResource("MultiMesh_xm3w6")
