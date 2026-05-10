@@ -53,7 +53,7 @@ func get_current_execution_queue() -> Array:
 
 func leave_shop():
   assert(current_state == "shop")
-  _state.current = "deal"
+  _state.current = "start_round"
 
 func do_receive_points_fx():
   _sound_counter += 0.01
@@ -83,6 +83,7 @@ func _ready() -> void:
   add_child(_state)
   add_child(player_tasks)
   
+  _state.register("start_round", _start_round)
   _state.register("deal", _deal)
   _state.register("wait_for_player", _wait_for_player)
   _state.register("begin_execution", _begin_execution)
@@ -122,14 +123,23 @@ func _process(delta: float) -> void:
     
   selection_svp.physics_object_picking = _state.current != "shop"
   
-func _deal(machine: CallableStateMachine, delta: float):
+func _start_round(machine: CallableStateMachine, delta: float):
   turn += 1
-  TileHand.inst.distribute_hand()
-  _state.current = "wait_for_player"
   
   BoardCamera.inst.map_size = GridManager.inst.size
   BoardCamera.inst.map_root = Vector3.ZERO
   BoardCamera.inst.try_set_focus(Vector3.ZERO)
+  
+  _state.current = "deal"
+  
+func _deal(machine: CallableStateMachine, delta: float):
+  if TileHand.inst.get_tile_count() >= Constants.DEFAULT_HAND_SIZE:
+    _state.current = "wait_for_player"
+    return
+  
+  if _deal_timer.check(delta):
+    var next = HandManager.inst.get_next_from_hand()
+    TileHand.inst.add_to_hand(next)
 
 func _wait_for_player(machine: CallableStateMachine, delta: float):
   pass

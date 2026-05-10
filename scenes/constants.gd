@@ -6,9 +6,18 @@ static var wrath := preload("res://data/stats/stat_wrath.tres")
 
 const TURNS_PER_SCORE = 4
 const DEFAULT_HAND_SIZE = 5
+const MAX_HAND_SIZE = 10
 
-const START_DECK = [
-  
+static var START_DECK = [
+  load("res://data/tiles/tile_basic_points.tres"),
+  load("res://data/tiles/tile_basic_points.tres"),
+  load("res://data/tiles/tile_basic_points.tres"),
+  load("res://data/tiles/tile_basic_points.tres"),
+  load("res://data/tiles/tile_basic_points.tres"),
+  load("res://data/tiles/tile_basic_multiply_area.tres"),
+  load("res://data/tiles/tile_basic_points_no_neighbors.tres"),
+  load("res://data/tiles/tile_basic_points_no_neighbors.tres"),
+  load("res://data/tiles/tile_basic_points_no_neighbors.tres"),
 ]
 
 const ALL_DIRECTIONS = [

@@ -316,8 +316,8 @@ func _on_select():
       Springer.data[stretcher]["rotation"]["velocity"] = Vector3(500.0, 0.0, 0.0)
       if GameManager.inst.money >= def.shop_cost:
         GameManager.inst.money -= def.shop_cost
-        print("TODO: ADD TO PLAYER HAND")
         BoardCamera.inst.shake(0.1, 0.1)
+        HandManager.inst.add_tile(def)
         queue_free()
       
 func _try_place_self(selection: Selection):

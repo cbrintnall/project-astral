@@ -14,14 +14,23 @@ static var tiles = [
 
 var _markers := []
 
-func distribute_hand():
-  _create_hand()
+func get_tile_count() -> int:
+  return len(_markers)
   
 func discard_hand():
   for marker in _markers:
     marker.queue_free()
     
   _markers = []
+  
+func add_to_hand(data: TileDef):
+  if len(_markers) < Constants.MAX_HAND_SIZE:
+    var marker := Marker3D.new()
+    add_child(marker)
+    _markers.push_back(marker)
+    var tile = load("res://scenes/board/tile.tscn").instantiate()
+    tile.def = data
+    marker.add_child(tile)
   
 func _unhandled_input(event: InputEvent) -> void:
   if event is InputEventKey and event.pressed:
@@ -39,15 +48,6 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _ready() -> void:
   inst = self
-  
-func _create_hand():
-  for i in Constants.DEFAULT_HAND_SIZE+1:
-    var marker := Marker3D.new()
-    add_child(marker)
-    _markers.push_back(marker)
-    var tile = load("res://scenes/board/tile.tscn").instantiate()
-    tile.def = tiles.pick_random()
-    marker.add_child(tile)
     
 func _process(delta: float) -> void:  
   for marker: Marker3D in _markers:

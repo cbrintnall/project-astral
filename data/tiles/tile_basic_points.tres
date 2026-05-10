@@ -7,7 +7,7 @@
 
 [resource]
 script = ExtResource("2_ugu2s")
-name = "React"
+name = "Nebula"
 effects = Array[ExtResource("1_ju7cw")]([ExtResource("2_a2168")])
 texture = ExtResource("4_a2168")
 metadata/_custom_type_script = "uid://cssx7lcdl5o45"
