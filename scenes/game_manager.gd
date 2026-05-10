@@ -3,6 +3,8 @@ class_name GameManager
 
 static var inst: GameManager
 
+signal points_fx
+
 @export var camera: Camera3D
 @export var selection_svp: SubViewport
 
@@ -54,6 +56,7 @@ func do_receive_points_fx():
   })
   
   _reset_sound_timer.reset()
+  points_fx.emit()
 
 func try_execute_turn():
   _state.current = "begin_execution"

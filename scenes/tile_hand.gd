@@ -1,7 +1,7 @@
 extends Node3D
 class_name TileHand
 
-const MAX_HAND_WIDTH = 7.0
+const MAX_HAND_WIDTH = 4.0
 const MAX_RANGE = [Vector3(-MAX_HAND_WIDTH, -0.7, 2.0), Vector3(MAX_HAND_WIDTH, -0.7, 2.0)]
 
 static var inst: TileHand
