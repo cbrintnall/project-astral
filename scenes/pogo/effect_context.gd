@@ -2,4 +2,4 @@ extends RefCounted
 class_name EffectContext
 
 var tile: Tile
-var location: Vector2i
+var override_location: Vector3i

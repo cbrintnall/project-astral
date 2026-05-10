@@ -21,10 +21,10 @@ metadata/_custom_type_script = "uid://di6fi4200kyxe"
 
 [sub_resource type="Resource" id="Resource_r2u1q"]
 script = ExtResource("2_0llrm")
-chance = 0.25
 stat = ExtResource("3_fbccm")
 provider = SubResource("Resource_x1idd")
 target = SubResource("Resource_fws4n")
+event = 2
 metadata/_custom_type_script = "uid://b4wlqujlbfl8p"
 
 [resource]

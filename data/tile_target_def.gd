@@ -36,6 +36,9 @@ func get_target(ctx: EffectContext) -> Array:
   var targets := []
   var viable_options := tiles.duplicate()
   var src = GridManager.inst.get_tile_loc(ctx.tile)
+
+  if not ctx.tile.placed and ctx.override_location:
+    src = ctx.override_location
   
   if size:
     var rect = Rect2i(Vector2i(src.x, src.z)-Vector2i((size*0.5).floor()), size)

@@ -18,13 +18,13 @@ func get_event_text() -> String:
     Event.ON_ACTIVATE:
       return "[color=#f2d3ab]On Activate[/color]"
     Event.ON_ROUND_START:
-      return "On Round Start"
+      return "[color=#8b6d9c]On Turn Start[/color]"
     Event.ON_ROUND_END:
-      return "On Round End"
+      return "[color=#c69fa5]On Turn End[/color]"
     Event.ON_DESTROY:
       return "On Destroyed"
     Event.ON_PLACE:
-      return "On Placed"
+      return "On Place"
 
   return "ERROR, NO EVENT"
 

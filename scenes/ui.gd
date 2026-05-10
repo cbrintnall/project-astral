@@ -10,6 +10,7 @@ static var inst: UI
 @onready var system_label: RichTextLabel = %SystemMessage
 
 var displayed_tile: Tile
+var displayed_context: EffectContext
 
 func show_system_message(text: String, audio: AudioStream = null):
   system_label.text = text
@@ -70,12 +71,12 @@ func _sync_displayed():
   
   if displayed_tile:
     %TileTitle.text = displayed_tile.def.name
-    var ctx := EffectContext.new()
-    ctx.tile = displayed_tile
+    displayed_context = EffectContext.new()
+    displayed_context.tile = displayed_tile
     for effect in displayed_tile.get_effects():
       var display: EffectsDisplayRoot = load("res://scenes/ui/tile_effect_display.tscn").instantiate()
       %EffectsDisplayRoot.add_child(display)
-      display.effect_ctx = ctx
+      display.effect_ctx = displayed_context
       display.effect = effect
 
 func _process(_delta: float) -> void:
@@ -109,6 +110,9 @@ func _process(_delta: float) -> void:
     desired_display = GridManager.inst.grid_hovered_tile
   elif GridManager.inst.hand_selected_tile:
     desired_display = GridManager.inst.hand_selected_tile
+
+  if displayed_context:
+    displayed_context.override_location = GridManager.inst.grid_position_3d
 
   if not displayed_tile:
     if desired_display:
