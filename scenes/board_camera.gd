@@ -12,8 +12,18 @@ static var inst: BoardCamera
 
 var _shake_intensity := 0.0
 var _shake_remaining := 0.0
-var _focus := Vector3.ZERO
-
+var _focus: Vector3 = Vector3.ZERO:
+  set(val):
+    _focus = val
+    
+    var size = Vector2(GridManager.inst.size)*0.5
+    _focus = Vector3(
+      clampf(val.x, -size.x, size.x),
+      clampf(val.y, -INF, INF),
+      clampf(val.z, -size.y, size.y)
+    )
+  get:
+    return _focus
 
 func shake(amt: float, time: float):
   _shake_intensity = amt

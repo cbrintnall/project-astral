@@ -13,6 +13,17 @@ func _ready() -> void:
   inst = self
 
   %PlayButton.pressed.connect(GameManager.inst.try_execute_turn)
+  
+  Springer.register("offset_transform_position", score_label, Vector2.ZERO, Vector2.ZERO, 200.0, 10.0)
+  Springer.register("offset_transform_scale", score_label, Vector2.ONE, Vector2.ZERO, 200.0, 10.0)
+  
+  await Utils.wait_until(func(): return GameManager.inst != null)
+  
+  GameManager.inst.points_fx.connect(
+    func():
+      score_label.offset_transform_position = Utils.random_unit_circle()*5.0
+      score_label.offset_transform_scale = Vector2(randf_range(1.0, 1.2), randf_range(1.0, 1.2))
+  )
 
 func _sync_displayed():
   NodeUtils.clear_children(%EffectsDisplayRoot)

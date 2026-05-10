@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://b88mkbokfc4re" path="res://scenes/board_camera.gd" id="11_mfdv2"]
 [ext_resource type="Shader" uid="uid://cbmhcoe13d8g4" path="res://materials/shaders/grid_backing_shader.gdshader" id="12_lc2xo"]
 [ext_resource type="Texture2D" uid="uid://dyo4ao2bdf0iv" path="res://assets/ring.png" id="17_e8heu"]
+[ext_resource type="PackedScene" uid="uid://bch84pl6vclm5" path="res://assets/vfx/vfxConstellationBox.glb" id="18_boyg6"]
 [ext_resource type="Material" uid="uid://de5t4qub7uetm" path="res://materials/highlight_material.tres" id="18_rvswv"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_215e1"]
@@ -192,10 +193,10 @@ render_target_update_mode = 4
 transform = Transform3D(0.9396927, -0.28214622, 0.19331655, 0, 0.5652198, 0.8249403, -0.34202015, -0.77519035, 0.5311329, 3.6313727, 15.871706, 9.977115)
 cull_mask = 2
 projection = 1
-size = 2.882
+size = 2.0
 
 [node name="TileScalar" type="Node3D" parent="TileDisplayViewport/SubViewportContainer/SubViewport/TileSelectCamera" unique_id=1587664697]
-transform = Transform3D(0.25, 0, -3.7252907e-09, 0, 0.25, 0, 3.7252907e-09, 0, 0.25, 0, -1, -0.99999976)
+transform = Transform3D(0.25, 0, -3.7252907e-09, 0, 0.25, 0, 3.7252907e-09, 0, 0.25, 0, -0.5, -1)
 script = ExtResource("9_vef74")
 
 [node name="GameManager" type="Node" parent="." unique_id=1080588153 node_paths=PackedStringArray("camera", "selection_svp")]
@@ -205,6 +206,7 @@ selection_svp = NodePath("../TileDisplayViewport/SubViewportContainer/SubViewpor
 
 [node name="GridManager" type="Node" parent="." unique_id=735757972]
 script = ExtResource("2_feb5d")
+size = Vector2i(30, 30)
 
 [node name="Gridcast" type="Node3D" parent="GridManager" unique_id=1771723510]
 script = ExtResource("3_j5wjh")
@@ -234,6 +236,9 @@ shape = SubResource("WorldBoundaryShape3D_eow3j")
 
 [node name="SelectionBox" type="MeshInstance3D" parent="GridManager/SelectionBox/vfxSelectionBox" unique_id=1626235669]
 mesh = SubResource("ArrayMesh_6ucq4")
+
+[node name="MapBounds" parent="GridManager" unique_id=1577216048 instance=ExtResource("18_boyg6")]
+transform = Transform3D(3, 0, 0, 0, 1, 0, 0, 0, 3, 0, 0, 0)
 
 [node name="MusicManager" type="Node" parent="." unique_id=1434635219 node_paths=PackedStringArray("player")]
 script = ExtResource("3_ryrav")
@@ -280,6 +285,7 @@ text = "Turn: 0/4"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+offset_transform_enabled = true
 theme_override_font_sizes/font_size = 32
 text = "100/100"
 horizontal_alignment = 1
@@ -323,6 +329,7 @@ text = "Play"
 [node name="PlayButton" type="Button" parent="UI/VBoxContainer/MarginContainer3/MarginContainer2" unique_id=679220892]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.15127584, 0.1512762, 0.1512759, 1)
 theme_override_font_sizes/font_size = 64

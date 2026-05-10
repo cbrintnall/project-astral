@@ -15,6 +15,7 @@ signal mods_changed
 @onready var grid_map: GridMap = $GridMap
 @onready var grid_cast: Gridcast = $Gridcast
 @onready var selection: Node3D = $SelectionBox
+@onready var map_bounds: Node3D = $MapBounds
 
 var grid_position_3d: Vector3i
 var center_tile: Tile
@@ -173,6 +174,8 @@ func _cancel_current_selection():
 
 func _ready() -> void:
   inst = self
+  
+  map_bounds.scale = Vector3(size.x, size.x*0.25, size.y)
   
 func _process(delta: float) -> void:
   _choose_cd.check(delta, false)
