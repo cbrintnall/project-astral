@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://dx2eq3q7x2bpo"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_aupmv"]
+[ext_resource type="Script" uid="uid://coxe54w821lob" path="res://scenes/tiles/effects/tile_effect_multiply_area.gd" id="2_tlnnn"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="3_f61uw"]
+[ext_resource type="Texture2D" uid="uid://c8iwhyh3jl6ts" path="res://assets/tiles/wingTile.png" id="4_aupmv"]
+
+[sub_resource type="Resource" id="Resource_fmt0w"]
+script = ExtResource("2_tlnnn")
+size = Vector2i(3, 3)
+multiplier = 1.0
+event = 4
+metadata/_custom_type_script = "uid://coxe54w821lob"
+
+[resource]
+script = ExtResource("3_f61uw")
+name = "Swift"
+effects = Array[ExtResource("1_aupmv")]([SubResource("Resource_fmt0w")])
+texture = ExtResource("4_aupmv")
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"
