@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://d1f7j0hlrjv5i"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_akovv"]
+[ext_resource type="Script" uid="uid://b8w5q1k7is7sg" path="res://scenes/tiles/effects/tile_effect_give_points.gd" id="2_13fbd"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_ytigj"]
+
+[sub_resource type="Resource" id="Resource_fahx3"]
+script = ExtResource("2_13fbd")
+points_given = -10
+metadata/_custom_type_script = "uid://b8w5q1k7is7sg"
+
+[resource]
+script = ExtResource("2_ytigj")
+name = "Petty"
+effects = Array[ExtResource("1_akovv")]([SubResource("Resource_fahx3")])
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"

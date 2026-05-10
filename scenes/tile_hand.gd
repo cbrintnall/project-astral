@@ -1,7 +1,6 @@
 extends Node3D
 class_name TileHand
 
-const MAX_HAND = 10
 const MAX_HAND_WIDTH = 7.0
 const MAX_RANGE = [Vector3(-MAX_HAND_WIDTH, -0.7, 2.0), Vector3(MAX_HAND_WIDTH, -0.7, 2.0)]
 
@@ -42,7 +41,7 @@ func _ready() -> void:
   inst = self
   
 func _create_hand():
-  for i in MAX_HAND+1:
+  for i in Constants.DEFAULT_HAND_SIZE+1:
     var marker := Marker3D.new()
     add_child(marker)
     _markers.push_back(marker)

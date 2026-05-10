@@ -2,8 +2,21 @@ extends Node
 class_name Constants
 
 static var dawn_provided := preload("res://data/stats/stat_dawn_given.tres")
+static var wrath := preload("res://data/stats/stat_wrath.tres")
 
 const TURNS_PER_SCORE = 4
+const DEFAULT_HAND_SIZE = 5
+
+const ALL_DIRECTIONS = [
+  Vector3i.LEFT,
+  Vector3i.RIGHT,
+  Vector3i.BACK,
+  Vector3i.FORWARD,
+  Vector3i(1, 0, 1),
+  Vector3i(-1, 0, 1),
+  Vector3i(1, 0, -1),
+  Vector3i(-1, 0, -1)
+]
 
 const REQUIRED_SCORES = [
   30,
@@ -16,4 +29,9 @@ const REQUIRED_SCORES = [
   1500000,
   3000000,
   10000000
+]
+
+static var ENEMY_TILES = [
+  load("res://data/tiles/enemy/tile_enemy_chaotic_wrath.tres"),
+  load("res://data/tiles/enemy/tile_basic_enemy.tres")
 ]

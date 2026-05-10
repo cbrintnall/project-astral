@@ -34,6 +34,9 @@ var _tiles_dirty := false
 var _indicator_color := DEFAULT_COLOR
 var _grid_material: ShaderMaterial = preload("res://materials/material_grid_selection_box.tres")
 
+var _execution_paths := []
+var _followers := []
+
 func get_mods_at_point(loc: Vector3i) -> GridContext:
   return _pos_modifications.get(loc, GridContext.new())
   
@@ -153,6 +156,26 @@ func _update_dirty_grid():
     text.position = Vector3.UP*1.5
     text.billboard = BaseMaterial3D.BILLBOARD_ENABLED
     text.add_to_group("debug_path_text")
+    #
+  #for path in _execution_paths:
+    #path.queue_free()
+    #
+  #_execution_paths = []
+  #_followers = []
+  #
+  #var path := Path3D.new()
+  #path.curve = Curve3D.new()
+  #var follower := PathFollow3D.new()
+  #for tile in execution_order:
+    #path.curve.add_point(path.to_local(tile.global_position))
+  #add_child(path)
+  #path.add_child(follower)
+  #var mesh := MeshInstance3D.new()
+  #mesh.mesh = SphereMesh.new()
+  #follower.add_child(mesh)
+  #
+  #_execution_paths.push_back(path)
+  #_followers.push_back(follower)
     
   board_changed.emit()
 
@@ -171,6 +194,9 @@ func _process(delta: float) -> void:
   if _tiles_dirty:
     _update_dirty_grid()
     _tiles_dirty = false
+    
+  for follower: PathFollow3D in _followers:
+    follower.progress += delta
   
   if not grid_cast.ray_data: return
 
