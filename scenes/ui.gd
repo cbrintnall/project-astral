@@ -101,7 +101,7 @@ func _process(_delta: float) -> void:
   
   if GameManager.inst.active_execution and GameManager.inst.active_execution.active_round:
     var queue = GameManager.inst.get_current_execution_queue()
-    if queue:
+    if queue and is_instance_valid(queue.front()):
       desired_display = queue.front()
   if GridManager.inst.hand_hovered_tile:
     desired_display = GridManager.inst.hand_hovered_tile

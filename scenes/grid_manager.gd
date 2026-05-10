@@ -16,6 +16,7 @@ signal mods_changed
 @onready var grid_cast: Gridcast = $Gridcast
 @onready var selection: Node3D = $SelectionBox
 @onready var map_bounds: Node3D = $MapBounds
+@onready var selection_boxes: MultiMeshInstance3D = %SelectionBoxes
 
 var grid_position_3d: Vector3i
 var center_tile: Tile
@@ -34,9 +35,6 @@ var _tiles_dirty := false
 
 var _indicator_color := DEFAULT_COLOR
 var _grid_material: ShaderMaterial = preload("res://materials/material_grid_selection_box.tres")
-
-var _execution_paths := []
-var _followers := []
 
 func get_mods_at_point(loc: Vector3i) -> GridContext:
   return _pos_modifications.get(loc, GridContext.new())
@@ -188,9 +186,6 @@ func _process(delta: float) -> void:
   if _tiles_dirty:
     _update_dirty_grid()
     _tiles_dirty = false
-    
-  for follower: PathFollow3D in _followers:
-    follower.progress += delta
   
   if not grid_cast.ray_data: return
 

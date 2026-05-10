@@ -113,8 +113,6 @@ func _ready() -> void:
   
   await Utils.wait_until(func(): return GridManager.inst != null)
   
-  GridManager.inst.board_changed.connect(_on_board_changed)
-  
   var start_tile = load("res://scenes/board/tile.tscn").instantiate()
   start_tile.def = load("res://data/tiles/tile_source_tile.tres")
   assert(GridManager.inst.try_place_tile(start_tile, Vector3i.ZERO), "This should never fail")
@@ -128,11 +126,6 @@ func _ready() -> void:
   var eos = load("res://assets/blender/objects/Eos.glb").instantiate()
   start_tile.add_child(eos)
   UI.inst.show_system_message("Begin Cycle")
-  
-func _on_board_changed():
-  _execution_order = GridManager.inst.collect_tiles_in_execution_order()
-  _pre_execution_order = _execution_order.filter(func(tile: Tile): return tile.has_pre_round_effects())
-  _post_execution_order = _execution_order.filter(func(tile: Tile): return tile.has_post_round_effects())
   
 func _process(delta: float) -> void:
   if _reset_sound_timer.check(delta):
@@ -231,8 +224,15 @@ func _begin_execution(machine: CallableStateMachine, delta: float):
   _execution_order = GridManager.inst.collect_tiles_in_execution_order()
   _pre_execution_order = _execution_order.filter(func(tile: Tile): return tile.has_pre_round_effects())
   _post_execution_order = _execution_order.filter(func(tile: Tile): return tile.has_post_round_effects())
+  _maintain_queue(_execution_order)
+  _maintain_queue(_pre_execution_order)
+  _maintain_queue(_post_execution_order)
   print("executing [pre=%d,mid=%d,post=%d]" % [ len(_pre_execution_order), len(_execution_order), len(_post_execution_order) ])
   _state.current = "pre_execute"
+  
+func _maintain_queue(queue: Array):
+  for tile: Tile in queue:
+    tile.tree_exiting.connect(queue.erase.bind(tile), CONNECT_ONE_SHOT)
   
 func _pre_execute(machine: CallableStateMachine, delta: float):
   _execute_tiles_from(
@@ -269,9 +269,13 @@ func _execute_tiles_from(order: Array, next_state: String, event: TileEffect.Eve
   
   if _current_context.current_tile == null:
     if order:
+      if not is_instance_valid(order.front()):
+        order.pop_front()
+        return
       if _play_timer.check(delta):
         var next = order.pop_front()
         _current_context.tile_execution_count += 1
+        assert(is_instance_valid(next))
         if is_instance_valid(next):
           _current_context.current_tile = next
           _current_context.current_tile.execute(_current_context, event)
