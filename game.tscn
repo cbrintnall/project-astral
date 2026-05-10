@@ -24,7 +24,6 @@
 [ext_resource type="Resource" uid="uid://cuiw4o7dkyh60" path="res://data/tiles/tile_points_on_destroy.tres" id="16_i2p71"]
 [ext_resource type="Resource" uid="uid://cs8h5k12pyhwc" path="res://data/tiles/tile_basic_points.tres" id="16_xa8c5"]
 [ext_resource type="Resource" uid="uid://iyogiblm2cv3" path="res://data/tiles/tile_basic_points_no_neighbors.tres" id="17_5b14r"]
-[ext_resource type="Texture2D" uid="uid://dyo4ao2bdf0iv" path="res://assets/ring.png" id="17_e8heu"]
 [ext_resource type="PackedScene" uid="uid://bch84pl6vclm5" path="res://assets/vfx/vfxConstellationBox.glb" id="18_boyg6"]
 [ext_resource type="Material" uid="uid://de5t4qub7uetm" path="res://materials/highlight_material.tres" id="18_rvswv"]
 [ext_resource type="Script" uid="uid://bldo4q8o2aiyq" path="res://scenes/enemy_tile_container.gd" id="20_5b14r"]
@@ -167,35 +166,6 @@ size = Vector2(25000, 25000)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_iotsf"]
 frequency = 0.0818
-
-[sub_resource type="Curve" id="Curve_rvswv"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.253406, 0.99999994), 0.0, 0.0, 0, 0, Vector2(0.7493188, 0.99999994), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 4
-
-[sub_resource type="CurveTexture" id="CurveTexture_boyg6"]
-curve = SubResource("Curve_rvswv")
-
-[sub_resource type="Curve" id="Curve_e8heu"]
-_limits = [0.0, 2.0, 0.0, 1.0]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 2), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_rvswv"]
-curve = SubResource("Curve_e8heu")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_e8heu"]
-gravity = Vector3(0, 0, 0)
-scale_curve = SubResource("CurveTexture_rvswv")
-alpha_curve = SubResource("CurveTexture_boyg6")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rvswv"]
-transparency = 1
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("17_e8heu")
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_boyg6"]
-material = SubResource("StandardMaterial3D_rvswv")
-size = Vector2(1, 1)
 
 [node name="Game" type="Node3D" unique_id=309939235]
 
@@ -631,10 +601,3 @@ fov = 30.0
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="CameraArm/Camera3D" unique_id=372956858]
 remote_path = NodePath("../../../TileDisplayViewport/SubViewportContainer/SubViewport/TileSelectCamera")
-
-[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=75812795]
-visible = false
-amount = 5
-lifetime = 2.0
-process_material = SubResource("ParticleProcessMaterial_e8heu")
-draw_pass_1 = SubResource("PlaneMesh_boyg6")

@@ -2,14 +2,22 @@
 
 [ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_sfu6w"]
 [ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_8fhta"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_fmt0w"]
 [ext_resource type="Script" uid="uid://coxe54w821lob" path="res://scenes/tiles/effects/tile_effect_multiply_area.gd" id="2_fxf0g"]
 [ext_resource type="Texture2D" uid="uid://j85dwgg6f72l" path="res://assets/tiles/multTile.png" id="4_fxf0g"]
+
+[sub_resource type="Resource" id="Resource_1w3ko"]
+script = ExtResource("2_fmt0w")
+include_self = false
+size = Vector2i(3, 3)
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
 
 [sub_resource type="Resource" id="Resource_fmt0w"]
 script = ExtResource("2_fxf0g")
 size = Vector2i(3, 3)
 multiplier = 1.0
 event = 4
+main_target = SubResource("Resource_1w3ko")
 metadata/_custom_type_script = "uid://coxe54w821lob"
 
 [resource]
