@@ -44,6 +44,7 @@ func _process(_delta: float) -> void:
   cycle_label.text = "Cycle: %d" % [ GameManager.inst.cycle ]
   
   %TileData.visible = displayed_tile != null
+  %PlayButton.disabled = GameManager.inst.active_execution and GameManager.inst.active_execution.active_round
 
   var desired_display: Tile = null
   

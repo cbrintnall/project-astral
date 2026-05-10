@@ -195,7 +195,7 @@ func _execute_turn(machine: CallableStateMachine, delta: float):
     delta
   )
       
-func _execute_tiles_from(order: Array, next_state: String, event: TileEffect.Event, on_finished: Callable, delta: float):
+func _execute_tiles_from(order: Array, next_state: String, event: TileEffect.Event, on_finished: Callable, delta: float):  
   if _current_context.current_tile:
     var loc = GridManager.inst.get_tile_loc(_current_context.current_tile)
     if loc != Vector3i.MIN:
@@ -205,6 +205,7 @@ func _execute_tiles_from(order: Array, next_state: String, event: TileEffect.Eve
     if order:
       if _play_timer.check(delta):
         var next = order.pop_front()
+        _current_context.tile_execution_count += 1
         if is_instance_valid(next):
           _current_context.current_tile = next
           _current_context.current_tile.execute(_current_context, event)

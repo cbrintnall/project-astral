@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatDef" format=3 uid="uid://dx8rp4c3ocj2k"]
+
+[ext_resource type="Script" uid="uid://bemrh2m32ehhl" path="res://otterlib/resources/stat_def.gd" id="1_lmtsd"]
+
+[resource]
+script = ExtResource("1_lmtsd")
+name = "Replay"
+description = "The amount of time a tile replays itself."
+base_value = 0.0
+metadata/_custom_type_script = "uid://bemrh2m32ehhl"

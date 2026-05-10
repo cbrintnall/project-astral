@@ -21,8 +21,13 @@ func _ready() -> void:
 
 func _on_mods_changed():
   var mods = GridManager.inst.get_mods()
-  for mod in mods:
-    highlights[mod] = Color.WHITE
+
+  for pt in mods:
+    var mod: GridContext = mods[pt]
+    if mod.points_multipliers > 0.0:
+      highlights[pt] = Color.WHITE
+    else:
+      highlights.erase(pt)
 
 func _process(delta: float) -> void:
   multi.multimesh.visible_instance_count = len(highlights)

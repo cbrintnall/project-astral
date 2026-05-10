@@ -107,6 +107,11 @@ func _input(event: InputEvent) -> void:
   if event.is_action_pressed("ui_cancel"):
     _cancel_current_selection()
     
+  match Utils.get_key_pressed(event):
+    KEY_Z:
+      if get_tile_at(grid_position_3d):
+        get_tile_at(grid_position_3d).destroy()
+    
   # timer cooldown so we don't immediately do something after creating selection
   # everything below this if statement should be selection related
   if _choose_cd.progress < 1.0: return

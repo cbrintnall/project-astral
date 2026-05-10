@@ -67,9 +67,11 @@ func is_executing() -> bool:
   return _state.current == "execute" or _state.current == "no_execute"
 
 func execute(ctx: ExecutionContext, event: TileEffect.Event):
+  print(ctx.tile_execution_count*0.01)
+  
   AudioManager3d.play({
-    "stream": preload("res://audio/knock.ogg"),
-    "pitch_variance": 0.1,
+    "stream": preload("res://audio/Light Drone Sound (button hover) 40.wav"),
+    "pitch_additional": ctx.tile_execution_count*0.01,
     "parent": self
   })
   
@@ -101,6 +103,13 @@ func set_placed_at(_tile: Vector3i):
   rotation = Vector3.ZERO
   scale = Vector3.ONE
   placed = true
+  
+  AudioManager3d.play({
+    "stream": preload("res://audio/place-tile.ogg"),
+    "pitch_variance": 0.1,
+    "parent": self,
+    "volume": 0.5
+  })
   
   for effect: TileEffect in get_effects():
     if effect.event == TileEffect.Event.ON_PLACE:

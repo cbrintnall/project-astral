@@ -17,9 +17,9 @@ void vertex() {
 
 void fragment() {
 	vec2 base_uv = UV;
-	vec4 albedo_tex = texture(texture_albedo, base_uv);
+	vec4 albedo_tex = texture(texture_albedo, base_uv + vec2(TIME*0.1));
   float n1 = texture(noise, (coords.xz*3.0)+vec2(TIME*0.01)).x;
   
-	ALBEDO = albedo.rgb * albedo_tex.rgb;
+	ALBEDO = albedo.rgb * albedo_tex.rgb * 3.0;
 	ALPHA *= albedo_tex.a;
 }

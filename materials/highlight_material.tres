@@ -1,7 +1,7 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://de5t4qub7uetm"]
 
 [ext_resource type="Shader" uid="uid://ns0ta2xa8tw1" path="res://materials/highlight_shader.gdshader" id="1_eow84"]
-[ext_resource type="Texture2D" uid="uid://c0vnuy85e4f0t" path="res://assets/higlight.png" id="2_yixts"]
+[ext_resource type="Texture2D" uid="uid://daw77r716xxu8" path="res://assets/plusses.png" id="2_eow84"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_e8heu"]
 noise_type = 2
@@ -20,7 +20,7 @@ seamless_blend_skirt = 0.359
 render_priority = 0
 shader = ExtResource("1_eow84")
 shader_parameter/noise = SubResource("NoiseTexture2D_rvswv")
-shader_parameter/albedo = Color(1, 1, 1, 1)
-shader_parameter/texture_albedo = ExtResource("2_yixts")
+shader_parameter/albedo = Color(0.9490196, 0.827451, 0.67058825, 1)
+shader_parameter/texture_albedo = ExtResource("2_eow84")
 shader_parameter/albedo_texture_size = Vector2i(0, 0)
 shader_parameter/point_size = 0.0
