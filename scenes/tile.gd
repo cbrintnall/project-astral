@@ -250,11 +250,22 @@ func _no_execute(machine: CallableStateMachine, delta: float):
     stretcher.punch(1.0, 3.0)
 
 func _selecting(machine: CallableStateMachine, delta: float):
-  stretcher.rotate(rotation_axis, delta)
+  if _mouse_entered:
+    var curr_scale := stretcher.global_basis.get_scale()
+    var direction = -get_viewport().get_camera_3d().global_basis.z
+    var target := Basis.looking_at(direction, get_viewport().get_camera_3d().global_basis.y)
+    target *= Basis.from_euler(Vector3(PI*0.5, 0.0, 0.0))
+    stretcher.global_basis = stretcher.global_basis.orthonormalized().slerp(target, 0.1).scaled(curr_scale)
+  else:
+    stretcher.rotate(rotation_axis, delta)
   position = position.lerp(Vector3.ZERO, delta*10.0)
 
 func _placing(machine: CallableStateMachine, delta: float):
-  stretcher.rotate(rotation_axis, delta*0.25)
+  var curr_scale := stretcher.global_basis.get_scale()
+  var direction = -get_viewport().get_camera_3d().global_basis.z
+  var target := Basis.looking_at(direction, get_viewport().get_camera_3d().global_basis.y)
+  target *= Basis.from_euler(Vector3(PI*0.5, 0.0, 0.0))
+  stretcher.global_basis = stretcher.global_basis.orthonormalized().slerp(target, 0.1).scaled(curr_scale)
   position = position.lerp(Vector3.UP, delta*10.0)
   
   var state = Selection.State.DEFAULT
@@ -324,6 +335,10 @@ func _try_place_self(selection: Selection):
   if GridManager.inst.try_place_tile(self, GridManager.inst.grid_position_3d):
     BoardCamera.inst.shake(0.2, 0.01)
     selection.cancel()
+
+func _input_event(camera: Camera3D, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
+  if event is InputEventMouseMotion:
+    pass
 
 func _unhandled_input(event: InputEvent) -> void:
   if not _mouse_entered: return

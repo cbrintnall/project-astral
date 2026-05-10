@@ -21,7 +21,7 @@ var cycle := 0
 var turn := 0
 
 var player_tasks := TaskGroup.new()
-var money := 500
+var money := 0
 
 var current_state: String:
   get:
@@ -167,13 +167,9 @@ func _post_round(machine: CallableStateMachine, delta: float):
       print("you lost!!!!")
       get_tree().quit()
 
+  _state.current = "deal"
   _current_context = ExecutionContext.new()
   _current_context.active_round = false
-  _state.current = "shop"
-  ShopManager.inst.enter()
-  #_state.current = "deal"
-  #_current_context = ExecutionContext.new()
-  #_current_context.active_round = false
   
 func _distribute_enemies():
   var played = GridManager.inst.get_played_tiles()
