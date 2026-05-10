@@ -1,0 +1,35 @@
+[gd_resource type="ArrayMesh" format=4 uid="uid://dufdhd4rdr3uv"]
+
+[ext_resource type="Material" uid="uid://5t8sftot6i4g" path="res://materials/extracted/Material_ConstellationIndicator.tres" id="1_k5i6c"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_6dvh3"]
+_surfaces = [{
+"aabb": AABB(-0.5650094, 0, -0.5650094, 1.1300188, 0.38880002, 1.1300188),
+"format": 34896613377,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAAAEAAEAAgADAAUABgAEAAAABQADAAcABgAHAAQABQAHAAYA"),
+"name": "Material_ConstellationIndicator",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("5hEAAOYRAAD/////AAAAABjuAADmEQAA////////AAAAAP//AAAAABjuAAAY7gAA5hEAABjuAAAAAP////8AAA==")
+}]
+blend_shape_mode = 0
+
+[resource]
+resource_name = "vfxConstellationBox_Plane_001"
+_surfaces = [{
+"aabb": AABB(-0.5650094, 0, -0.5650094, 1.1300188, 0.38880002, 1.1300188),
+"attribute_data": PackedByteArray("/7//////AAD//////78AAP9/////fwAA/z////8/AAAAAP//AAAAAA=="),
+"format": 34896613399,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAADAAAABAAFAAMABgAFAAQABgAHAAUACAAHAAYACAAJAAcA"),
+"material": ExtResource("1_k5i6c"),
+"name": "Material_ConstellationIndicator",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 10,
+"vertex_data": PackedByteArray("5hEAAOYR3qH/////AAAYohjuAADmERiiAAD//wAA3qHmEQAAGO5T4AAA/////1PgGO4AABjuU+D///////9T4BjuAADmEd2k/////wAA3aSPqWMdb7RT2m+0U9qPqWMdQpU6BkKVOgY5hrzqOYa86jmP5805j+fN")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_6dvh3")

@@ -15,6 +15,7 @@ const DIRECTION_EXECUTION_ORDER = [
 
 var stat := StatStore.new()
 var placed := false
+var constellation: ConstellationDef
 
 var _state := CallableStateMachine.new()
 var _mouse_entered := false
@@ -27,6 +28,7 @@ var _meshes := []
 var _face_mesh: MeshInstance3D
 var _face_material = preload("res://materials/extracted/Material_TileFace.material")
 var _effects := []
+var _constellation_satisfied := false
 
 func destroy():
   AudioManager3d.play({
@@ -118,6 +120,8 @@ func _ready() -> void:
   add_child(_state)
   add_to_group("tile")
   
+  (%Constellations as MultiMeshInstance3D).multimesh = (%Constellations as MultiMeshInstance3D).multimesh.duplicate()
+  
   _state.register("selecting", _selecting)
   _state.register("placing", _placing)
   _state.register("placed", _placed)
@@ -131,6 +135,8 @@ func _ready() -> void:
   add_child(stat)
   
   stat.changed.connect(_on_stat_changed)
+  
+  GridManager.inst.board_changed.connect(_on_board_changed)
   
   _meshes = NodeUtils.get_nodes_with_predicate(self, func(node): return node is MeshInstance3D)
   _face_mesh = NodeUtils.find_child_with_predicate(
@@ -150,7 +156,26 @@ func _ready() -> void:
   
   for m in _meshes:
     m.layers = 2
+    
+  constellation = def.constellation
   
+func _on_board_changed():
+  var before = _constellation_satisfied
+  _constellation_satisfied = constellation != null and constellation.tile_targets.get_target(_get_effect_ctx()).all(
+    func(tile: Vector3i):
+      return GridManager.inst.has_tile(tile)
+  )
+  
+  if before and not _constellation_satisfied:
+    (%Constellations as MultiMeshInstance3D).set_instance_shader_parameter("glow", 10.0)
+    AudioManager3d.play({
+      "stream": preload("res://audio/constellation-broken.ogg")
+    })
+  if not before and _constellation_satisfied:
+    (%Constellations as MultiMeshInstance3D).set_instance_shader_parameter("glow", 100.0)
+    AudioManager3d.play({
+      "stream": preload("res://audio/constellation-complete.ogg")
+    })
 func _on_state_changed(state: String):
   match state:
     "placing":
@@ -281,3 +306,15 @@ func _unhandled_input(event: InputEvent) -> void:
   if event is InputEventMouseButton:
     if event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
       _on_select()
+
+func _process(delta: float) -> void:
+  %Constellations.visible = constellation != null
+  if constellation:
+    %Constellations.global_position = Vector3.ZERO
+    var targets = constellation.tile_targets.get_target(_get_effect_ctx())
+    (%Constellations as MultiMeshInstance3D).multimesh.instance_count = len(targets)
+    var count := 0
+    for tile in targets:
+      var t := Transform3D().translated(Vector3(tile))
+      (%Constellations as MultiMeshInstance3D).multimesh.set_instance_transform(count, t)
+      count += 1

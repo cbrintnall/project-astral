@@ -6,3 +6,4 @@ class_name TileDef
 @export var initiates := false
 @export var effects: Array[TileEffect] = []
 @export var texture: Texture2D
+@export var constellation: ConstellationDef

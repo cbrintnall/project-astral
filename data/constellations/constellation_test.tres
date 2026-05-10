@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ConstellationDef" format=3 uid="uid://brbgfkqfbp36"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_iois7"]
+[ext_resource type="Script" uid="uid://bb3fdv8vn78ca" path="res://data/constellation_def.gd" id="2_6t424"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="3_6t424"]
+
+[sub_resource type="Resource" id="Resource_4l72k"]
+script = ExtResource("3_6t424")
+tiles = Array[Vector3i]([Vector3i(1, 0, 0), Vector3i(-1, 0, 0), Vector3i(0, 0, 1), Vector3i(0, 0, 2), Vector3i(0, 0, 3), Vector3i(0, 0, 4)])
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[resource]
+script = ExtResource("2_6t424")
+name = "Test"
+tile_targets = SubResource("Resource_4l72k")
+metadata/_custom_type_script = "uid://bb3fdv8vn78ca"
