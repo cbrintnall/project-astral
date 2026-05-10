@@ -109,8 +109,13 @@ func _ready() -> void:
   assert(GridManager.inst.try_place_tile(start_tile, Vector3i.ZERO), "This should never fail")
   GridManager.inst.center_tile = start_tile
   BoardCamera.inst.try_set_focus(GridManager.inst.map_to_global(Vector3i.ZERO))
+  #var start_mesh: MeshInstance3D = NodeUtils.find_child_with_predicate(start_tile, func(node): return node is MeshInstance3D)
+  #start_mesh.material_override = preload("res://materials/material_debug.tres")
   var start_mesh: MeshInstance3D = NodeUtils.find_child_with_predicate(start_tile, func(node): return node is MeshInstance3D)
-  start_mesh.material_override = preload("res://materials/material_debug.tres")
+  if start_mesh:
+      start_mesh.queue_free()
+  var eos = load("res://assets/blender/objects/Eos.glb").instantiate()
+  start_tile.add_child(eos)
   
 func _on_board_changed():
   _execution_order = GridManager.inst.collect_tiles_in_execution_order()
