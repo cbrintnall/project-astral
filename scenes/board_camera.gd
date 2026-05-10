@@ -12,6 +12,11 @@ static var inst: BoardCamera
 
 var map_root: Vector3
 var map_size: Vector2i
+var target_fov: float = 30.0:
+  set(val):
+    target_fov = clampf(val, 25.0, 70.0)
+  get:
+    return target_fov
 
 var _chromatic_material:ShaderMaterial = preload("res://materials/chromatic_ab_material.tres")
 
@@ -44,6 +49,12 @@ func shake(amt: float, time: float):
 func try_set_focus(target: Vector3) -> bool:
   _focus = target
   return true
+  
+func _input(event: InputEvent) -> void:
+  if event.is_action_pressed("zoom_in"):
+    target_fov += 5.0
+  elif event.is_action_pressed("zoom_out"):
+    target_fov -= 5.0
 
 func _ready() -> void:
   inst = self
@@ -56,7 +67,8 @@ func _process(delta: float) -> void:
   var normalized := Vector2(mouse.x/rect.size.x, mouse.y/rect.size.y)
   var offset := (normalized-Vector2(0.5, 0.5))*0.01
   
-  camera.rotation = camera.rotation.lerp(default_rotation+Vector3(-offset.y, offset.x, 0.0), 0.02)
+  camera.rotation = camera.rotation.lerp(default_rotation+Vector3(-offset.y, offset.x, 0.0), 0.02)      
+  camera.fov = lerp(camera.fov, target_fov, 0.01)
   
   if _shake_remaining:
     camera.h_offset = noise.get_noise_1d(Time.get_ticks_msec()*0.09)*_shake_intensity

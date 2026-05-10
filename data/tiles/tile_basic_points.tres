@@ -3,12 +3,18 @@
 [ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_ju7cw"]
 [ext_resource type="Resource" uid="uid://2dgbbhqcwj1f" path="res://data/effects/effect_basic_give_points.tres" id="2_a2168"]
 [ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_ugu2s"]
+[ext_resource type="Script" uid="uid://b8w5q1k7is7sg" path="res://scenes/tiles/effects/tile_effect_give_points.gd" id="3_xlkub"]
 [ext_resource type="Texture2D" uid="uid://7n2vscsvryqj" path="res://assets/tiles/reactTile.png" id="4_a2168"]
+
+[sub_resource type="Resource" id="Resource_h3brm"]
+script = ExtResource("3_xlkub")
+event = 4
+metadata/_custom_type_script = "uid://b8w5q1k7is7sg"
 
 [resource]
 script = ExtResource("2_ugu2s")
 name = "Nebula"
-effects = Array[ExtResource("1_ju7cw")]([ExtResource("2_a2168")])
+effects = Array[ExtResource("1_ju7cw")]([ExtResource("2_a2168"), SubResource("Resource_h3brm")])
 texture = ExtResource("4_a2168")
 in_shop = true
 metadata/_custom_type_script = "uid://cssx7lcdl5o45"

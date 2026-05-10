@@ -16,7 +16,6 @@ metadata/_custom_type_script = "uid://di6fi4200kyxe"
 script = ExtResource("2_fxf0g")
 size = Vector2i(3, 3)
 multiplier = 1.0
-event = 4
 main_target = SubResource("Resource_1w3ko")
 metadata/_custom_type_script = "uid://coxe54w821lob"
 

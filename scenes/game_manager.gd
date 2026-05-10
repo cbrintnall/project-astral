@@ -45,6 +45,8 @@ var _play_timer := BetterTimer.new(1.0)
 var _set_enemy_timer := BetterTimer.new(1.0)
 var _enemy_queue := {}
 
+var _execution_queue := []
+
 func get_current_execution_queue() -> Array:
   match _state.current:
     "pre_execute":
@@ -140,7 +142,10 @@ func _start_round(machine: CallableStateMachine, delta: float):
   BoardCamera.inst.map_root = Vector3.ZERO
   BoardCamera.inst.try_set_focus(Vector3.ZERO)
   
-  _state.current = "deal"
+  _pre_execution_order = _execution_order.filter(func(tile: Tile): return tile.has_pre_round_effects())
+  _maintain_queue(_pre_execution_order)
+  
+  _state.current = "pre_execute"
   
 func _deal(machine: CallableStateMachine, delta: float):
   if TileHand.inst.get_tile_count() >= Constants.DEFAULT_HAND_SIZE:
@@ -222,13 +227,11 @@ func _begin_execution(machine: CallableStateMachine, delta: float):
   _current_context = ExecutionContext.new()
   _current_context.active_round = true
   _execution_order = GridManager.inst.collect_tiles_in_execution_order()
-  _pre_execution_order = _execution_order.filter(func(tile: Tile): return tile.has_pre_round_effects())
   _post_execution_order = _execution_order.filter(func(tile: Tile): return tile.has_post_round_effects())
   _maintain_queue(_execution_order)
-  _maintain_queue(_pre_execution_order)
   _maintain_queue(_post_execution_order)
   print("executing [pre=%d,mid=%d,post=%d]" % [ len(_pre_execution_order), len(_execution_order), len(_post_execution_order) ])
-  _state.current = "pre_execute"
+  _state.current = "execute"
   
 func _maintain_queue(queue: Array):
   for tile: Tile in queue:
@@ -237,7 +240,7 @@ func _maintain_queue(queue: Array):
 func _pre_execute(machine: CallableStateMachine, delta: float):
   _execute_tiles_from(
     _pre_execution_order, 
-    "execute", 
+    "deal", 
     TileEffect.Event.ON_ROUND_START, 
     func(): _execution_order = GridManager.inst.collect_tiles_in_execution_order(),
     delta
@@ -262,28 +265,20 @@ func _execute_turn(machine: CallableStateMachine, delta: float):
   )
       
 func _execute_tiles_from(order: Array, next_state: String, event: TileEffect.Event, on_finished: Callable, delta: float):  
-  if _current_context.current_tile:
-    var loc = GridManager.inst.get_tile_loc(_current_context.current_tile)
-    if loc != Vector3i.MIN:
-      BoardCamera.inst.try_set_focus(loc)
-  
-  if _current_context.current_tile == null:
-    if order:
-      if not is_instance_valid(order.front()):
-        order.pop_front()
-        return
-      if _play_timer.check(delta):
-        var next = order.pop_front()
-        _current_context.tile_execution_count += 1
-        assert(is_instance_valid(next))
-        if is_instance_valid(next):
-          _current_context.current_tile = next
-          _current_context.current_tile.execute(_current_context, event)
-          _play_timer.reset_to(_play_timer.every*0.9)
+  if order:
+    var next = order.pop_front()
+    if is_instance_valid(next):
+      _current_context.tile_execution_count += 1
+      _execution_queue.push_back(next.execute(_current_context, event))
+  elif _execution_queue:
+    if is_instance_valid(_execution_queue.front()):
+      # once it's finished executing remove it
+      if not _execution_queue.front().is_executing():
+        _execution_queue.pop_front()
     else:
-      _play_timer.reset_to(1.0)
+      _execution_queue.pop_front()
+  else:
+    if _play_timer.check(delta):
       _state.current = next_state
       if on_finished.is_valid():
         on_finished.call()
-  elif not _current_context.current_tile.is_executing():
-    _current_context.current_tile = null

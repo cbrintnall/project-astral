@@ -17,11 +17,13 @@ script = ExtResource("3_k3sfb")
 stat = ExtResource("4_jlv38")
 provider = SubResource("Resource_byfhv")
 description_verbiage = "Increase"
+event = 2
 metadata/_custom_type_script = "uid://cpwdsdmetvsul"
 
 [sub_resource type="Resource" id="Resource_xclym"]
 script = ExtResource("6_jlv38")
 points_given = 10
+event = 4
 metadata/_custom_type_script = "uid://b8w5q1k7is7sg"
 
 [resource]

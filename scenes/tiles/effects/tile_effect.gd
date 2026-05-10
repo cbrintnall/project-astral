@@ -3,14 +3,14 @@ extends Resource
 class_name TileEffect
 
 enum Event {
-  ON_ACTIVATE,
-  ON_ROUND_START,
-  ON_ROUND_END,
-  ON_DESTROY,
-  ON_PLACE
+  ON_ACTIVATE = 1,
+  ON_ROUND_START = 2,
+  ON_ROUND_END = 4,
+  ON_DESTROY = 8,
+  ON_PLACE = 16
 }
 
-@export var event := Event.ON_ACTIVATE
+@export var event := Event.ON_PLACE
 @export var main_target: TileTargetDef
 
 func get_event_text() -> String:
