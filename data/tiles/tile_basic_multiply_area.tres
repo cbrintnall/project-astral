@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_sfu6w"]
 [ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_8fhta"]
 [ext_resource type="Script" uid="uid://coxe54w821lob" path="res://scenes/tiles/effects/tile_effect_multiply_area.gd" id="2_fxf0g"]
-[ext_resource type="Texture2D" uid="uid://cmt4f8f6oy1p3" path="res://assets/particles/source.png" id="4_fxf0g"]
+[ext_resource type="Texture2D" uid="uid://j85dwgg6f72l" path="res://assets/tiles/multTile.png" id="4_fxf0g"]
 
 [sub_resource type="Resource" id="Resource_fmt0w"]
 script = ExtResource("2_fxf0g")

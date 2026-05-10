@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://dkptkjfy2kbu0"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_nrpid"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_rphwe"]
+[ext_resource type="Texture2D" uid="uid://cw65myli6t7h7" path="res://assets/tiles/destructTile.png" id="3_rphwe"]
+
+[resource]
+script = ExtResource("2_rphwe")
+name = "Meteor Shower"
+execute_directions = Array[Vector2i]([Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)])
+texture = ExtResource("3_rphwe")
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"
