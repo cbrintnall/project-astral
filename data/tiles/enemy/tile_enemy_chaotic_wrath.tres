@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cdselfcrv6cg4" path="res://otterlib/resources/stat_provider_def.gd" id="2_r2u1q"]
 [ext_resource type="Resource" uid="uid://cwfsgmakqguhu" path="res://data/stats/stat_wrath.tres" id="3_fbccm"]
 [ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="5_5rlo8"]
+[ext_resource type="Texture2D" uid="uid://dcppfs5ls82r8" path="res://assets/tiles/Bullshit.png" id="7_5rlo8"]
 
 [sub_resource type="Resource" id="Resource_x1idd"]
 script = ExtResource("2_r2u1q")
@@ -30,4 +31,5 @@ metadata/_custom_type_script = "uid://b4wlqujlbfl8p"
 script = ExtResource("2_bmodk")
 name = "Vengeance"
 effects = Array[ExtResource("1_df8lu")]([SubResource("Resource_r2u1q")])
+texture = ExtResource("7_5rlo8")
 metadata/_custom_type_script = "uid://cssx7lcdl5o45"
