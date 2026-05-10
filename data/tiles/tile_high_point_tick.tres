@@ -29,4 +29,5 @@ script = ExtResource("2_hekpi")
 name = "Squall"
 effects = Array[ExtResource("1_4ayie")]([SubResource("Resource_k3sfb"), SubResource("Resource_xclym")])
 texture = ExtResource("8_xclym")
+in_shop = true
 metadata/_custom_type_script = "uid://cssx7lcdl5o45"

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://cuiw4o7dkyh60"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_5isqo"]
+[ext_resource type="Script" uid="uid://b8w5q1k7is7sg" path="res://scenes/tiles/effects/tile_effect_give_points.gd" id="2_uvwh6"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_vxuob"]
+[ext_resource type="Texture2D" uid="uid://dcppfs5ls82r8" path="res://assets/tiles/Bullshit.png" id="4_uvwh6"]
+
+[sub_resource type="Resource" id="Resource_ytnkp"]
+script = ExtResource("2_uvwh6")
+points_given = 30
+event = 3
+metadata/_custom_type_script = "uid://b8w5q1k7is7sg"
+
+[resource]
+script = ExtResource("2_vxuob")
+name = "Distraction"
+shop_cost = 2
+effects = Array[ExtResource("1_5isqo")]([SubResource("Resource_ytnkp")])
+texture = ExtResource("4_uvwh6")
+in_shop = true
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"

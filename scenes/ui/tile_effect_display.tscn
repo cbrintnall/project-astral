@@ -3,7 +3,28 @@
 [ext_resource type="FontFile" uid="uid://bwa1eluxk04vt" path="res://assets/fonts/Habibi-Regular.ttf" id="1_3jea6"]
 [ext_resource type="Script" uid="uid://gxwopqlwyfos" path="res://scenes/ui/tile_effect_display.gd" id="1_nut02"]
 [ext_resource type="Texture2D" uid="uid://uox7cg17blt6" path="res://assets/arrow.png" id="2_ejhag"]
+[ext_resource type="Texture2D" uid="uid://02euhmyf5ukn" path="res://assets/star.png" id="2_j2ipn"]
 [ext_resource type="FontFile" uid="uid://dw17dptw7rmyt" path="res://assets/static/MuseoModerno-Regular.ttf" id="3_ejhag"]
+
+[sub_resource type="Curve" id="Curve_j2ipn"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_sjfgp"]
+curve = SubResource("Curve_j2ipn")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sjfgp"]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(0, 42, 0)
+emission_shape = 3
+emission_box_extents = Vector3(1, 42, 1)
+spread = 0.0
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.01
+scale_max = 0.099999994
+scale_curve = SubResource("CurveTexture_sjfgp")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ejhag"]
 bg_color = Color(0, 0, 0, 1)
@@ -15,11 +36,22 @@ custom_minimum_size = Vector2(300, 0)
 custom_maximum_size = Vector2(300, -1)
 script = ExtResource("1_nut02")
 
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=443150424]
+clip_children = 1
+layout_mode = 2
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="MarginContainer" unique_id=1735436944]
+visible = false
+z_index = 1
+texture = ExtResource("2_j2ipn")
+process_material = SubResource("ParticleProcessMaterial_sjfgp")
+
 [node name="Panel" type="Panel" parent="." unique_id=1077783201]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ejhag")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=419230590]
+z_index = 1
 layout_mode = 2
 size_flags_vertical = 3
 

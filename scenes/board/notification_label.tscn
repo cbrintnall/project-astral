@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cw5ifoxdyen0o"]
+
+[ext_resource type="Script" uid="uid://c27uubvg6v16e" path="res://scenes/board/notification_label.gd" id="1_qjhnh"]
+
+[node name="NotificationLabel" type="Label3D" unique_id=1225430847]
+billboard = 1
+render_priority = 1
+outline_render_priority = 0
+modulate = Color(0.9490196, 0.827451, 0.67058825, 1)
+outline_modulate = Color(0.15294118, 0.15294118, 0.26666668, 1)
+text = "+500"
+font_size = 128
+outline_size = 64
+script = ExtResource("1_qjhnh")

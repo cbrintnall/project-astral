@@ -16,7 +16,7 @@ func generate():
     current.queue_free()
     
   current = load("res://scenes/board/tile.tscn").instantiate()
-  var data:TileDef = TileHand.tiles.pick_random()
+  var data:TileDef = ShopTileContainer.inst.resources.pick_random()
   
   current.def = data
   add_child(current)

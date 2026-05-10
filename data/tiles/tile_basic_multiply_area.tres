@@ -17,4 +17,5 @@ script = ExtResource("2_8fhta")
 name = "Sunlight"
 effects = Array[ExtResource("1_sfu6w")]([SubResource("Resource_fmt0w")])
 texture = ExtResource("4_fxf0g")
+in_shop = true
 metadata/_custom_type_script = "uid://cssx7lcdl5o45"

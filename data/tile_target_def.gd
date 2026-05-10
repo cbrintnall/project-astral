@@ -4,6 +4,8 @@ class_name TileTargetDef
 @export var tiles: Array[Vector3i] = []
 @export var include_self := true
 @export var random_amount_from_tiles := 0
+@export var row := false
+@export var column := false
 
 func get_text():
   var amount := mini(len(tiles), random_amount_from_tiles)

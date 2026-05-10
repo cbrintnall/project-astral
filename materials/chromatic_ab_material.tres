@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://b27lbq1oej8mq"]
+
+[ext_resource type="Shader" uid="uid://2n3ftp2q5raq" path="res://materials/shaders/chromatic_shader.gdshader" id="1_vi6aq"]
+
+[resource]
+shader = ExtResource("1_vi6aq")
+shader_parameter/strength = 0.0030000001425
+shader_parameter/edge_falloff = true
+shader_parameter/distortion_amount = -0.019999953450000052

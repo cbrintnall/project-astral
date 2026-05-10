@@ -11,6 +11,7 @@ enum Event {
 }
 
 @export var event := Event.ON_ACTIVATE
+@export var main_target: TileTargetDef
 
 func get_event_text() -> String:
   match event:
@@ -37,6 +38,7 @@ func run(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
 func _reward_points(effect_ctx: EffectContext, amount: int):
   var total_points = _get_total_points(effect_ctx, amount)
   GameManager.inst.current_score += total_points
+  NotificationLabel.from("%+d" % total_points, effect_ctx.tile)
   if total_points <= 0: return
   var stars: MultiMeshInstance3D = load("res://scenes/fx/stars_multimesh.tscn").instantiate()
   effect_ctx.tile.get_tree().current_scene.add_child(stars)

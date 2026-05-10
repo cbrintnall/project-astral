@@ -32,4 +32,5 @@ script = ExtResource("2_bmodk")
 name = "Vengeance"
 effects = Array[ExtResource("1_df8lu")]([SubResource("Resource_r2u1q")])
 texture = ExtResource("7_5rlo8")
+is_enemy = true
 metadata/_custom_type_script = "uid://cssx7lcdl5o45"

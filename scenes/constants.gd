@@ -4,7 +4,7 @@ class_name Constants
 static var dawn_provided := preload("res://data/stats/stat_dawn_given.tres")
 static var wrath := preload("res://data/stats/stat_wrath.tres")
 
-const TURNS_PER_SCORE = 4
+const TURNS_PER_SCORE = 3
 const DEFAULT_HAND_SIZE = 5
 const MAX_HAND_SIZE = 10
 
@@ -32,17 +32,25 @@ const ALL_DIRECTIONS = [
 ]
 
 const REQUIRED_SCORES = [
-  30,
-  150,
+  60,
+  300,
   1000,
   7500,
-  30000,
-  100000,
-  500000,
-  1500000,
-  3000000,
-  10000000
+  30000
 ]
+
+#const REQUIRED_SCORES = [
+  #30,
+  #150,
+  #1000,
+  #7500,
+  #30000,
+  #100000,
+  #500000,
+  #1500000,
+  #3000000,
+  #10000000
+#]
 
 static var ENEMY_TILES = [
   load("res://data/tiles/enemy/tile_enemy_chaotic_wrath.tres"),

@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://uleg3ypmwuc5" path="res://scenes/shop_manager.gd" id="3_boyg6"]
 [ext_resource type="Script" uid="uid://chs7hvvvqn863" path="res://scenes/gridcast.gd" id="3_j5wjh"]
 [ext_resource type="Script" uid="uid://blphjbp21vxu2" path="res://scenes/music_manager.gd" id="3_ryrav"]
-[ext_resource type="AudioStream" uid="uid://dh2020w12fpnh" path="res://audio/music/Underwater Passage (Lake Lamode) - Super Mario Odyssey OST [WUG0PNB6pMo].mp3" id="4_eow3j"]
 [ext_resource type="Material" uid="uid://08ngit6xcjnn" path="res://materials/material_grid_selection_box.tres" id="4_vef74"]
 [ext_resource type="Script" uid="uid://c5oat8xid2os6" path="res://scenes/board/grid_highlighter.gd" id="5_7sc4i"]
 [ext_resource type="PackedScene" uid="uid://dx8nii23jt42c" path="res://scenes/shop/shop_option.tscn" id="5_e36ub"]
@@ -16,11 +15,24 @@
 [ext_resource type="Script" uid="uid://cbsof0i8gmrfi" path="res://scenes/tile_hand.gd" id="9_vef74"]
 [ext_resource type="FontFile" uid="uid://bwa1eluxk04vt" path="res://assets/fonts/Habibi-Regular.ttf" id="11_215e1"]
 [ext_resource type="Script" uid="uid://b88mkbokfc4re" path="res://scenes/board_camera.gd" id="11_mfdv2"]
+[ext_resource type="AudioStream" uid="uid://d4k6gbh8djvh1" path="res://audio/music/minijam_loop.ogg" id="12_hb5m1"]
 [ext_resource type="Shader" uid="uid://cbmhcoe13d8g4" path="res://materials/shaders/grid_backing_shader.gdshader" id="12_lc2xo"]
 [ext_resource type="Script" uid="uid://iq0mu5bomd0v" path="res://scenes/hand_manager.gd" id="13_hb5m1"]
+[ext_resource type="Script" uid="uid://curfronmsvgaq" path="res://scenes/shop_tile_container.gd" id="14_x5p1p"]
+[ext_resource type="Resource" uid="uid://car8lvcpofuyc" path="res://data/tiles/tile_basic_multiply_area.tres" id="15_i2p71"]
+[ext_resource type="Resource" uid="uid://4vjb6mhcmyxk" path="res://data/tiles/tile_high_point_tick.tres" id="15_vaj68"]
+[ext_resource type="Resource" uid="uid://cuiw4o7dkyh60" path="res://data/tiles/tile_points_on_destroy.tres" id="16_i2p71"]
+[ext_resource type="Resource" uid="uid://cs8h5k12pyhwc" path="res://data/tiles/tile_basic_points.tres" id="16_xa8c5"]
+[ext_resource type="Resource" uid="uid://iyogiblm2cv3" path="res://data/tiles/tile_basic_points_no_neighbors.tres" id="17_5b14r"]
 [ext_resource type="Texture2D" uid="uid://dyo4ao2bdf0iv" path="res://assets/ring.png" id="17_e8heu"]
 [ext_resource type="PackedScene" uid="uid://bch84pl6vclm5" path="res://assets/vfx/vfxConstellationBox.glb" id="18_boyg6"]
 [ext_resource type="Material" uid="uid://de5t4qub7uetm" path="res://materials/highlight_material.tres" id="18_rvswv"]
+[ext_resource type="Script" uid="uid://bldo4q8o2aiyq" path="res://scenes/enemy_tile_container.gd" id="20_5b14r"]
+[ext_resource type="Resource" uid="uid://d1f7j0hlrjv5i" path="res://data/tiles/enemy/tile_basic_enemy.tres" id="21_36jdj"]
+[ext_resource type="Resource" uid="uid://cro8hkydotaoa" path="res://data/tiles/enemy/tile_enemy_chaotic_wrath.tres" id="22_xfvwf"]
+[ext_resource type="Texture2D" uid="uid://dccsxygfvpdfy" path="res://assets/icons/uncertainty(1).png" id="25_xfvwf"]
+[ext_resource type="Shader" uid="uid://dhmhdf8o5gvdk" path="res://materials/shaders/vignette_shader.gdshader" id="28_dhpj7"]
+[ext_resource type="Material" uid="uid://b27lbq1oej8mq" path="res://materials/chromatic_ab_material.tres" id="29_7knny"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_215e1"]
 material = ExtResource("18_rvswv")
@@ -85,6 +97,19 @@ texture_margin_top = 32.0
 texture_margin_right = 32.0
 texture_margin_bottom = 32.0
 region_rect = Rect2(0, 0, 1024, 1024)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xfvwf"]
+texture = ExtResource("8_hve3p")
+texture_margin_left = 32.0
+texture_margin_top = 32.0
+texture_margin_right = 32.0
+texture_margin_bottom = 32.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7knny"]
+shader = ExtResource("28_dhpj7")
+shader_parameter/alpha = 1.0
+shader_parameter/inner_radius = 0.0
+shader_parameter/outer_radius = 3.085
 
 [sub_resource type="Environment" id="Environment_mwb40"]
 tonemap_mode = 3
@@ -202,10 +227,11 @@ size = 2.0
 transform = Transform3D(0.25, 0, -3.7252907e-09, 0, 0.25, 0, 3.7252907e-09, 0, 0.25, 0, -0.5, -1)
 script = ExtResource("9_vef74")
 
-[node name="GameManager" type="Node" parent="." unique_id=1080588153 node_paths=PackedStringArray("camera", "selection_svp")]
+[node name="GameManager" type="Node" parent="." unique_id=1080588153 node_paths=PackedStringArray("camera", "selection_svp", "enemy_tile_container")]
 script = ExtResource("1_fc0e3")
 camera = NodePath("../CameraArm/Camera3D")
 selection_svp = NodePath("../TileDisplayViewport/SubViewportContainer/SubViewport")
+enemy_tile_container = NodePath("../EnemyTileContainer")
 
 [node name="ShopManager" type="Node" parent="." unique_id=1207696944]
 script = ExtResource("3_boyg6")
@@ -275,11 +301,20 @@ script = ExtResource("3_ryrav")
 player = NodePath("AudioStreamPlayer")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MusicManager" unique_id=869604729]
-stream = ExtResource("4_eow3j")
-volume_db = -30.0
+stream = ExtResource("12_hb5m1")
+autoplay = true
+bus = &"Music"
 
 [node name="HandManager" type="Node" parent="." unique_id=332281660]
 script = ExtResource("13_hb5m1")
+
+[node name="ShopTileContainer" type="Node" parent="." unique_id=1521082501]
+script = ExtResource("14_x5p1p")
+resources = Array[Resource]([ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("15_vaj68"), ExtResource("16_i2p71")])
+
+[node name="EnemyTileContainer" type="Node" parent="." unique_id=1200513788]
+script = ExtResource("20_5b14r")
+resources = Array[Resource]([ExtResource("21_36jdj"), ExtResource("22_xfvwf")])
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=946420198]
 script = ExtResource("8_iotsf")
@@ -345,6 +380,22 @@ vertical_alignment = 1
 [node name="HBoxContainer2" type="HBoxContainer" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer" unique_id=1611610520]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/HBoxContainer2" unique_id=1872472265]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="TextureRect" type="TextureRect" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/HBoxContainer2/MarginContainer" unique_id=750719088]
+layout_mode = 2
+texture = ExtResource("25_xfvwf")
+expand_mode = 3
+
+[node name="HelpButton" type="Button" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/HBoxContainer2/MarginContainer" unique_id=865171529]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
 
 [node name="MarginContainer3" type="MarginContainer" parent="UI/VBoxContainer" unique_id=105548196]
 z_index = -1
@@ -422,6 +473,136 @@ horizontal_alignment = 1
 [node name="EffectsDisplayRoot" type="VBoxContainer" parent="UI/TileData/MarginContainer/VBoxContainer" unique_id=1328159812]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="Help" type="MarginContainer" parent="UI" unique_id=490620865]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="UI/Help" unique_id=1171910708]
+self_modulate = Color(0.28627452, 0.3019608, 0.49411765, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_xfvwf")
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/Help" unique_id=1020606262]
+custom_maximum_size = Vector2(700, -1)
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Help/MarginContainer" unique_id=1340188858]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label2" type="Label" parent="UI/Help/MarginContainer/VBoxContainer" unique_id=26706729]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_215e1")
+theme_override_font_sizes/font_size = 48
+text = "How To Play"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/Help/MarginContainer/VBoxContainer" unique_id=2035383837]
+layout_mode = 2
+
+[node name="Panel2" type="Panel" parent="UI/Help/MarginContainer/VBoxContainer/MarginContainer" unique_id=715500385]
+self_modulate = Color(0.15294118, 0.15294118, 0.26666668, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_xfvwf")
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/Help/MarginContainer/VBoxContainer/MarginContainer" unique_id=1885671939]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="Label" type="Label" parent="UI/Help/MarginContainer/VBoxContainer/MarginContainer/MarginContainer" unique_id=115086643]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Your job as Eos is to defeat the eternal night. Use tiles to create dawn and beat the score requirement before the cycle is over."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="UI/Help/MarginContainer/VBoxContainer" unique_id=608006043]
+layout_mode = 2
+
+[node name="Panel2" type="Panel" parent="UI/Help/MarginContainer/VBoxContainer/MarginContainer2" unique_id=1785807690]
+self_modulate = Color(0.15294118, 0.15294118, 0.26666668, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_xfvwf")
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/Help/MarginContainer/VBoxContainer/MarginContainer2" unique_id=1493409731]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="Label" type="RichTextLabel" parent="UI/Help/MarginContainer/VBoxContainer/MarginContainer2/MarginContainer" unique_id=806201381]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "Each cycle has [color=#8b6d9c]3[/color] turns. At the end of each cycle you can shop for additional tiles. You gain [color=#8b6d9c]1[/color] currency for each turn you're over the score requirement."
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="SystemMessage" type="RichTextLabel" parent="UI" unique_id=1826523349]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(700, 0)
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.25
+anchor_right = 0.5
+anchor_bottom = 0.25
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("11_215e1")
+theme_override_font_sizes/normal_font_size = 64
+bbcode_enabled = true
+text = "[pulse freq=1.0 color=#ffffff40 ease=-2.0]Evil Draws In[/pulse]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=94658656]
+layer = 0
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=847599822]
+material = SubResource("ShaderMaterial_7knny")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="CanvasLayer" unique_id=1213374118]
+position = Vector2(651, 538)
+copy_mode = 2
+
+[node name="ColorRect2" type="ColorRect" parent="CanvasLayer" unique_id=1284616908]
+material = ExtResource("29_7knny")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1757800547]
 transform = Transform3D(1, 0, 0, 0, 0.23705596, 0.971496, 0, -0.971496, 0.23705596, 0, 18.659317, 0)

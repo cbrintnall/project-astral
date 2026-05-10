@@ -7,6 +7,7 @@ signal points_fx
 
 @export var camera: Camera3D
 @export var selection_svp: SubViewport
+@export var enemy_tile_container: EnemyTileContainer
 
 var current_score := 0
 var required_score: int:
@@ -41,6 +42,9 @@ var _reset_sound_timer := BetterTimer.new(1.0)
 
 var _play_timer := BetterTimer.new(1.0)
 
+var _set_enemy_timer := BetterTimer.new(1.0)
+var _enemy_queue := {}
+
 func get_current_execution_queue() -> Array:
   match _state.current:
     "pre_execute":
@@ -50,6 +54,11 @@ func get_current_execution_queue() -> Array:
     "post_execute":
       return _post_execution_order
   return []
+
+func enter_shop():
+  assert(current_state == "wait_for_accept_shop")
+  _state.current = "shop"
+  ShopManager.inst.enter()
 
 func leave_shop():
   assert(current_state == "shop")
@@ -92,6 +101,8 @@ func _ready() -> void:
   _state.register("post_execute", _post_execute)
   _state.register("post_round", _post_round)
   _state.register("shop", _shop)
+  _state.register("enemies", _distribute_enemies)
+  _state.register("wait_for_accept_shop", CallableStateMachine.noop)
   
   selection_svp.world_3d = get_viewport().find_world_3d()
   
@@ -116,6 +127,7 @@ func _ready() -> void:
       start_mesh.queue_free()
   var eos = load("res://assets/blender/objects/Eos.glb").instantiate()
   start_tile.add_child(eos)
+  UI.inst.show_system_message("Begin Cycle")
   
 func _on_board_changed():
   _execution_order = GridManager.inst.collect_tiles_in_execution_order()
@@ -160,23 +172,24 @@ func _post_round(machine: CallableStateMachine, delta: float):
         print("YOU BEAT THE GAME YIPPPEEEE")
         get_tree().quit()
         return
+      
+      UI.inst.show_system_message("Begin Cycle")
       cycle += 1
       turn = 0
-      _distribute_enemies()
       _current_context = ExecutionContext.new()
       _current_context.active_round = false
-      _state.current = "shop"
-      ShopManager.inst.enter()
+      _setup_enemy_queue()
+      _state.current = "enemies"
       return
     else:
       print("you lost!!!!")
       get_tree().quit()
 
-  _state.current = "deal"
+  _state.current = "start_round"
   _current_context = ExecutionContext.new()
   _current_context.active_round = false
   
-func _distribute_enemies():
+func _setup_enemy_queue():
   var played = GridManager.inst.get_played_tiles()
   played.shuffle()
   var amount = ceili(len(played)*0.1)
@@ -187,11 +200,22 @@ func _distribute_enemies():
 
     var spot = (played.pop_front() as Tile).get_open_neighbor()
     if spot:
-      var tile = load("res://scenes/board/tile.tscn").instantiate()
-      var data = Constants.ENEMY_TILES.pick_random()
-      tile.def = data
-      GridManager.inst.try_place_tile(tile, spot)
+      var data = enemy_tile_container.resources.pick_random()
+      _enemy_queue[spot] = data
       spawned += 1
+  
+func _distribute_enemies(machine: CallableStateMachine, delta: float):
+  if _enemy_queue:
+    if _set_enemy_timer.check(delta):
+      var next = _enemy_queue.keys().front()
+      var tile = load("res://scenes/board/tile.tscn").instantiate()
+      tile.def = _enemy_queue[next]
+      
+      GridManager.inst.try_place_tile(tile, next)
+      
+      _enemy_queue.erase(next)
+  else:
+    _state.current = "wait_for_accept_shop"
     
 func _shop(machine: CallableStateMachine, delta: float):
   pass

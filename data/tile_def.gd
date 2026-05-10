@@ -8,3 +8,14 @@ class_name TileDef
 @export var effects: Array[TileEffect] = []
 @export var texture: Texture2D
 @export var constellation: ConstellationDef
+
+@export_category("editor")
+@export var in_shop := false
+@export var is_enemy := false
+
+func get_target_points(ctx: EffectContext) -> Array:
+  var targets = effects \
+    .filter(func(effect: TileEffect): return effect.target != null) \
+    .map(func(effect: TileEffect): return effect.target.get_target(ctx))
+  
+  return Utils.flatten_array(targets) 

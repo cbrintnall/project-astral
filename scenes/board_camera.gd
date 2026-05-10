@@ -13,6 +13,15 @@ static var inst: BoardCamera
 var map_root: Vector3
 var map_size: Vector2i
 
+var _chromatic_material:ShaderMaterial = preload("res://materials/chromatic_ab_material.tres")
+
+var _chromatic_intensity: float = .003:
+  set(val):
+    if _chromatic_intensity != val:
+      _chromatic_intensity = val
+      _chromatic_material.set_shader_parameter("strength", val)
+  get:
+    return _chromatic_intensity
 var _shake_intensity := 0.0
 var _shake_remaining := 0.0
 var _focus: Vector3 = Vector3.ZERO:
@@ -52,9 +61,11 @@ func _process(delta: float) -> void:
   if _shake_remaining:
     camera.h_offset = noise.get_noise_1d(Time.get_ticks_msec()*0.09)*_shake_intensity
     camera.v_offset = noise.get_noise_1d(550.0 + (Time.get_ticks_msec()*0.09))*_shake_intensity
+    _chromatic_intensity = .02
   else:
     camera.h_offset = 0.0
     camera.v_offset = 0.0
+    _chromatic_intensity = move_toward(_chromatic_intensity, .003, .001)
     
   _shake_remaining = move_toward(_shake_remaining, 0.0, delta)
   

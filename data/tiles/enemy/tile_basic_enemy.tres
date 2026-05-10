@@ -15,4 +15,5 @@ script = ExtResource("2_ytigj")
 name = "Petty"
 effects = Array[ExtResource("1_akovv")]([SubResource("Resource_fahx3")])
 texture = ExtResource("4_13fbd")
+is_enemy = true
 metadata/_custom_type_script = "uid://cssx7lcdl5o45"
