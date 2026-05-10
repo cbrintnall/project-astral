@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://dx8nii23jt42c"]
+
+[ext_resource type="Script" uid="uid://b6elhtkv2wxmj" path="res://scenes/shop/shop_option.gd" id="1_35wtd"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_boyg6"]
+albedo_color = Color(0.06053035, 0.06053035, 0.060530342, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_boyg6"]
+material = SubResource("StandardMaterial3D_boyg6")
+size = Vector2(1.2, 0.355)
+
+[node name="ShopOption" type="Marker3D" unique_id=1013725956]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+script = ExtResource("1_35wtd")
+
+[node name="Label3D" type="Label3D" parent="." unique_id=807378424]
+transform = Transform3D(-4.3711385e-08, 1, 4.371139e-08, 0, -4.371139e-08, 1, 1, 4.371139e-08, 0, 1, 0.117720366, 4.29764e-31)
+outline_modulate = Color(0, 0, 0, 0)
+text = "100"
+font_size = 64
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Label3D" unique_id=1209284996]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5062607e-31, 0, -0.04125929)
+mesh = SubResource("QuadMesh_boyg6")

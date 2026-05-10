@@ -12,7 +12,14 @@ var displayed_tile: Tile
 func _ready() -> void:
   inst = self
 
-  %PlayButton.pressed.connect(GameManager.inst.try_execute_turn)
+  %PlayButton.pressed.connect(
+    func():
+      match GameManager.inst.current_state:
+        "shop":
+          GameManager.inst.leave_shop()
+        "wait_for_player":
+          GameManager.inst.try_execute_turn()
+  )
   
   Springer.register("offset_transform_position", score_label, Vector2.ZERO, Vector2.ZERO, 200.0, 10.0)
   Springer.register("offset_transform_scale", score_label, Vector2.ONE, Vector2.ZERO, 200.0, 10.0)
@@ -42,9 +49,18 @@ func _process(_delta: float) -> void:
   score_label.text = "%d/%d" % [ GameManager.inst.current_score, GameManager.inst.required_score ]
   turn_label.text = "Turn: %d/%d" % [ GameManager.inst.turn, Constants.TURNS_PER_SCORE ]
   cycle_label.text = "Cycle: %d" % [ GameManager.inst.cycle ]
+  %MoneyLabel.text = "Money: %d" % [ GameManager.inst.money ]
   
   %TileData.visible = displayed_tile != null
   %PlayButton.disabled = GameManager.inst.active_execution and GameManager.inst.active_execution.active_round
+  
+  var play_text := "Play"
+  
+  match GameManager.inst.current_state:
+    "shop":
+      play_text = "Leave"
+      
+  %PlayText.text = play_text
 
   var desired_display: Tile = null
   

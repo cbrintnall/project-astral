@@ -7,6 +7,10 @@ static var wrath := preload("res://data/stats/stat_wrath.tres")
 const TURNS_PER_SCORE = 4
 const DEFAULT_HAND_SIZE = 5
 
+const START_DECK = [
+  
+]
+
 const ALL_DIRECTIONS = [
   Vector3i.LEFT,
   Vector3i.RIGHT,

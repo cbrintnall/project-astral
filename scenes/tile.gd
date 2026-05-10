@@ -30,6 +30,12 @@ var _face_material = preload("res://materials/extracted/Material_TileFace.materi
 var _effects := []
 var _constellation_satisfied := false
 
+func set_display_mode():
+  _state.current = "display"
+  for m in _meshes:
+    m.layers = 1
+  Springer.register("rotation", stretcher, Vector3.ZERO, Vector3.ZERO, 200.0, 20.0)
+
 func destroy():
   AudioManager3d.play({
     "stream": preload("res://audio/break-tile.ogg"),
@@ -67,8 +73,6 @@ func is_executing() -> bool:
   return _state.current == "execute" or _state.current == "no_execute"
 
 func execute(ctx: ExecutionContext, event: TileEffect.Event):
-  print(ctx.tile_execution_count*0.01)
-  
   AudioManager3d.play({
     "stream": preload("res://audio/Light Drone Sound (button hover) 40.wav"),
     "pitch_additional": ctx.tile_execution_count*0.01,
@@ -138,6 +142,7 @@ func _ready() -> void:
   _state.register("no_execute", _no_execute)
   _state.register("deferred", _deferred)
   _state.register("waiting_for_end", _waiting_for_end)
+  _state.register("display", _display)
   
   _state.state_changed.connect(_on_state_changed)
   
@@ -215,6 +220,9 @@ func _get_effect_ctx() -> EffectContext:
   ctx.tile = self
   
   return ctx
+
+func _display(machine: CallableStateMachine, delta: float):
+  pass
 
 func _deferred(machine: CallableStateMachine, delta: float):
   pass
@@ -303,6 +311,14 @@ func _on_select():
       unselect()
     "placed":
       print("hello?")
+    "display":
+      stretcher.punch(5.0,10.0)
+      Springer.data[stretcher]["rotation"]["velocity"] = Vector3(500.0, 0.0, 0.0)
+      if GameManager.inst.money >= def.shop_cost:
+        GameManager.inst.money -= def.shop_cost
+        print("TODO: ADD TO PLAYER HAND")
+        BoardCamera.inst.shake(0.1, 0.1)
+        queue_free()
       
 func _try_place_self(selection: Selection):
   if GridManager.inst.try_place_tile(self, GridManager.inst.grid_position_3d):

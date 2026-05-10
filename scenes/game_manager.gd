@@ -21,6 +21,11 @@ var cycle := 0
 var turn := 0
 
 var player_tasks := TaskGroup.new()
+var money := 500
+
+var current_state: String:
+  get:
+    return _state.current
 
 var _state := CallableStateMachine.new()
 var _deal_timer := BetterTimer.new(0.1)
@@ -45,6 +50,10 @@ func get_current_execution_queue() -> Array:
     "post_execute":
       return _post_execution_order
   return []
+
+func leave_shop():
+  assert(current_state == "shop")
+  _state.current = "deal"
 
 func do_receive_points_fx():
   _sound_counter += 0.01
@@ -81,6 +90,7 @@ func _ready() -> void:
   _state.register("execute", _execute_turn)
   _state.register("post_execute", _post_execute)
   _state.register("post_round", _post_round)
+  _state.register("shop", _shop)
   
   selection_svp.world_3d = get_viewport().find_world_3d()
   
@@ -109,16 +119,25 @@ func _on_board_changed():
 func _process(delta: float) -> void:
   if _reset_sound_timer.check(delta):
     _sound_counter = 0.0
+    
+  selection_svp.physics_object_picking = _state.current != "shop"
   
 func _deal(machine: CallableStateMachine, delta: float):
   turn += 1
   TileHand.inst.distribute_hand()
   _state.current = "wait_for_player"
+  
+  BoardCamera.inst.map_size = GridManager.inst.size
+  BoardCamera.inst.map_root = Vector3.ZERO
+  BoardCamera.inst.try_set_focus(Vector3.ZERO)
 
 func _wait_for_player(machine: CallableStateMachine, delta: float):
   pass
 
 func _post_round(machine: CallableStateMachine, delta: float):
+  if current_score >= required_score:
+    money += 1
+  
   if turn >= Constants.TURNS_PER_SCORE:
     if current_score >= required_score:
       print("beat cycle!!!!")
@@ -129,13 +148,22 @@ func _post_round(machine: CallableStateMachine, delta: float):
       cycle += 1
       turn = 0
       _distribute_enemies()
+      _current_context = ExecutionContext.new()
+      _current_context.active_round = false
+      _state.current = "shop"
+      ShopManager.inst.enter()
+      return
     else:
       print("you lost!!!!")
       get_tree().quit()
 
-  _state.current = "deal"
   _current_context = ExecutionContext.new()
   _current_context.active_round = false
+  _state.current = "shop"
+  ShopManager.inst.enter()
+  #_state.current = "deal"
+  #_current_context = ExecutionContext.new()
+  #_current_context.active_round = false
   
 func _distribute_enemies():
   var played = GridManager.inst.get_played_tiles()
@@ -153,6 +181,9 @@ func _distribute_enemies():
       tile.def = data
       GridManager.inst.try_place_tile(tile, spot)
       spawned += 1
+    
+func _shop(machine: CallableStateMachine, delta: float):
+  pass
   
 func _begin_execution(machine: CallableStateMachine, delta: float):
   if not player_tasks.finished:

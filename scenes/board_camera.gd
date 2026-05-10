@@ -10,17 +10,20 @@ static var inst: BoardCamera
 @onready var camera : Camera3D = $Camera3D
 @onready var default_rotation := camera.rotation
 
+var map_root: Vector3
+var map_size: Vector2i
+
 var _shake_intensity := 0.0
 var _shake_remaining := 0.0
 var _focus: Vector3 = Vector3.ZERO:
   set(val):
     _focus = val
     
-    var size = Vector2(GridManager.inst.size)*0.5
+    var size = Vector2(map_size)*0.5
     _focus = Vector3(
-      clampf(val.x, -size.x, size.x),
+      clampf(val.x, map_root.x-size.x, map_root.x+size.x),
       clampf(val.y, -INF, INF),
-      clampf(val.z, -size.y, size.y)
+      clampf(val.z, map_root.z-size.y, map_root.z+size.y)
     )
   get:
     return _focus
