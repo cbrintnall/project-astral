@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TileEffectDestroyIfStat" format=3 uid="uid://dgxnjx1ta42ap"]
+
+[ext_resource type="Script" uid="uid://d38l0nlvyjxhe" path="res://scenes/tiles/effects/tile_effect_destroy_if_stat.gd" id="1_cenyh"]
+[ext_resource type="Resource" uid="uid://cwfsgmakqguhu" path="res://data/stats/stat_wrath.tres" id="2_ffkyd"]
+
+[resource]
+script = ExtResource("1_cenyh")
+stat = ExtResource("2_ffkyd")
+value = 5
+metadata/_custom_type_script = "uid://d38l0nlvyjxhe"

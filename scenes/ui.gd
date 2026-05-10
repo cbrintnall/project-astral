@@ -36,6 +36,10 @@ func _process(_delta: float) -> void:
 
   var desired_display: Tile = null
   
+  if GameManager.inst.active_execution and GameManager.inst.active_execution.active_round:
+    var queue = GameManager.inst.get_current_execution_queue()
+    if queue:
+      desired_display = queue.front()
   if GridManager.inst.hand_hovered_tile:
     desired_display = GridManager.inst.hand_hovered_tile
   elif GridManager.inst.grid_hovered_tile:

@@ -62,7 +62,7 @@ func get_directions() -> Array:
   return DIRECTION_EXECUTION_ORDER
 
 func is_executing() -> bool:
-  return _state.current == "execute"
+  return _state.current == "execute" or _state.current == "no_execute"
 
 func execute(ctx: ExecutionContext, event: TileEffect.Event):
   AudioManager3d.play({
@@ -102,7 +102,17 @@ func set_placed_at(_tile: Vector3i):
   
   for effect: TileEffect in get_effects():
     if effect.event == TileEffect.Event.ON_PLACE:
-      GameManager.inst.player_tasks.run(effect.execute.bind(_get_effect_ctx(), GameManager.inst.active_execution))
+      GameManager.inst.player_tasks.run(effect.run.bind(_get_effect_ctx(), GameManager.inst.active_execution))
+      
+func register_effect(effect: TileEffect):
+  _effects.push_back(effect)
+
+func get_open_neighbor() -> Vector3i:
+  var my_tile = GridManager.inst.get_tile_loc(self)
+  for dir in Constants.ALL_DIRECTIONS:
+    if not GridManager.inst.has_tile(dir+my_tile):
+      return dir+my_tile
+  return Vector3i.MIN
 
 func _ready() -> void:
   add_child(_state)
@@ -112,12 +122,15 @@ func _ready() -> void:
   _state.register("placing", _placing)
   _state.register("placed", _placed)
   _state.register("execute", _executing)
+  _state.register("no_execute", _no_execute)
   _state.register("deferred", _deferred)
   _state.register("waiting_for_end", _waiting_for_end)
   
   _state.state_changed.connect(_on_state_changed)
   
   add_child(stat)
+  
+  stat.changed.connect(_on_stat_changed)
   
   _meshes = NodeUtils.get_nodes_with_predicate(self, func(node): return node is MeshInstance3D)
   _face_mesh = NodeUtils.find_child_with_predicate(
@@ -154,6 +167,14 @@ func _on_state_changed(state: String):
     "placing":
       input_ray_pickable = false
 
+func _on_stat_changed(changed: StatDef):
+  match changed:
+    Constants.wrath:
+      if stat.get_value(Constants.wrath) > 0.0:
+        var has_debuff = get_effects().any(func(effect: TileEffect): return effect == preload("res://data/effects/effect_destroy_from_wrath.tres"))
+        if not has_debuff:
+          register_effect(preload("res://data/effects/effect_destroy_from_wrath.tres"))
+
 func _get_effect_ctx() -> EffectContext:
   var ctx := EffectContext.new()
   
@@ -165,16 +186,26 @@ func _deferred(machine: CallableStateMachine, delta: float):
   pass
 
 func _executing(machine: CallableStateMachine, delta: float):
+  stretcher.position = stretcher.position.lerp(Vector3.UP, 0.1)
+  
   if not _current_effect_task:
     if _remaining_effects:
-      _current_effect_task = Task.wait_for(_remaining_effects.pop_front().execute.bind(_get_effect_ctx(), _ctx))
+      _current_effect_task = Task.wait_for(_remaining_effects.pop_front().run.bind(_get_effect_ctx(), _ctx))
     else:
       _state.current = "waiting_for_end"
-      _ctx.current_tile = null
       _ctx = null
+      stretcher.punch(1.0, 3.0)
       
   elif _current_effect_task.finished:
     _current_effect_task = null
+
+func _no_execute(machine: CallableStateMachine, delta: float):
+  stretcher.position = stretcher.position.lerp(Vector3.UP, 0.1)
+  
+  if _timer.check(delta):
+    _state.current = "waiting_for_end"
+    _ctx = null
+    stretcher.punch(1.0, 3.0)
 
 func _selecting(machine: CallableStateMachine, delta: float):
   stretcher.rotate(rotation_axis, delta)
@@ -202,7 +233,7 @@ func _placed(machine: CallableStateMachine, delta: float):
   stretcher.rotation = Vector3.ZERO
 
 func _waiting_for_end(machine: CallableStateMachine, delta: float):
-  pass
+  stretcher.position = stretcher.position.lerp(Vector3.ZERO, 0.05)
 
 func _mouse_enter() -> void:
   GridManager.inst.hand_hovered_tile = self

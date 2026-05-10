@@ -30,14 +30,18 @@ func get_event_text() -> String:
 @abstract func get_description(effect_ctx: EffectContext, exec_ctx: ExecutionContext) -> String
 @abstract func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext)
 
+func run(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
+  await execute(effect_ctx, exec_ctx)
+
 func _reward_points(effect_ctx: EffectContext, amount: int):
   var total_points = _get_total_points(effect_ctx, amount)
   GameManager.inst.current_score += total_points
+  if total_points <= 0: return
   var stars: MultiMeshInstance3D = load("res://scenes/fx/stars_multimesh.tscn").instantiate()
   effect_ctx.tile.get_tree().current_scene.add_child(stars)
   stars.multimesh = stars.multimesh.duplicate()
   stars.multimesh.instance_count = total_points
-  var t = effect_ctx.tile.create_tween()
+  var t = effect_ctx.tile.get_tree().current_scene.create_tween()
   for i in total_points:
     t.set_parallel(true)
     var end = GridManager.inst.center_tile.global_position

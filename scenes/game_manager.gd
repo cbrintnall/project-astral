@@ -32,6 +32,18 @@ var _post_execution_order := []
 var _sound_counter := 0.0
 var _reset_sound_timer := BetterTimer.new(1.0)
 
+var _play_timer := BetterTimer.new(1.0)
+
+func get_current_execution_queue() -> Array:
+  match _state.current:
+    "pre_execute":
+      return _pre_execution_order
+    "execute":
+      return _execution_order
+    "post_execute":
+      return _post_execution_order
+  return []
+
 func do_receive_points_fx():
   _sound_counter += 0.01
   
@@ -53,6 +65,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _ready() -> void:
   DebugDraw2D.debug_enabled = false
+  _current_context = ExecutionContext.new()
   
   inst = self
   add_child(_state)
@@ -112,6 +125,7 @@ func _post_round(machine: CallableStateMachine, delta: float):
         return
       cycle += 1
       turn = 0
+      _distribute_enemies()
     else:
       print("you lost!!!!")
       get_tree().quit()
@@ -119,6 +133,23 @@ func _post_round(machine: CallableStateMachine, delta: float):
   _state.current = "deal"
   _current_context = ExecutionContext.new()
   _current_context.active_round = false
+  
+func _distribute_enemies():
+  var played = GridManager.inst.get_played_tiles()
+  played.shuffle()
+  var amount = ceili(len(played)*0.1)
+  print("creating %d enemy tiles (10%% of current)" % amount)
+  var spawned := 0
+  for i in 1000:
+    if spawned > amount or not played: break
+
+    var spot = (played.pop_front() as Tile).get_open_neighbor()
+    if spot:
+      var tile = load("res://scenes/board/tile.tscn").instantiate()
+      var data = Constants.ENEMY_TILES.pick_random()
+      tile.def = data
+      GridManager.inst.try_place_tile(tile, spot)
+      spawned += 1
   
 func _begin_execution(machine: CallableStateMachine, delta: float):
   if not player_tasks.finished:
@@ -139,7 +170,8 @@ func _pre_execute(machine: CallableStateMachine, delta: float):
     _pre_execution_order, 
     "execute", 
     TileEffect.Event.ON_ROUND_START, 
-    func(): _execution_order = GridManager.inst.collect_tiles_in_execution_order()
+    func(): _execution_order = GridManager.inst.collect_tiles_in_execution_order(),
+    delta
   )
   
 func _post_execute(machine: CallableStateMachine, delta: float):
@@ -147,7 +179,8 @@ func _post_execute(machine: CallableStateMachine, delta: float):
     _post_execution_order, 
     "post_round", 
     TileEffect.Event.ON_ROUND_END,
-    func(): _current_context = null
+    func(): _current_context = null,
+    delta
   )
   
 func _execute_turn(machine: CallableStateMachine, delta: float):
@@ -155,10 +188,11 @@ func _execute_turn(machine: CallableStateMachine, delta: float):
     _execution_order, 
     "post_execute", 
     TileEffect.Event.ON_ACTIVATE, 
-    func(): _post_execution_order = GridManager.inst.collect_tiles_in_execution_order().filter(func(tile: Tile): return tile.has_post_round_effects())
+    func(): _post_execution_order = GridManager.inst.collect_tiles_in_execution_order().filter(func(tile: Tile): return tile.has_post_round_effects()),
+    delta
   )
       
-func _execute_tiles_from(order: Array, next_state: String, event: TileEffect.Event, on_finished: Callable):
+func _execute_tiles_from(order: Array, next_state: String, event: TileEffect.Event, on_finished: Callable, delta: float):
   if _current_context.current_tile:
     var loc = GridManager.inst.get_tile_loc(_current_context.current_tile)
     if loc != Vector3i.MIN:
@@ -166,11 +200,14 @@ func _execute_tiles_from(order: Array, next_state: String, event: TileEffect.Eve
   
   if _current_context.current_tile == null:
     if order:
-      var next = order.pop_front()
-      if is_instance_valid(next):
-        _current_context.current_tile = next
-        _current_context.current_tile.execute(_current_context, event)
+      if _play_timer.check(delta):
+        var next = order.pop_front()
+        if is_instance_valid(next):
+          _current_context.current_tile = next
+          _current_context.current_tile.execute(_current_context, event)
     else:
       _state.current = next_state
       if on_finished.is_valid():
         on_finished.call()
+  elif not _current_context.current_tile.is_executing():
+    _current_context.current_tile = null
