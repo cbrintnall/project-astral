@@ -5,6 +5,8 @@
 [ext_resource type="Resource" uid="uid://dd6l3bd1seddo" path="res://data/tiles/tile_no_effects.tres" id="2_vpg4h"]
 [ext_resource type="PackedScene" uid="uid://bi54uvkurhgh2" path="res://assets/blender/objects/objectTile.glb" id="4_xm3w6"]
 [ext_resource type="ArrayMesh" uid="uid://dufdhd4rdr3uv" path="res://assets/extracted_mesh/vfxConstellationBox.tres" id="5_w7oh7"]
+[ext_resource type="ArrayMesh" uid="uid://cgf2yg4i0yf6g" path="res://assets/vfx/vfxSelectionBox_Plane.res" id="6_abphe"]
+[ext_resource type="Material" uid="uid://bsmgkh28yoiet" path="res://materials/material_enemy_indicator.tres" id="7_npgv3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fc0e3"]
 
@@ -31,3 +33,10 @@ shape = SubResource("BoxShape3D_fc0e3")
 [node name="Constellations" type="MultiMeshInstance3D" parent="." unique_id=1454948822]
 unique_name_in_owner = true
 multimesh = SubResource("MultiMesh_xm3w6")
+
+[node name="EnemyIndicator" type="Node3D" parent="." unique_id=1133225040]
+unique_name_in_owner = true
+
+[node name="SelectionBox" type="MeshInstance3D" parent="EnemyIndicator" unique_id=273233849]
+mesh = ExtResource("6_abphe")
+surface_material_override/0 = ExtResource("7_npgv3")

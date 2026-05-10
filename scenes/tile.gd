@@ -130,6 +130,8 @@ func get_open_neighbor() -> Vector3i:
   return Vector3i.MIN
 
 func _ready() -> void:
+  %EnemyIndicator.visible = def.is_enemy
+  
   add_child(_state)
   add_to_group("tile")
   

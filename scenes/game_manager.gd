@@ -279,7 +279,9 @@ func _execute_tiles_from(order: Array, next_state: String, event: TileEffect.Eve
         if is_instance_valid(next):
           _current_context.current_tile = next
           _current_context.current_tile.execute(_current_context, event)
+          _play_timer.reset_to(_play_timer.every*0.9)
     else:
+      _play_timer.reset_to(1.0)
       _state.current = next_state
       if on_finished.is_valid():
         on_finished.call()
