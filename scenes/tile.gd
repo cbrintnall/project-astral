@@ -30,6 +30,23 @@ var _face_material = preload("res://materials/extracted/Material_TileFace.materi
 var _effects := []
 var _constellation_satisfied := false
 
+func has_effect(effect: TileEffect):
+  return _effects.has(effect)
+
+func transform_to(tile_def: TileDef):
+  def = tile_def
+  
+  %EnemyIndicator.visible = def.is_enemy
+  _effects = []
+  
+  for effect: TileEffect in def.effects:
+    _effects.push_back(effect)
+  
+  if def.texture:
+    _face_material.albedo_texture = def.texture
+
+  constellation = def.constellation
+
 func set_display_mode():
   _state.current = "display"
   for m in _meshes:
@@ -99,7 +116,21 @@ func unselect():
     if _selection:
       _selection.cancel()
       _selection = null
-      
+     
+func try_move(target: Vector3i) -> Tween:
+  var success = GridManager.inst.try_move(self, target)
+  var start = global_position
+  var t = create_tween()
+  t.tween_property(self, "global_position", Vector3(target), 1.0).set_trans(Tween.TRANS_CUBIC)
+  if not success:
+    t.tween_property(self, "global_position", start, 0.5).set_trans(Tween.TRANS_CUBIC)
+  return t
+    
+func set_move(src: Vector3i, new: Vector3i):
+  for effect: TileEffect in get_effects():
+    if effect.event == TileEffect.Event.ON_MOVE:
+      GameManager.inst.player_tasks.run(effect.run.bind(_get_effect_ctx(), GameManager.inst.active_execution))
+     
 func set_placed_at(_tile: Vector3i):
   _state.current = "placed"
   for m in _meshes:
@@ -122,11 +153,25 @@ func set_placed_at(_tile: Vector3i):
 func register_effect(effect: TileEffect):
   _effects.push_back(effect)
 
-func get_open_neighbor() -> Vector3i:
+func no_neighbors() -> bool:
+  return len(get_open_neighbors()) == len(get_valid_neighbor_tiles())
+
+func get_valid_neighbor_tiles() -> Array:
   var my_tile = GridManager.inst.get_tile_loc(self)
-  for dir in Constants.ALL_DIRECTIONS:
-    if not GridManager.inst.has_tile(dir+my_tile):
-      return dir+my_tile
+  return Constants.ALL_DIRECTIONS \
+    .filter(func(dir: Vector3i): return GridManager.inst.is_in_bounds(dir+my_tile)) \
+    .map(func(dir: Vector3i): return dir+my_tile)
+
+func get_open_neighbors() -> Array:
+  return get_valid_neighbor_tiles() \
+    .filter(func(pos: Vector3i): return not GridManager.inst.has_tile(pos))
+
+func get_open_neighbor() -> Vector3i:
+  var open := get_open_neighbors()
+  
+  if open:
+    return open.pick_random()
+  
   return Vector3i.MIN
 
 func _ready() -> void:
@@ -166,7 +211,7 @@ func _ready() -> void:
   
   for effect: TileEffect in def.effects:
     _effects.push_back(effect)
-  
+
   if def.texture:
     _face_material.albedo_texture = def.texture
   

@@ -1,6 +1,8 @@
 shader_type spatial;
 render_mode world_vertex_coords;
 
+global uniform vec4 world_background: source_color;
+
 uniform vec3 clr_a: source_color;
 uniform vec3 clr_b: source_color;
 
@@ -20,5 +22,5 @@ void fragment() {
   float size = ((sin(TIME+coords.x)+1.0)*0.5)*250.0;
   float star = step(n, 0.9);
   
-  ALBEDO = mix(clr_a*size, clr_b, star);
+  ALBEDO = mix(clr_a*size, pow(world_background.rgb, vec3(2.2)), star);
 }

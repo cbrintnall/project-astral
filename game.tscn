@@ -27,9 +27,12 @@
 [ext_resource type="Resource" uid="uid://iyogiblm2cv3" path="res://data/tiles/tile_basic_points_no_neighbors.tres" id="17_5b14r"]
 [ext_resource type="PackedScene" uid="uid://bch84pl6vclm5" path="res://assets/vfx/vfxConstellationBox.glb" id="18_boyg6"]
 [ext_resource type="Material" uid="uid://de5t4qub7uetm" path="res://materials/highlight_material.tres" id="18_rvswv"]
+[ext_resource type="Resource" uid="uid://7164xr2gbmkb" path="res://data/tiles/tile_encourage.tres" id="19_xex6t"]
 [ext_resource type="Script" uid="uid://bldo4q8o2aiyq" path="res://scenes/enemy_tile_container.gd" id="20_5b14r"]
-[ext_resource type="Resource" uid="uid://d1f7j0hlrjv5i" path="res://data/tiles/enemy/tile_basic_enemy.tres" id="21_36jdj"]
+[ext_resource type="Resource" uid="uid://dyavo287xoagu" path="res://data/tiles/tile_small_multiply_area.tres" id="22_aa0lp"]
 [ext_resource type="Resource" uid="uid://cro8hkydotaoa" path="res://data/tiles/enemy/tile_enemy_chaotic_wrath.tres" id="22_xfvwf"]
+[ext_resource type="Resource" uid="uid://b8pfayg4c0t67" path="res://data/tiles/enemy/tile_basic_enemy.tres" id="23_082n1"]
+[ext_resource type="Resource" uid="uid://cnbv8jwsf4hte" path="res://data/tiles/enemy/tile_envy.tres" id="24_082n1"]
 [ext_resource type="Texture2D" uid="uid://dccsxygfvpdfy" path="res://assets/icons/uncertainty(1).png" id="25_xfvwf"]
 [ext_resource type="Shader" uid="uid://dhmhdf8o5gvdk" path="res://materials/shaders/vignette_shader.gdshader" id="28_dhpj7"]
 [ext_resource type="Material" uid="uid://b27lbq1oej8mq" path="res://materials/chromatic_ab_material.tres" id="29_7knny"]
@@ -88,6 +91,8 @@ noise = SubResource("FastNoiseLite_7knny")
 render_priority = 0
 shader = ExtResource("11_7knny")
 shader_parameter/noise = SubResource("NoiseTexture2D_082n1")
+shader_parameter/rad = 0.5
+shader_parameter/feather = 0.5
 
 [sub_resource type="QuadMesh" id="QuadMesh_xex6t"]
 material = SubResource("ShaderMaterial_082n1")
@@ -214,11 +219,12 @@ size = 2.0
 transform = Transform3D(0.25, 0, -3.7252907e-09, 0, 0.25, 0, 3.7252907e-09, 0, 0.25, 0, -0.5, -1)
 script = ExtResource("9_vef74")
 
-[node name="GameManager" type="Node" parent="." unique_id=1080588153 node_paths=PackedStringArray("camera", "selection_svp", "enemy_tile_container")]
+[node name="GameManager" type="Node" parent="." unique_id=1080588153 node_paths=PackedStringArray("camera", "selection_svp", "enemy_tile_container", "light")]
 script = ExtResource("1_fc0e3")
 camera = NodePath("../CameraArm/Camera3D")
 selection_svp = NodePath("../TileDisplayViewport/SubViewportContainer/SubViewport")
 enemy_tile_container = NodePath("../EnemyTileContainer")
+light = NodePath("../DirectionalLight3D")
 
 [node name="ShopManager" type="Node" parent="." unique_id=1207696944]
 script = ExtResource("3_boyg6")
@@ -249,7 +255,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4, 0
 
 [node name="GridManager" type="Node" parent="." unique_id=735757972]
 script = ExtResource("2_feb5d")
-size = Vector2i(30, 30)
+size = Vector2i(24, 24)
 
 [node name="Gridcast" type="Node3D" parent="GridManager" unique_id=1771723510]
 script = ExtResource("3_j5wjh")
@@ -307,64 +313,65 @@ script = ExtResource("13_hb5m1")
 
 [node name="ShopTileContainer" type="Node" parent="." unique_id=1521082501]
 script = ExtResource("14_x5p1p")
-resources = Array[Resource]([ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("15_vaj68"), ExtResource("16_i2p71")])
+resources = Array[Resource]([ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("19_xex6t"), ExtResource("15_vaj68"), ExtResource("16_i2p71"), ExtResource("22_aa0lp")])
 
 [node name="EnemyTileContainer" type="Node" parent="." unique_id=1200513788]
 script = ExtResource("20_5b14r")
-resources = Array[Resource]([ExtResource("21_36jdj"), ExtResource("22_xfvwf")])
+resources = Array[Resource]([ExtResource("23_082n1"), ExtResource("22_xfvwf"), ExtResource("24_082n1")])
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=946420198]
 script = ExtResource("8_iotsf")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI" unique_id=1337269720]
+[node name="UpperBar" type="VBoxContainer" parent="UI" unique_id=1337269720]
+unique_name_in_owner = true
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 103.0
 grow_horizontal = 2
 theme_override_constants/separation = -34
 
-[node name="MarginContainer2" type="MarginContainer" parent="UI/VBoxContainer" unique_id=576643354]
+[node name="MarginContainer2" type="MarginContainer" parent="UI/UpperBar" unique_id=576643354]
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="UI/VBoxContainer/MarginContainer2" unique_id=1654312415]
+[node name="Panel" type="Panel" parent="UI/UpperBar/MarginContainer2" unique_id=1654312415]
 modulate = Color(0.15294118, 0.15294118, 0.26666668, 1)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_7sc4i")
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/MarginContainer2" unique_id=2067133570]
+[node name="MarginContainer" type="MarginContainer" parent="UI/UpperBar/MarginContainer2" unique_id=2067133570]
 layout_mode = 2
 theme_override_constants/margin_left = 80
 theme_override_constants/margin_right = 80
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/MarginContainer2/MarginContainer" unique_id=819270449]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/UpperBar/MarginContainer2/MarginContainer" unique_id=819270449]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer" unique_id=517821626]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/UpperBar/MarginContainer2/MarginContainer/HBoxContainer" unique_id=517821626]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CycleLabel" type="Label" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/HBoxContainer" unique_id=1396080300]
+[node name="CycleLabel" type="Label" parent="UI/UpperBar/MarginContainer2/MarginContainer/HBoxContainer/HBoxContainer" unique_id=1396080300]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "Cycle: 1"
 
-[node name="TurnLabel" type="Label" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/HBoxContainer" unique_id=1163476972]
+[node name="TurnLabel" type="Label" parent="UI/UpperBar/MarginContainer2/MarginContainer/HBoxContainer/HBoxContainer" unique_id=1163476972]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "Turn: 0/4"
 
-[node name="MoneyLabel" type="Label" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/HBoxContainer" unique_id=1510176653]
+[node name="MoneyLabel" type="Label" parent="UI/UpperBar/MarginContainer2/MarginContainer/HBoxContainer/HBoxContainer" unique_id=1510176653]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "Money: 500"
 
-[node name="ScoreLabel" type="Label" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer" unique_id=362333001]
+[node name="ScoreLabel" type="Label" parent="UI/UpperBar/MarginContainer2/MarginContainer/HBoxContainer" unique_id=362333001]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -374,55 +381,55 @@ text = "100/100"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer" unique_id=1611610520]
+[node name="HBoxContainer2" type="HBoxContainer" parent="UI/UpperBar/MarginContainer2/MarginContainer/HBoxContainer" unique_id=1611610520]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/HBoxContainer2" unique_id=1872472265]
+[node name="MarginContainer" type="MarginContainer" parent="UI/UpperBar/MarginContainer2/MarginContainer/HBoxContainer/HBoxContainer2" unique_id=1872472265]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="TextureRect" type="TextureRect" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/HBoxContainer2/MarginContainer" unique_id=750719088]
+[node name="TextureRect" type="TextureRect" parent="UI/UpperBar/MarginContainer2/MarginContainer/HBoxContainer/HBoxContainer2/MarginContainer" unique_id=750719088]
 layout_mode = 2
 texture = ExtResource("25_xfvwf")
 expand_mode = 3
 
-[node name="HelpButton" type="Button" parent="UI/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer/HBoxContainer2/MarginContainer" unique_id=865171529]
+[node name="HelpButton" type="Button" parent="UI/UpperBar/MarginContainer2/MarginContainer/HBoxContainer/HBoxContainer2/MarginContainer" unique_id=865171529]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 flat = true
 
-[node name="MarginContainer3" type="MarginContainer" parent="UI/VBoxContainer" unique_id=105548196]
+[node name="MarginContainer3" type="MarginContainer" parent="UI/UpperBar" unique_id=105548196]
 z_index = -1
 layout_mode = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="UI/VBoxContainer/MarginContainer3" unique_id=996971321]
+[node name="MarginContainer2" type="MarginContainer" parent="UI/UpperBar/MarginContainer3" unique_id=996971321]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 
-[node name="Panel" type="Panel" parent="UI/VBoxContainer/MarginContainer3/MarginContainer2" unique_id=856053680]
+[node name="Panel" type="Panel" parent="UI/UpperBar/MarginContainer3/MarginContainer2" unique_id=856053680]
 modulate = Color(0.15294118, 0.15294118, 0.26666668, 1)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_hve3p")
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/VBoxContainer/MarginContainer3/MarginContainer2" unique_id=1035190512]
+[node name="MarginContainer" type="MarginContainer" parent="UI/UpperBar/MarginContainer3/MarginContainer2" unique_id=1035190512]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="PlayText" type="Label" parent="UI/VBoxContainer/MarginContainer3/MarginContainer2/MarginContainer" unique_id=1530798185]
+[node name="PlayText" type="Label" parent="UI/UpperBar/MarginContainer3/MarginContainer2/MarginContainer" unique_id=1530798185]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9843137, 0.9607843, 0.9372549, 1)
 theme_override_font_sizes/font_size = 48
 text = "Play"
 
-[node name="PlayButton" type="Button" parent="UI/VBoxContainer/MarginContainer3/MarginContainer2" unique_id=679220892]
+[node name="PlayButton" type="Button" parent="UI/UpperBar/MarginContainer3/MarginContainer2" unique_id=679220892]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
@@ -576,7 +583,47 @@ bbcode_enabled = true
 text = "[pulse freq=1.0 color=#ffffff40 ease=-2.0]Evil Draws In[/pulse]"
 fit_content = true
 scroll_active = false
+autowrap_mode = 0
 horizontal_alignment = 1
+
+[node name="TryAgainRoot" type="MarginContainer" parent="UI" unique_id=1149007260]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="UI/TryAgainRoot" unique_id=1144019764]
+modulate = Color(0.15294118, 0.15294118, 0.26666668, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_hve3p")
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/TryAgainRoot" unique_id=2032146813]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 16
+
+[node name="Label" type="Label" parent="UI/TryAgainRoot/MarginContainer" unique_id=1396575220]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Try Again"
+horizontal_alignment = 1
+
+[node name="RetryButton" type="Button" parent="UI/TryAgainRoot/MarginContainer" unique_id=1728187377]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_default_cursor_shape = 2
+flat = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=94658656]
 layer = 0

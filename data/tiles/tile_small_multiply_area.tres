@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://dyavo287xoagu"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_j5nk3"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_6njta"]
+[ext_resource type="Script" uid="uid://coxe54w821lob" path="res://scenes/tiles/effects/tile_effect_multiply_area.gd" id="2_lfpj7"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_ty6li"]
+[ext_resource type="Texture2D" uid="uid://reccu60n5vo8" path="res://assets/particles/rock1.png" id="5_6njta"]
+
+[sub_resource type="Resource" id="Resource_dqxom"]
+script = ExtResource("2_6njta")
+size = Vector2i(3, 3)
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_6njta"]
+script = ExtResource("2_lfpj7")
+size = Vector2i(3, 3)
+multiplier = 4.0
+main_target = SubResource("Resource_dqxom")
+metadata/_custom_type_script = "uid://coxe54w821lob"
+
+[resource]
+script = ExtResource("2_ty6li")
+name = "High Point"
+effects = Array[ExtResource("1_j5nk3")]([SubResource("Resource_6njta")])
+texture = ExtResource("5_6njta")
+in_shop = true
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"

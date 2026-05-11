@@ -6,8 +6,12 @@ class_name TileEffectModifyStat
 
 @export var description_verbiage := "Set"
 
+func _get_targets(ctx: EffectContext):
+  return main_target.get_target(ctx)
+
 func get_description(effect_ctx: EffectContext, exec_ctx: ExecutionContext) -> String:
-  return "%s %s by %s." % [ description_verbiage, stat.name, StatProviderDef.get_value_as_format(provider.amount) ]
+  return "%s %s by %s %s." % [ description_verbiage, stat.name, StatProviderDef.get_value_as_format(provider.amount), main_target.get_text() ]
 
 func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
-  effect_ctx.tile.stat.add_provider(stat, provider)
+  for tile in _get_targets(effect_ctx):
+    effect_ctx.tile.stat.add_provider(stat, provider)

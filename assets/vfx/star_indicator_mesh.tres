@@ -1,0 +1,16 @@
+[gd_resource type="PlaneMesh" format=3 uid="uid://dwgqpx2a1atwg"]
+
+[ext_resource type="Texture2D" uid="uid://02euhmyf5ukn" path="res://assets/star.png" id="1_u6kcg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7knny"]
+transparency = 1
+albedo_texture = ExtResource("1_u6kcg")
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+billboard_mode = 1
+billboard_keep_scale = true
+
+[resource]
+material = SubResource("StandardMaterial3D_7knny")
+size = Vector2(1, 1)
+orientation = 2

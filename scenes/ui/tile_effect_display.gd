@@ -16,6 +16,8 @@ var effect: TileEffect:
     return effect
 
 func _process(delta: float) -> void:
+  if not is_instance_valid(effect_ctx.tile):
+    return 
   
   if effect:
     event_text.text = effect.get_event_text()

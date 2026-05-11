@@ -35,6 +35,27 @@ var _tiles_dirty := false
 
 var _indicator_color := DEFAULT_COLOR
 var _grid_material: ShaderMaterial = preload("res://materials/material_grid_selection_box.tres")
+var _bounds := Rect2i()
+
+func is_in_bounds(pos: Vector3i) -> bool:
+  return _bounds.has_point(Vector2i(pos.x, pos.z))
+
+func try_move(tile: Tile, target: Vector3i) -> bool:
+  if has_tile(target):
+    return false
+    
+  assert(_tiles.has(tile))
+    
+  var original = get_tile_loc(tile)
+  _tiles.erase(tile)
+  _placements.erase(original)
+
+  _tiles[tile] = target
+  _placements[target] = tile
+  
+  tile.set_move(original, target)
+  
+  return true
 
 func get_mods_at_point(loc: Vector3i) -> GridContext:
   return _pos_modifications.get(loc, GridContext.new())
@@ -69,6 +90,7 @@ func has_tile(loc: Vector3i) -> bool:
 
 func try_place_tile(tile: Tile, pos: Vector3i) -> bool:
   if _placements.has(pos): return false
+  if not is_in_bounds(pos): return false
   
   _placements[pos] = tile
   _tiles[tile] = pos
@@ -178,11 +200,14 @@ func _cancel_current_selection():
 func _ready() -> void:
   inst = self
   
-  map_bounds.scale = Vector3(size.x, size.x*0.25, size.y)
+  map_bounds.scale = Vector3(size.x+2, size.x*0.25, size.y+2)
+  _bounds = Rect2i(
+    Vector2i((Vector2(-size)*Vector2(0.5, 0.5)).ceil()),
+    size+Vector2i.ONE
+  )
   
 func _process(delta: float) -> void:
   _choose_cd.check(delta, false)
-  
   if _tiles_dirty:
     _update_dirty_grid()
     _tiles_dirty = false

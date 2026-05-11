@@ -8,6 +8,7 @@
 
 [sub_resource type="Resource" id="Resource_h3brm"]
 script = ExtResource("3_xlkub")
+points_given = 3
 event = 4
 metadata/_custom_type_script = "uid://b8w5q1k7is7sg"
 

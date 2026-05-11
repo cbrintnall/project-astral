@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://cnbv8jwsf4hte"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_484lb"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_2shif"]
+[ext_resource type="Script" uid="uid://cb0nsybw5kr8n" path="res://scenes/tiles/effects/tile_effect_spawn_no_neighbor.gd" id="2_o3gbu"]
+[ext_resource type="Texture2D" uid="uid://bk5jcxhmit1xh" path="res://assets/tiles/vaseTile.png" id="3_2shif"]
+[ext_resource type="Resource" uid="uid://b8pfayg4c0t67" path="res://data/tiles/enemy/tile_basic_enemy.tres" id="3_rocek"]
+
+[sub_resource type="Resource" id="Resource_rocek"]
+script = ExtResource("2_o3gbu")
+spawn = ExtResource("3_rocek")
+amount = 1
+event = 4
+metadata/_custom_type_script = "uid://cb0nsybw5kr8n"
+
+[resource]
+script = ExtResource("2_2shif")
+name = "Envy"
+effects = Array[ExtResource("1_484lb")]([SubResource("Resource_rocek")])
+texture = ExtResource("3_2shif")
+is_enemy = true
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatDef" format=3 uid="uid://pnvjjggkxomx"]
+
+[ext_resource type="Script" uid="uid://bemrh2m32ehhl" path="res://otterlib/resources/stat_def.gd" id="1_geolg"]
+
+[resource]
+script = ExtResource("1_geolg")
+name = "Dawn Received"
+description = "How much extra points this tile receives. Applied before grid modifiers."
+base_value = 0.0
+metadata/_custom_type_script = "uid://bemrh2m32ehhl"

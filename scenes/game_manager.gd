@@ -9,7 +9,13 @@ signal points_fx
 @export var selection_svp: SubViewport
 @export var enemy_tile_container: EnemyTileContainer
 
-var current_score := 0
+@export var light: DirectionalLight3D
+
+var current_score: int = 0:
+  set(val):
+    current_score = maxi(val, 0)
+  get:
+    return current_score
 var required_score: int:
   get:
     return Constants.REQUIRED_SCORES[mini(cycle, len(Constants.REQUIRED_SCORES)-1)]
@@ -27,6 +33,10 @@ var money := 0
 var current_state: String:
   get:
     return _state.current
+
+var won := false
+
+var _background_color := Color.from_string("#272744", Color.WHITE)
 
 var _state := CallableStateMachine.new()
 var _deal_timer := BetterTimer.new(0.1)
@@ -105,6 +115,7 @@ func _ready() -> void:
   _state.register("shop", _shop)
   _state.register("enemies", _distribute_enemies)
   _state.register("wait_for_accept_shop", CallableStateMachine.noop)
+  _state.register("end_game", _end_game)
   
   selection_svp.world_3d = get_viewport().find_world_3d()
   
@@ -129,11 +140,34 @@ func _ready() -> void:
   start_tile.add_child(eos)
   UI.inst.show_system_message("Begin Cycle")
   
+  Console.add_command(
+    "lose",
+    func(): 
+      _state.current = "end_game"
+      UI.inst.show_system_message("You've lost, plunging the world into eternal night.")
+  )
+  
+  Console.add_command(
+    "won",
+    func():
+        _state.current = "end_game"
+        won = true
+        UI.inst.show_system_message("You've won, defeating the eternal night!")
+  )
+  
 func _process(delta: float) -> void:
   if _reset_sound_timer.check(delta):
     _sound_counter = 0.0
     
   selection_svp.physics_object_picking = _state.current != "shop"
+  
+func _end_game(machine: CallableStateMachine, delta: float):
+  if not won:
+    light.light_energy = move_toward(light.light_energy, 0.0, delta)
+  else:
+    light.light_energy = move_toward(light.light_energy, 2.0, delta)
+    _background_color = _background_color.lerp(Color.from_string("#c69fa5", Color.WHITE), 0.01)
+    RenderingServer.global_shader_parameter_set("world_background", _background_color)
   
 func _start_round(machine: CallableStateMachine, delta: float):
   turn += 1
@@ -142,8 +176,9 @@ func _start_round(machine: CallableStateMachine, delta: float):
   BoardCamera.inst.map_root = Vector3.ZERO
   BoardCamera.inst.try_set_focus(Vector3.ZERO)
   
-  _pre_execution_order = _execution_order.filter(func(tile: Tile): return tile.has_pre_round_effects())
+  _pre_execution_order = GridManager.inst.get_played_tiles().filter(func(tile: Tile): return tile.has_pre_round_effects())
   _maintain_queue(_pre_execution_order)
+  print(_pre_execution_order)
   
   _state.current = "pre_execute"
   
@@ -165,10 +200,10 @@ func _post_round(machine: CallableStateMachine, delta: float):
   
   if turn >= Constants.TURNS_PER_SCORE:
     if current_score >= required_score:
-      print("beat cycle!!!!")
       if cycle >= len(Constants.REQUIRED_SCORES)-1:
-        print("YOU BEAT THE GAME YIPPPEEEE")
-        get_tree().quit()
+        won = true
+        _state.current = "end_game"
+        UI.inst.show_system_message("You've won, defeating the eternal night!")
         return
       
       UI.inst.show_system_message("Begin Cycle")
@@ -180,15 +215,16 @@ func _post_round(machine: CallableStateMachine, delta: float):
       _state.current = "enemies"
       return
     else:
-      print("you lost!!!!")
-      get_tree().quit()
+      _state.current = "end_game"
+      UI.inst.show_system_message("You've lost, plunging the world into eternal night.")
+      return
 
   _state.current = "start_round"
   _current_context = ExecutionContext.new()
   _current_context.active_round = false
   
 func _setup_enemy_queue():
-  var played = GridManager.inst.get_played_tiles()
+  var played = GridManager.inst.get_played_tiles().filter(func(tile: Tile): return not tile.def.initiates)
   played.shuffle()
   var amount = ceili(len(played)*0.1)
   print("creating %d enemy tiles (10%% of current)" % amount)
@@ -227,7 +263,7 @@ func _begin_execution(machine: CallableStateMachine, delta: float):
   _current_context = ExecutionContext.new()
   _current_context.active_round = true
   _execution_order = GridManager.inst.collect_tiles_in_execution_order()
-  _post_execution_order = _execution_order.filter(func(tile: Tile): return tile.has_post_round_effects())
+  _post_execution_order = tiles.filter(func(tile: Tile): return tile.has_post_round_effects())
   _maintain_queue(_execution_order)
   _maintain_queue(_post_execution_order)
   print("executing [pre=%d,mid=%d,post=%d]" % [ len(_pre_execution_order), len(_execution_order), len(_post_execution_order) ])

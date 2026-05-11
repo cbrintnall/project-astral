@@ -7,23 +7,27 @@ class_name TileTargetDef
 @export var size := Vector2i.ZERO
 @export var row := false
 @export var column := false
+@export var random_cardinal_direction := false
 
 func get_text():
   var text := []
   var amount := mini(len(tiles), random_amount_from_tiles)
   
+  if random_cardinal_direction:
+    text.push_back("in a random cardinal direction")
+  
   if amount:
-    text.push_back("[color=#c69fa5]%d[/color] %s neighbor%s" % [
+    text.push_back("for [color=#c69fa5]%d[/color] %s neighbor%s" % [
       amount, 
       "random" if random_amount_from_tiles > 0 else "", 
       "s" if amount > 1 else ""
     ])
     
   if size:
-    text.push_back("in a [color=#c69fa5]%dx%d[/color] area" % [size.x,size.y])
+    text.push_back("in an [color=#c69fa5]%dx%d[/color] area" % [size.x,size.y])
   
   if include_self:
-    text.push_back("[color=#c69fa5]itself[/color]")
+    text.push_back("for [color=#c69fa5]itself[/color]")
     
   if len(text) > 1:
     text[-1] = "and %s" % text[-1]
@@ -39,6 +43,9 @@ func get_target(ctx: EffectContext) -> Array:
 
   if not ctx.tile.placed and ctx.override_location:
     src = ctx.override_location
+  
+  if random_cardinal_direction:
+    targets.push_back(Constants.CARDINAL_DIRECTIONS.pick_random())
   
   if size:
     var rect = Rect2i(Vector2i(src.x, src.z)-Vector2i((size*0.5).floor()), size)
@@ -56,5 +63,7 @@ func get_target(ctx: EffectContext) -> Array:
   else:
     for dir in tiles:
       targets.push_back(src+dir)
+      
+  targets = targets.filter(func(tile: Vector3i): return GridManager.inst.is_in_bounds(tile))
       
   return targets

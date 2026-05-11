@@ -7,7 +7,8 @@ enum Event {
   ON_ROUND_START = 2,
   ON_ROUND_END = 4,
   ON_DESTROY = 8,
-  ON_PLACE = 16
+  ON_PLACE = 16,
+  ON_MOVE = 32
 }
 
 @export var event := Event.ON_PLACE
@@ -25,6 +26,8 @@ func get_event_text() -> String:
       return "On Destroyed"
     Event.ON_PLACE:
       return "On Place"
+    Event.ON_MOVE:
+      return "[color=#494d7e]On Move[/color]"
 
   return "ERROR, NO EVENT"
 
@@ -68,9 +71,10 @@ func _reward_points(effect_ctx: EffectContext, amount: int):
   t.tween_callback(stars.queue_free)
 
 func _get_total_points(effect_ctx: EffectContext, base_amount: int) -> int:
+  var src_loc = GridManager.inst.get_tile_loc(effect_ctx.tile)
   if not effect_ctx.tile.placed:
-    return base_amount
-  var grid_ctx := GridManager.inst.get_mods_at_point(GridManager.inst.get_tile_loc(effect_ctx.tile))
-  var added_points = base_amount+grid_ctx.points_additional
+    src_loc = effect_ctx.override_location
+  var grid_ctx := GridManager.inst.get_mods_at_point(src_loc)
+  var added_points = base_amount+grid_ctx.points_additional+effect_ctx.tile.stat.get_value(preload("res://data/stats/stat_additional_points.tres"))
   var total_points = floori(added_points+(added_points*grid_ctx.points_multipliers))
   return total_points

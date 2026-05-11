@@ -48,6 +48,22 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _ready() -> void:
   inst = self
+  
+  Console.add_command("give", _give, ["path"])
+  
+  await Utils.wait_until(func(): return GameManager.inst != null)
+  
+  GameManager.inst._state.state_changed.connect(
+    func(state: String):
+      match state:
+        "end_game":
+          discard_hand()
+  )
+    
+func _give(path: String):
+  var tile = load(path)
+  if tile and tile is TileDef:
+    add_to_hand(tile)
     
 func _process(delta: float) -> void:  
   for marker: Marker3D in _markers:

@@ -3,18 +3,40 @@
 [ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_5isqo"]
 [ext_resource type="Script" uid="uid://b8w5q1k7is7sg" path="res://scenes/tiles/effects/tile_effect_give_points.gd" id="2_uvwh6"]
 [ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_vxuob"]
-[ext_resource type="Texture2D" uid="uid://dcppfs5ls82r8" path="res://assets/tiles/Bullshit.png" id="4_uvwh6"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="3_ttbqt"]
+[ext_resource type="Script" uid="uid://cdselfcrv6cg4" path="res://otterlib/resources/stat_provider_def.gd" id="3_xuuhm"]
+[ext_resource type="Script" uid="uid://bke2g7202pvbv" path="res://scenes/tiles/effects/tile_effect_modify_enemy_stat.gd" id="3_yobd7"]
+[ext_resource type="Texture2D" uid="uid://c0kwau82w6jul" path="res://assets/tiles/arrowTile.png" id="4_uvwh6"]
+[ext_resource type="Resource" uid="uid://cwfsgmakqguhu" path="res://data/stats/stat_wrath.tres" id="4_xuuhm"]
 
 [sub_resource type="Resource" id="Resource_ytnkp"]
 script = ExtResource("2_uvwh6")
 points_given = 30
 metadata/_custom_type_script = "uid://b8w5q1k7is7sg"
 
+[sub_resource type="Resource" id="Resource_bbfwp"]
+script = ExtResource("3_ttbqt")
+size = Vector2i(5, 5)
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_7ib0a"]
+script = ExtResource("3_xuuhm")
+metadata/_custom_type_script = "uid://cdselfcrv6cg4"
+
+[sub_resource type="Resource" id="Resource_ttbqt"]
+script = ExtResource("3_yobd7")
+stat = ExtResource("4_xuuhm")
+provider = SubResource("Resource_7ib0a")
+description_verbiage = "Increase"
+event = 2
+main_target = SubResource("Resource_bbfwp")
+metadata/_custom_type_script = "uid://bke2g7202pvbv"
+
 [resource]
 script = ExtResource("2_vxuob")
 name = "Distraction"
 shop_cost = 2
-effects = Array[ExtResource("1_5isqo")]([SubResource("Resource_ytnkp")])
+effects = Array[ExtResource("1_5isqo")]([SubResource("Resource_ytnkp"), SubResource("Resource_ttbqt")])
 texture = ExtResource("4_uvwh6")
 in_shop = true
 metadata/_custom_type_script = "uid://cssx7lcdl5o45"

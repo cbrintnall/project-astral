@@ -25,6 +25,7 @@ AudioManager2d="*uid://c3q7grbrtwnau"
 AudioManager3d="*uid://b5jglyf5ejngq"
 Springer="*uid://dwladhserl57o"
 SaveManager="*uid://bcgaocsahwrbo"
+Console="*uid://ouiu5xh1cs8n"
 
 [debug_draw_3d]
 
@@ -36,6 +37,10 @@ window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/console/plugin.cfg")
 
 [gui]
 
@@ -145,4 +150,8 @@ anti_aliasing/quality/msaa_3d=1
 global_mouse_position={
 "type": "vec3",
 "value": Vector3(0, 0, 0)
+}
+world_background={
+"type": "color",
+"value": Color(0.15294118, 0.15294118, 0.26666668, 1)
 }

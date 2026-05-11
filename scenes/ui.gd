@@ -35,6 +35,7 @@ func _ready() -> void:
   
   system_label.self_modulate = Color.TRANSPARENT
 
+  %TryAgainRoot.modulate.a = 0.0
   %PlayButton.pressed.connect(
     func():
       match GameManager.inst.current_state:
@@ -44,6 +45,11 @@ func _ready() -> void:
           GameManager.inst.try_execute_turn()
         "wait_for_accept_shop":
           GameManager.inst.enter_shop()
+  )
+  
+  %RetryButton.pressed.connect(
+    func():
+      get_tree().change_scene_to_file("res://game.tscn")
   )
   
   %HelpButton.pressed.connect(
@@ -79,7 +85,7 @@ func _sync_displayed():
       display.effect_ctx = displayed_context
       display.effect = effect
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
   score_label.text = "%d/%d" % [ GameManager.inst.current_score, GameManager.inst.required_score ]
   turn_label.text = "Turn: %d/%d" % [ GameManager.inst.turn, Constants.TURNS_PER_SCORE ]
   cycle_label.text = "Cycle: %d" % [ GameManager.inst.cycle ]
@@ -95,6 +101,11 @@ func _process(_delta: float) -> void:
       play_text = "Leave"
     "wait_for_accept_shop":
       play_text = "Next"
+    "end_game":
+      %UpperBar.modulate.a = lerp(%UpperBar.modulate.a, 0.0, delta*5.0)
+      if not GameManager.inst.won:
+        %TryAgainRoot.visible = true
+        %TryAgainRoot.modulate.a = lerp(%TryAgainRoot.modulate.a, 1.0, delta*5.0)
       
   %PlayText.text = play_text
 

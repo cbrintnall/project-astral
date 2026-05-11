@@ -20,6 +20,13 @@ static var START_DECK = [
   load("res://data/tiles/tile_basic_points_no_neighbors.tres"),
 ]
 
+const CARDINAL_DIRECTIONS = [
+  Vector3i.LEFT,
+  Vector3i.RIGHT,
+  Vector3i.BACK,
+  Vector3i.FORWARD,
+]
+
 const ALL_DIRECTIONS = [
   Vector3i.LEFT,
   Vector3i.RIGHT,
@@ -51,8 +58,3 @@ const REQUIRED_SCORES = [
   #3000000,
   #10000000
 #]
-
-static var ENEMY_TILES = [
-  load("res://data/tiles/enemy/tile_enemy_chaotic_wrath.tres"),
-  load("res://data/tiles/enemy/tile_basic_enemy.tres")
-]
