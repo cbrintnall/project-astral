@@ -174,6 +174,10 @@ func get_open_neighbor() -> Vector3i:
   
   return Vector3i.MIN
 
+func get_neighbors() -> Array:
+  var tiles := get_valid_neighbor_tiles()
+  return tiles.map(func(pos: Vector3i): return GridManager.inst.get_tile_at(pos)).filter(func(tile: Tile): return tile != null)
+
 func _ready() -> void:
   %EnemyIndicator.visible = def.is_enemy
   

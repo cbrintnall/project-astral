@@ -3,10 +3,17 @@
 [ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_4ayie"]
 [ext_resource type="Script" uid="uid://cdselfcrv6cg4" path="res://otterlib/resources/stat_provider_def.gd" id="2_byfhv"]
 [ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_hekpi"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_xclym"]
 [ext_resource type="Script" uid="uid://cpwdsdmetvsul" path="res://scenes/tiles/effects/tile_effect_modify_stat.gd" id="3_k3sfb"]
 [ext_resource type="Resource" uid="uid://cwfsgmakqguhu" path="res://data/stats/stat_wrath.tres" id="4_jlv38"]
 [ext_resource type="Script" uid="uid://b8w5q1k7is7sg" path="res://scenes/tiles/effects/tile_effect_give_points.gd" id="6_jlv38"]
 [ext_resource type="Texture2D" uid="uid://d2xib00bg1jt7" path="res://assets/particles/cloud2.png" id="8_xclym"]
+
+[sub_resource type="Resource" id="Resource_fdow6"]
+script = ExtResource("2_xclym")
+include_self = false
+random_neighbors = 1
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
 
 [sub_resource type="Resource" id="Resource_byfhv"]
 script = ExtResource("2_byfhv")
@@ -18,11 +25,12 @@ stat = ExtResource("4_jlv38")
 provider = SubResource("Resource_byfhv")
 description_verbiage = "Increase"
 event = 2
+main_target = SubResource("Resource_fdow6")
 metadata/_custom_type_script = "uid://cpwdsdmetvsul"
 
 [sub_resource type="Resource" id="Resource_xclym"]
 script = ExtResource("6_jlv38")
-points_given = 10
+points_given = 50
 event = 4
 metadata/_custom_type_script = "uid://b8w5q1k7is7sg"
 

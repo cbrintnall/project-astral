@@ -152,7 +152,7 @@ func _ready() -> void:
     func():
         _state.current = "end_game"
         won = true
-        UI.inst.show_system_message("You've won, defeating the eternal night!")
+        UI.inst.show_system_message("You've won, defeating the eternal night.")
   )
   
 func _process(delta: float) -> void:
@@ -203,7 +203,7 @@ func _post_round(machine: CallableStateMachine, delta: float):
       if cycle >= len(Constants.REQUIRED_SCORES)-1:
         won = true
         _state.current = "end_game"
-        UI.inst.show_system_message("You've won, defeating the eternal night!")
+        UI.inst.show_system_message("You've won, defeating the eternal night.")
         return
       
       UI.inst.show_system_message("Begin Cycle")

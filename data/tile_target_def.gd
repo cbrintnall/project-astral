@@ -8,6 +8,7 @@ class_name TileTargetDef
 @export var row := false
 @export var column := false
 @export var random_cardinal_direction := false
+@export var random_neighbors := 0
 
 func get_text():
   var text := []
@@ -15,6 +16,9 @@ func get_text():
   
   if random_cardinal_direction:
     text.push_back("in a random cardinal direction")
+    
+  if random_neighbors:
+    text.push_back("for up to [color=#c69fa5]%d[/color] random neighbor(s)"% random_neighbors)
   
   if amount:
     text.push_back("for [color=#c69fa5]%d[/color] %s neighbor%s" % [
@@ -63,6 +67,13 @@ func get_target(ctx: EffectContext) -> Array:
   else:
     for dir in tiles:
       targets.push_back(src+dir)
+      
+  if random_neighbors:
+    var viable = ctx.tile.get_neighbors()
+    if viable:
+      viable.shuffle()
+    for i in mini(len(viable), random_neighbors):
+      targets.push_back(viable.pop_front())
       
   targets = targets.filter(func(tile: Vector3i): return GridManager.inst.is_in_bounds(tile))
       
