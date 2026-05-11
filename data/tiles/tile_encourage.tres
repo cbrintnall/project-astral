@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_baugj"]
 [ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_bh12o"]
 [ext_resource type="Script" uid="uid://b8w5q1k7is7sg" path="res://scenes/tiles/effects/tile_effect_give_points.gd" id="2_w282p"]
-[ext_resource type="Texture2D" uid="uid://bfkromjuoo3rj" path="res://assets/tiles/lyreTile.png" id="7_w282p"]
+[ext_resource type="Texture2D" uid="uid://c8iwhyh3jl6ts" path="res://assets/tiles/wingTile.png" id="6_bh12o"]
 
 [sub_resource type="Resource" id="Resource_4a357"]
 script = ExtResource("2_w282p")
@@ -29,6 +29,6 @@ metadata/_custom_type_script = "uid://bjc7uaym4sn7u"
 script = ExtResource("2_baugj")
 name = "Encouragement"
 effects = Array[ExtResource("1_j3cek")]([SubResource("Resource_e1b82")])
-texture = ExtResource("7_w282p")
+texture = ExtResource("6_bh12o")
 in_shop = true
 metadata/_custom_type_script = "uid://cssx7lcdl5o45"
