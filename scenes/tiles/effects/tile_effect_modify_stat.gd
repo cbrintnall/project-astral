@@ -14,6 +14,6 @@ func get_description(effect_ctx: EffectContext, exec_ctx: ExecutionContext) -> S
 
 func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
   for tile in _get_targets(effect_ctx):
-    var target = GridManager.inst.get_tile(tile)
+    var target = GridManager.inst.get_tile_at(tile)
     if target:
       target.stat.add_provider(stat, provider)

@@ -73,7 +73,7 @@ func get_target(ctx: EffectContext) -> Array:
     if viable:
       viable.shuffle()
     for i in mini(len(viable), random_neighbors):
-      targets.push_back(viable.pop_front())
+      targets.push_back(GridManager.inst.get_tile_loc(viable.pop_front()))
       
   targets = targets.filter(func(tile: Vector3i): return GridManager.inst.is_in_bounds(tile))
       
