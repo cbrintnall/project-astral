@@ -32,8 +32,7 @@ void fragment() {
 
   const float tile_fade_length = 1.0;
   vec3 dist = abs(world_pos - vec3(root_pos.x, 0.0, root_pos.y));
-  //vec2 additional_buffer = vec2(step(world_pos.x, 0.0), step(world_pos.z, 0.0));
-  vec2 used_size = ((grid_size+vec2(1.0))*0.5)+vec2(0.5);
+  vec2 used_size = ((grid_size+vec2(2.0))*0.5)+vec2(0.5*sign(world_pos.xz));
   float alpha_base = max(
     1.0-smoothstep(dist.x, dist.x+tile_fade_length, used_size.x),
     1.0-smoothstep(dist.z, dist.z+tile_fade_length, used_size.y)
