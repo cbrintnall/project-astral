@@ -40,4 +40,5 @@ name = "Happiness"
 shop_cost = 2
 effects = Array[ExtResource("1_0rerq")]([SubResource("Resource_0sk5t"), SubResource("Resource_wfhr4")])
 texture = ExtResource("8_2www2")
+in_shop = true
 metadata/_custom_type_script = "uid://cssx7lcdl5o45"

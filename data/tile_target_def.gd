@@ -9,6 +9,7 @@ class_name TileTargetDef
 @export var column := false
 @export var random_cardinal_direction := false
 @export var random_neighbors := 0
+@export var every_tile := false
 
 func get_text():
   var text := []
@@ -30,7 +31,12 @@ func get_text():
   if size:
     text.push_back("in an [color=#c69fa5]%dx%d[/color] area" % [size.x,size.y])
   
-  if include_self:
+  if every_tile:
+    var txt = "for all tiles on the board"
+    if include_self:
+      txt += ", including itself"
+    text.push_back(txt)
+  elif include_self:
     text.push_back("on [color=#c69fa5]itself[/color]")
     
   if len(text) > 1:
@@ -53,9 +59,9 @@ func get_target(ctx: EffectContext) -> Array:
 
   if not ctx.tile.placed and ctx.override_location:
     src = ctx.override_location
-  
-  if random_cardinal_direction:
-    targets.push_back(Constants.CARDINAL_DIRECTIONS.pick_random())
+  #
+  #if random_cardinal_direction:
+    #targets.push_back(Constants.CARDINAL_DIRECTIONS.pick_random())
   
   if size:
     var rect = Rect2i(Vector2i(src.x, src.z)-Vector2i((size*0.5).floor()), size)
@@ -63,8 +69,13 @@ func get_target(ctx: EffectContext) -> Array:
     area_tiles.erase(src)
     targets.append_array(area_tiles)
   
+  # before include self to decide if we want to include it
+  if every_tile:
+    targets.append_array(GridManager.inst.get_played_tiles().map(GridManager.inst.get_tile_loc))
+    targets.erase(src)
+    
   if include_self:
-    viable_options.push_back(GridManager.inst.get_tile_loc(ctx.tile))
+    targets.push_back(src)
   
   if random_amount_from_tiles > 0:
     viable_options.shuffle()

@@ -30,11 +30,13 @@
 [ext_resource type="Resource" uid="uid://dxqrjemap6vx6" path="res://data/tiles/tile_change.tres" id="19_4v2jo"]
 [ext_resource type="Resource" uid="uid://7164xr2gbmkb" path="res://data/tiles/tile_encourage.tres" id="19_xex6t"]
 [ext_resource type="Script" uid="uid://bldo4q8o2aiyq" path="res://scenes/enemy_tile_container.gd" id="20_5b14r"]
+[ext_resource type="Resource" uid="uid://cuixbtb3kefuf" path="res://data/tiles/tile_happiness.tres" id="21_l1i01"]
 [ext_resource type="Resource" uid="uid://dyavo287xoagu" path="res://data/tiles/tile_small_multiply_area.tres" id="22_aa0lp"]
 [ext_resource type="Resource" uid="uid://dgh4wxuf1qr2b" path="res://data/tiles/tile_push_pull.tres" id="22_iu0sx"]
 [ext_resource type="Resource" uid="uid://cro8hkydotaoa" path="res://data/tiles/enemy/tile_enemy_chaotic_wrath.tres" id="22_xfvwf"]
 [ext_resource type="Resource" uid="uid://b8pfayg4c0t67" path="res://data/tiles/enemy/tile_basic_enemy.tres" id="23_082n1"]
 [ext_resource type="Resource" uid="uid://cnbv8jwsf4hte" path="res://data/tiles/enemy/tile_envy.tres" id="24_082n1"]
+[ext_resource type="Resource" uid="uid://bdnsg6b0ly6d1" path="res://data/tiles/tile_point_per_tile.tres" id="24_r62pu"]
 [ext_resource type="Texture2D" uid="uid://dccsxygfvpdfy" path="res://assets/icons/uncertainty(1).png" id="25_xfvwf"]
 [ext_resource type="Shader" uid="uid://dhmhdf8o5gvdk" path="res://materials/shaders/vignette_shader.gdshader" id="28_dhpj7"]
 [ext_resource type="Material" uid="uid://b27lbq1oej8mq" path="res://materials/chromatic_ab_material.tres" id="29_7knny"]
@@ -315,7 +317,7 @@ script = ExtResource("13_hb5m1")
 
 [node name="ShopTileContainer" type="Node" parent="." unique_id=1521082501]
 script = ExtResource("14_x5p1p")
-resources = Array[Resource]([ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("19_4v2jo"), ExtResource("19_xex6t"), ExtResource("15_vaj68"), ExtResource("16_i2p71"), ExtResource("22_iu0sx"), ExtResource("22_aa0lp")])
+resources = Array[Resource]([ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("19_4v2jo"), ExtResource("19_xex6t"), ExtResource("21_l1i01"), ExtResource("15_vaj68"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("22_aa0lp")])
 
 [node name="EnemyTileContainer" type="Node" parent="." unique_id=1200513788]
 script = ExtResource("20_5b14r")
