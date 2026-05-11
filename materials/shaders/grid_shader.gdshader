@@ -2,15 +2,17 @@
 shader_type spatial;
 
 global uniform vec3 global_mouse_position;
+global uniform vec2 grid_size;
 
 uniform sampler2D noise: repeat_enable;
 
 uniform float line_width : hint_range(0.0, 1.0) = 0.04;
-uniform float grid_size : hint_range(0.0, 10.0) = 1.0;
+uniform float visual_grid_size : hint_range(0.0, 10.0) = 1.0;
 uniform vec4 line_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 uniform vec4 fill_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
 
 const float mouse_distance = 10.0;
+const vec3 root_pos = vec3(0.0);
 
 void fragment() {
 	// Calculate world position
@@ -20,7 +22,7 @@ void fragment() {
 
 	// Apply grid effect
   float step_range = 0.5;
-	vec2 grid_pos = mod(world_pos.xz + grid_size * 0.5, grid_size) / grid_size - 0.5;
+	vec2 grid_pos = mod(world_pos.xz + visual_grid_size * 0.5, visual_grid_size) / visual_grid_size - 0.5;
 	grid_pos = (abs(grid_pos) * 2.0);
   float width = line_width+(pow(n2, 15.0)*0.3);
   //width += (mouse_distance-min(distance(world_pos,global_mouse_position), mouse_distance))*0.005;
@@ -28,8 +30,16 @@ void fragment() {
 	//float line = min(smoothstep(width, width+step_range, grid_pos.x), smoothstep(width, width+step_range, grid_pos.y));
   float line = min(step(width, grid_pos.x), step(width, grid_pos.y));
 
-	// Apply color and transparency
+  const float tile_fade_length = 10.0;
+  vec3 dist = abs(world_pos - vec3(root_pos.x, 0.0, root_pos.y));
+  vec2 used_size = ((grid_size)*0.5)+vec2(0.5);
+  float alpha_base = max(
+    1.0-smoothstep(dist.x, dist.x+tile_fade_length, used_size.x),
+    1.0-smoothstep(dist.z, dist.z+tile_fade_length, used_size.y)
+  );
+  
+  // Apply color and transparency
   vec3 clr = mix(line_color.rgb, fill_color.rgb, line);
-	ALBEDO = clr+(clr*(n*1.0));
-	ALPHA = mix(line_color.a, fill_color.a, line);
+  ALBEDO = clr+(clr*(n*1.0));
+  ALPHA = min(mix(line_color.a, fill_color.a, line), 1.0-alpha_base);
 }

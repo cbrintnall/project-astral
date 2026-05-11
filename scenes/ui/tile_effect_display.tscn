@@ -5,6 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://uox7cg17blt6" path="res://assets/arrow.png" id="2_ejhag"]
 [ext_resource type="Texture2D" uid="uid://02euhmyf5ukn" path="res://assets/star.png" id="2_j2ipn"]
 [ext_resource type="FontFile" uid="uid://dw17dptw7rmyt" path="res://assets/static/MuseoModerno-Regular.ttf" id="3_ejhag"]
+[ext_resource type="Texture2D" uid="uid://dgxhq71og5rtw" path="res://assets/ui/barriers.png" id="3_sjfgp"]
+[ext_resource type="Texture2D" uid="uid://c3mk3f4rf4v27" path="res://assets/ui/blocked-nine-patch.png" id="4_gg1k6"]
 
 [sub_resource type="Curve" id="Curve_j2ipn"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -26,10 +28,43 @@ scale_min = 0.01
 scale_max = 0.099999994
 scale_curve = SubResource("CurveTexture_sjfgp")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ejhag"]
-bg_color = Color(0, 0, 0, 1)
+[sub_resource type="Gradient" id="Gradient_sjfgp"]
+colors = PackedColorArray(0.15294118, 0.15294118, 0.26666668, 1, 0.28627452, 0.3019608, 0.49411765, 0.32941177)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gg1k6"]
+gradient = SubResource("Gradient_sjfgp")
+width = 128
+height = 128
+use_hdr = true
+fill_from = Vector2(0, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gxvww"]
+texture = SubResource("GradientTexture2D_gg1k6")
+texture_margin_left = 32.0
+texture_margin_top = 29.0
+texture_margin_right = 32.0
+texture_margin_bottom = 32.0
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sjfgp"]
+texture = ExtResource("3_sjfgp")
+texture_margin_left = 28.0
+texture_margin_top = 25.0
+texture_margin_right = 28.0
+texture_margin_bottom = 26.0
 expand_margin_left = 12.0
 expand_margin_right = 12.0
+expand_margin_bottom = 4.0
+region_rect = Rect2(492, 217, 40, 35)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ulcw6"]
+texture = ExtResource("4_gg1k6")
+texture_margin_left = 24.0
+texture_margin_top = 8.0
+texture_margin_right = 24.0
+texture_margin_bottom = 8.0
 
 [node name="TileEffectDisplay" type="MarginContainer" unique_id=1392376793]
 custom_minimum_size = Vector2(300, 0)
@@ -39,6 +74,7 @@ script = ExtResource("1_nut02")
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=443150424]
 clip_children = 1
 layout_mode = 2
+theme_override_constants/margin_top = 6
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="MarginContainer" unique_id=1735436944]
 visible = false
@@ -48,44 +84,81 @@ process_material = SubResource("ParticleProcessMaterial_sjfgp")
 
 [node name="Panel" type="Panel" parent="." unique_id=1077783201]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_ejhag")
+theme_override_styles/panel = SubResource("StyleBoxTexture_gxvww")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=419230590]
+[node name="Panel2" type="Panel" parent="." unique_id=834016117]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_sjfgp")
+
+[node name="MarginContainer2" type="MarginContainer" parent="." unique_id=1474733319]
+layout_mode = 2
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer2" unique_id=419230590]
 z_index = 1
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=447447347]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer2/VBoxContainer" unique_id=447447347]
 layout_mode = 2
 
-[node name="HFlowContainer" type="HFlowContainer" parent="VBoxContainer/VBoxContainer" unique_id=70248517]
+[node name="HFlowContainer" type="HFlowContainer" parent="MarginContainer2/VBoxContainer/VBoxContainer" unique_id=70248517]
 layout_mode = 2
 
-[node name="EventText" type="RichTextLabel" parent="VBoxContainer/VBoxContainer/HFlowContainer" unique_id=444445475]
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer2/VBoxContainer/VBoxContainer/HFlowContainer" unique_id=754846606]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MarginContainer2/VBoxContainer/VBoxContainer/HFlowContainer/MarginContainer2" unique_id=1486278159]
+self_modulate = Color(0.15294118, 0.15294118, 0.26666668, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_ulcw6")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/VBoxContainer/VBoxContainer/HFlowContainer/MarginContainer2" unique_id=520068597]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
+
+[node name="EventText" type="RichTextLabel" parent="MarginContainer2/VBoxContainer/VBoxContainer/HFlowContainer/MarginContainer2/MarginContainer" unique_id=444445475]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("1_3jea6")
-theme_override_font_sizes/normal_font_size = 32
+theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[color=#f2d3ab]On Activate[/color]"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/VBoxContainer/HFlowContainer" unique_id=2065993340]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/VBoxContainer/VBoxContainer/HFlowContainer" unique_id=2065993340]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HFlowContainer/MarginContainer" unique_id=986774108]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer2/VBoxContainer/VBoxContainer/HFlowContainer/MarginContainer" unique_id=986774108]
+visible = false
 layout_mode = 2
 texture = ExtResource("2_ejhag")
 expand_mode = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/VBoxContainer" unique_id=532029242]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/VBoxContainer/VBoxContainer" unique_id=532029242]
 layout_mode = 2
-theme_override_constants/margin_left = 36
+theme_override_constants/margin_left = 12
 
-[node name="Description" type="RichTextLabel" parent="VBoxContainer/VBoxContainer/MarginContainer" unique_id=1549063393]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer2/VBoxContainer/VBoxContainer/MarginContainer" unique_id=1020016565]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1683379427]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_top = -20
+
+[node name="Label" type="Label" parent="MarginContainer2/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=493671295]
+z_index = -1
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "⌊"
+
+[node name="Description" type="RichTextLabel" parent="MarginContainer2/VBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1549063393]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_ejhag")

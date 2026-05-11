@@ -36,6 +36,12 @@ func _ready() -> void:
   system_label.self_modulate = Color.TRANSPARENT
 
   %TryAgainRoot.modulate.a = 0.0
+  
+  %Bluesky.pressed.connect(
+    func():
+      OS.shell_open("https://bsky.app/profile/otterbee.bsky.social")
+  )
+  
   %PlayButton.pressed.connect(
     func():
       match GameManager.inst.current_state:
@@ -81,9 +87,9 @@ func _sync_displayed():
     displayed_context.tile = displayed_tile
     for effect in displayed_tile.get_effects():
       var display: EffectsDisplayRoot = load("res://scenes/ui/tile_effect_display.tscn").instantiate()
-      %EffectsDisplayRoot.add_child(display)
       display.effect_ctx = displayed_context
       display.effect = effect
+      %EffectsDisplayRoot.add_child(display)
 
 func _process(delta: float) -> void:
   score_label.text = "%d/%d" % [ GameManager.inst.current_score, GameManager.inst.required_score ]

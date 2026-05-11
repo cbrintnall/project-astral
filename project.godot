@@ -155,3 +155,7 @@ world_background={
 "type": "color",
 "value": Color(0.15294118, 0.15294118, 0.26666668, 1)
 }
+grid_size={
+"type": "vec2",
+"value": Vector2(24, 24)
+}

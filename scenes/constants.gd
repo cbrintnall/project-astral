@@ -8,6 +8,8 @@ const TURNS_PER_SCORE = 3
 const DEFAULT_HAND_SIZE = 5
 const MAX_HAND_SIZE = 10
 
+const EFFECT_COLOR_STRING = "#fbf5ef"
+
 static var START_DECK = [
   load("res://data/tiles/tile_basic_points.tres"),
   load("res://data/tiles/tile_basic_points.tres"),

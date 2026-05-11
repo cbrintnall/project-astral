@@ -206,6 +206,8 @@ func _ready() -> void:
     size+Vector2i.ONE
   )
   
+  RenderingServer.global_shader_parameter_set("grid_size", Vector2(size))
+  
 func _process(delta: float) -> void:
   _choose_cd.check(delta, false)
   if _tiles_dirty:

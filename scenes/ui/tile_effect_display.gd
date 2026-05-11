@@ -14,6 +14,11 @@ var effect: TileEffect:
     effect = val
   get:
     return effect
+    
+func _ready() -> void:
+  if not effect:
+    queue_free()
+    set_process(false)
 
 func _process(delta: float) -> void:
   if not is_instance_valid(effect_ctx.tile):

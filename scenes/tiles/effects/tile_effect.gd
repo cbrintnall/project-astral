@@ -2,6 +2,8 @@
 extends Resource
 class_name TileEffect
 
+const EFFECT_COLOR_STRING = ""
+
 enum Event {
   ON_ACTIVATE = 1,
   ON_ROUND_START = 2,
@@ -16,18 +18,18 @@ enum Event {
 
 func get_event_text() -> String:
   match event:
-    Event.ON_ACTIVATE:
-      return "[color=#f2d3ab]On Activate[/color]"
+    Event.ON_ACTIVATE: 
+      return "[color=%s]On Activate[/color]" % Constants.EFFECT_COLOR_STRING
     Event.ON_ROUND_START:
-      return "[color=#8b6d9c]On Turn Start[/color]"
+      return "[color=%s]On Turn Start[/color]" % Constants.EFFECT_COLOR_STRING
     Event.ON_ROUND_END:
-      return "[color=#c69fa5]On Turn End[/color]"
+      return "[color=%s]On Turn End[/color]" % Constants.EFFECT_COLOR_STRING
     Event.ON_DESTROY:
       return "On Destroyed"
     Event.ON_PLACE:
       return "On Place"
     Event.ON_MOVE:
-      return "[color=#494d7e]On Move[/color]"
+      return "[color=%s]On Move[/color]" % Constants.EFFECT_COLOR_STRING
 
   return "ERROR, NO EVENT"
 

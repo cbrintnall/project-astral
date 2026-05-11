@@ -43,7 +43,6 @@
 [ext_resource type="Material" uid="uid://b27lbq1oej8mq" path="res://materials/chromatic_ab_material.tres" id="29_7knny"]
 [ext_resource type="Texture2D" uid="uid://35uxxspd0xt8" path="res://assets/bluesky-icon.blue.svg" id="33_klri6"]
 [ext_resource type="Texture2D" uid="uid://c5n62lu3y6qfo" path="res://assets/ui/tile-name-background.png" id="37_eu6ph"]
-[ext_resource type="Shader" uid="uid://bi3dkwmqo5d3q" path="res://materials/shaders/grid_barrier_shader.gdshader" id="43_kq12w"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_215e1"]
 material = ExtResource("18_rvswv")
@@ -169,13 +168,13 @@ render_priority = 0
 shader = ExtResource("1_80nbo")
 shader_parameter/noise = SubResource("NoiseTexture2D_80nbo")
 shader_parameter/line_width = 0.010000000475
-shader_parameter/visual_grid_size = 1.0
+shader_parameter/grid_size = 1.0000000475
 shader_parameter/line_color = Color(0.9843137, 0.9607843, 0.9372549, 1)
 shader_parameter/fill_color = Color(0, 0, 0, 0)
 
 [sub_resource type="QuadMesh" id="QuadMesh_mwb40"]
 material = SubResource("ShaderMaterial_e2o6t")
-size = Vector2(5000, 5000)
+size = Vector2(25000, 25000)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_lc2xo"]
 noise_type = 2
@@ -200,28 +199,7 @@ shader_parameter/noise = SubResource("NoiseTexture2D_215e1")
 
 [sub_resource type="QuadMesh" id="QuadMesh_80nbo"]
 material = SubResource("ShaderMaterial_iotsf")
-size = Vector2(5000, 5000)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_kq12w"]
-noise_type = 2
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_t46w6"]
-noise = SubResource("FastNoiseLite_kq12w")
-seamless = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_t46w6"]
-render_priority = 0
-shader = ExtResource("43_kq12w")
-shader_parameter/border_margin = 0.0
-shader_parameter/mist_margin = 3.0
-shader_parameter/color = Color(0.15294118, 0.15294118, 0.26666668, 1)
-shader_parameter/base_color = Color(0, 0, 0, 1)
-shader_parameter/noise = SubResource("NoiseTexture2D_t46w6")
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_edr7y"]
-material = SubResource("ShaderMaterial_t46w6")
-size = Vector2(5000, 5000)
-orientation = 2
+size = Vector2(25000, 25000)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_iotsf"]
 frequency = 0.0818
@@ -330,7 +308,6 @@ mesh = SubResource("ArrayMesh_6ucq4")
 
 [node name="MapBounds" parent="GridManager" unique_id=1249318940 instance=ExtResource("18_boyg6")]
 transform = Transform3D(3, 0, 0, 0, 1, 0, 0, 0, 3, 0, 0, 0)
-visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="GridManager" unique_id=217686084]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2, 0)
@@ -520,7 +497,6 @@ size_flags_vertical = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/TileData/MarginContainer" unique_id=1614693962]
 layout_mode = 2
-theme_override_constants/separation = -2
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/TileData/MarginContainer/VBoxContainer" unique_id=1310165273]
 layout_mode = 2
@@ -544,7 +520,6 @@ horizontal_alignment = 1
 
 [node name="EffectsDisplayRoot" type="VBoxContainer" parent="UI/TileData/MarginContainer/VBoxContainer" unique_id=1328159812]
 unique_name_in_owner = true
-show_behind_parent = true
 layout_mode = 2
 size_flags_horizontal = 4
 
@@ -741,10 +716,6 @@ mesh = SubResource("QuadMesh_mwb40")
 [node name="BackgroundMesh" type="MeshInstance3D" parent="GridVisual" unique_id=1097233135]
 transform = Transform3D(1, 0, 0, 0, 1, -1.5893256e-08, 0, 1.5893256e-08, 1, 0, 1.5893257e-09, -0.1)
 mesh = SubResource("QuadMesh_80nbo")
-
-[node name="BorderMesh" type="MeshInstance3D" parent="GridVisual" unique_id=718208658]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.7881394e-08, 0.3)
-mesh = SubResource("PlaneMesh_edr7y")
 
 [node name="CameraArm" type="Node3D" parent="." unique_id=515860464]
 transform = Transform3D(0.9396926, 0, 0.34202012, 0, 1, 0, -0.34202012, 0, 0.9396926, 0, 0, 0)
