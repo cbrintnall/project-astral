@@ -24,7 +24,7 @@ func _on_mods_changed():
 
   for pt in mods:
     var mod: GridContext = mods[pt]
-    if mod.points_multipliers > 0.0:
+    if mod.points_multipliers != 0.0:
       highlights[pt] = Color.WHITE
     else:
       highlights.erase(pt)

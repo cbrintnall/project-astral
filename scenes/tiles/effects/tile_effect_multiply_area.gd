@@ -5,7 +5,7 @@ class_name TileEffectMultiplyArea
 @export var multiplier := 2.0
 
 func get_description(effect_ctx: EffectContext, exec_ctx: ExecutionContext) -> String:
-  return "All tiles %s give an addition %.0f%% dawn." % [main_target.get_text(), multiplier*100.0]
+  return "All tiles %s give an additional %.0f%% dawn." % [main_target.get_text(), multiplier*100.0]
   
 func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
   var points = main_target.get_target(effect_ctx)

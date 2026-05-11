@@ -35,6 +35,12 @@ func get_text():
     
   if len(text) > 1:
     text[-1] = "and %s" % text[-1]
+    
+  if row:
+    text.push_back("in the same row")
+    
+  if column:
+    text.push_back("in the same column")
   
   var base_text = ", ".join(text)
   
@@ -74,6 +80,28 @@ func get_target(ctx: EffectContext) -> Array:
       viable.shuffle()
     for i in mini(len(viable), random_neighbors):
       targets.push_back(GridManager.inst.get_tile_loc(viable.pop_front()))
+      
+  if row:
+    var loc = GridManager.inst.get_tile_loc(ctx.tile)
+    var next = Vector3i.LEFT
+    while GridManager.inst.is_in_bounds(loc+next):
+      targets.push_back(loc+next)
+      next += Vector3i.LEFT
+    next = Vector3i.RIGHT
+    while GridManager.inst.is_in_bounds(loc+next):
+      targets.push_back(loc+next)
+      next += Vector3i.RIGHT
+      
+  if column:
+    var loc = GridManager.inst.get_tile_loc(ctx.tile)
+    var next = Vector3i.FORWARD
+    while GridManager.inst.is_in_bounds(loc+next):
+      targets.push_back(loc+next)
+      next += Vector3i.FORWARD
+    next = Vector3i.BACK
+    while GridManager.inst.is_in_bounds(loc+next):
+      targets.push_back(loc+next)
+      next += Vector3i.BACK
       
   targets = targets.filter(func(tile: Vector3i): return GridManager.inst.is_in_bounds(tile))
       

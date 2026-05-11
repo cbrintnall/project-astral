@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://dgh4wxuf1qr2b"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_b55w7"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_56h6o"]
+[ext_resource type="Script" uid="uid://coxe54w821lob" path="res://scenes/tiles/effects/tile_effect_multiply_area.gd" id="2_cy1ak"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_dmtlr"]
+[ext_resource type="Texture2D" uid="uid://dwpxqxvwubq8x" path="res://assets/tiles/blackholeTile.png" id="5_56h6o"]
+
+[sub_resource type="Resource" id="Resource_jfj4y"]
+script = ExtResource("2_56h6o")
+include_self = false
+row = true
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_56h6o"]
+script = ExtResource("2_cy1ak")
+multiplier = -0.25
+main_target = SubResource("Resource_jfj4y")
+metadata/_custom_type_script = "uid://coxe54w821lob"
+
+[sub_resource type="Resource" id="Resource_mg4d4"]
+script = ExtResource("2_56h6o")
+include_self = false
+column = true
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_cy1ak"]
+script = ExtResource("2_cy1ak")
+multiplier = 3.0
+main_target = SubResource("Resource_mg4d4")
+metadata/_custom_type_script = "uid://coxe54w821lob"
+
+[resource]
+script = ExtResource("2_dmtlr")
+name = "Push & Pull"
+effects = Array[ExtResource("1_b55w7")]([SubResource("Resource_56h6o"), SubResource("Resource_cy1ak")])
+texture = ExtResource("5_56h6o")
+in_shop = true
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"
