@@ -42,8 +42,8 @@ const REQUIRED_SCORES = [
   60,
   300,
   1000,
-  7500,
-  30000
+  3000,
+  5000
 ]
 
 #const REQUIRED_SCORES = [

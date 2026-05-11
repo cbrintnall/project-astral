@@ -31,7 +31,7 @@ func get_text():
     text.push_back("in an [color=#c69fa5]%dx%d[/color] area" % [size.x,size.y])
   
   if include_self:
-    text.push_back("for [color=#c69fa5]itself[/color]")
+    text.push_back("on [color=#c69fa5]itself[/color]")
     
   if len(text) > 1:
     text[-1] = "and %s" % text[-1]
@@ -64,7 +64,7 @@ func get_target(ctx: EffectContext) -> Array:
     targets.append_array(area_tiles)
   
   if include_self:
-    viable_options.push_back(Vector3i.ZERO)
+    viable_options.push_back(GridManager.inst.get_tile_loc(ctx.tile))
   
   if random_amount_from_tiles > 0:
     viable_options.shuffle()

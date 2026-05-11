@@ -27,6 +27,7 @@
 [ext_resource type="Resource" uid="uid://iyogiblm2cv3" path="res://data/tiles/tile_basic_points_no_neighbors.tres" id="17_5b14r"]
 [ext_resource type="PackedScene" uid="uid://bch84pl6vclm5" path="res://assets/vfx/vfxConstellationBox.glb" id="18_boyg6"]
 [ext_resource type="Material" uid="uid://de5t4qub7uetm" path="res://materials/highlight_material.tres" id="18_rvswv"]
+[ext_resource type="Resource" uid="uid://dxqrjemap6vx6" path="res://data/tiles/tile_change.tres" id="19_4v2jo"]
 [ext_resource type="Resource" uid="uid://7164xr2gbmkb" path="res://data/tiles/tile_encourage.tres" id="19_xex6t"]
 [ext_resource type="Script" uid="uid://bldo4q8o2aiyq" path="res://scenes/enemy_tile_container.gd" id="20_5b14r"]
 [ext_resource type="Resource" uid="uid://dyavo287xoagu" path="res://data/tiles/tile_small_multiply_area.tres" id="22_aa0lp"]
@@ -314,7 +315,7 @@ script = ExtResource("13_hb5m1")
 
 [node name="ShopTileContainer" type="Node" parent="." unique_id=1521082501]
 script = ExtResource("14_x5p1p")
-resources = Array[Resource]([ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("19_xex6t"), ExtResource("15_vaj68"), ExtResource("16_i2p71"), ExtResource("22_iu0sx"), ExtResource("22_aa0lp")])
+resources = Array[Resource]([ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("19_4v2jo"), ExtResource("19_xex6t"), ExtResource("15_vaj68"), ExtResource("16_i2p71"), ExtResource("22_iu0sx"), ExtResource("22_aa0lp")])
 
 [node name="EnemyTileContainer" type="Node" parent="." unique_id=1200513788]
 script = ExtResource("20_5b14r")

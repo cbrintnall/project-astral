@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://cuixbtb3kefuf"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_0rerq"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_0sk5t"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_88o7o"]
+[ext_resource type="Script" uid="uid://cdselfcrv6cg4" path="res://otterlib/resources/stat_provider_def.gd" id="2_f7e2q"]
+[ext_resource type="Script" uid="uid://cpwdsdmetvsul" path="res://scenes/tiles/effects/tile_effect_modify_stat.gd" id="2_v6rsu"]
+[ext_resource type="Resource" uid="uid://ccmgbglcsckc8" path="res://data/stats/stat_cheer.tres" id="3_f7e2q"]
+[ext_resource type="Script" uid="uid://kj1f7ucj1kiq" path="res://scenes/tiles/effects/tile_effect_dawn_per_stat.gd" id="6_h8bgf"]
+[ext_resource type="Texture2D" uid="uid://b05nganb0v4yp" path="res://assets/tiles/star2Tile.png" id="8_2www2"]
+
+[sub_resource type="Resource" id="Resource_2www2"]
+script = ExtResource("2_0sk5t")
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_h8bgf"]
+script = ExtResource("2_f7e2q")
+amount = 5.0
+metadata/_custom_type_script = "uid://cdselfcrv6cg4"
+
+[sub_resource type="Resource" id="Resource_0sk5t"]
+script = ExtResource("2_v6rsu")
+stat = ExtResource("3_f7e2q")
+provider = SubResource("Resource_h8bgf")
+description_verbiage = "Increase"
+event = 4
+main_target = SubResource("Resource_2www2")
+metadata/_custom_type_script = "uid://cpwdsdmetvsul"
+
+[sub_resource type="Resource" id="Resource_wfhr4"]
+script = ExtResource("6_h8bgf")
+stat = ExtResource("3_f7e2q")
+amount_per = 2
+event = 4
+metadata/_custom_type_script = "uid://kj1f7ucj1kiq"
+
+[resource]
+script = ExtResource("2_88o7o")
+name = "Happiness"
+shop_cost = 2
+effects = Array[ExtResource("1_0rerq")]([SubResource("Resource_0sk5t"), SubResource("Resource_wfhr4")])
+texture = ExtResource("8_2www2")
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"
