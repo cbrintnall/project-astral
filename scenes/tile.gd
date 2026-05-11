@@ -321,15 +321,8 @@ func _placing(machine: CallableStateMachine, delta: float):
   
   var state = Selection.State.DEFAULT
   
-  if GridManager.inst.has_tile(GridManager.inst.grid_position_3d):
+  if not GridManager.inst.could_place_tile(GridManager.inst.grid_position_3d):
     state = Selection.State.ERROR
-    
-  var has_neighbor = DIRECTION_EXECUTION_ORDER.any(
-    func(dir): 
-      return GridManager.inst.has_tile(GridManager.inst.grid_position_3d+Vector3i(dir.x, 0, dir.y))
-  ) 
-  if not has_neighbor:
-    state = Selection.State.WARNING
     
   _selection.state = state
 

@@ -56,6 +56,9 @@ func try_move(tile: Tile, target: Vector3i) -> bool:
   tile.set_move(original, target)
   
   return true
+  
+func could_place_tile(loc: Vector3i) -> bool:
+  return not get_tile_at(loc) and is_in_bounds(loc)
 
 func get_mods_at_point(loc: Vector3i) -> GridContext:
   return _pos_modifications.get(loc, GridContext.new())
@@ -207,6 +210,7 @@ func _ready() -> void:
   )
   
   RenderingServer.global_shader_parameter_set("grid_size", Vector2(size))
+  print("rendering server grid size %s" % str(Vector2(size)))
   
 func _process(delta: float) -> void:
   _choose_cd.check(delta, false)

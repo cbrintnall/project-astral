@@ -92,12 +92,10 @@ func try_execute_turn():
   _state.current = "begin_execution"
   TileHand.inst.discard_hand()
 
-func _unhandled_input(event: InputEvent) -> void:
-  if event.is_action_pressed("toggle_debug"):
-    DebugDraw2D.debug_enabled = not DebugDraw2D.debug_enabled
-
 func _ready() -> void:
   DebugDraw2D.debug_enabled = false
+  Console.pause_enabled = true
+
   _current_context = ExecutionContext.new()
   
   inst = self
@@ -153,6 +151,12 @@ func _ready() -> void:
         _state.current = "end_game"
         won = true
         UI.inst.show_system_message("You've won, defeating the eternal night.")
+  )
+  
+  Console.add_command(
+    "debug",
+    func():
+      DebugDraw2D.debug_enabled = not DebugDraw2D.debug_enabled
   )
   
 func _process(delta: float) -> void:

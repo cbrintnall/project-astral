@@ -158,11 +158,13 @@ glow_bloom = 0.99
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_80nbo"]
 noise_type = 2
-frequency = 0.0009
+frequency = 0.0169
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_80nbo"]
+generate_mipmaps = false
 noise = SubResource("FastNoiseLite_80nbo")
 seamless = true
+seamless_blend_skirt = 0.65
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e2o6t"]
 render_priority = 0
