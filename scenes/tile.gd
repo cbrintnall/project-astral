@@ -29,6 +29,7 @@ var _face_mesh: MeshInstance3D
 var _face_material = preload("res://materials/extracted/Material_TileFace.material")
 var _effects := []
 var _constellation_satisfied := false
+var _preview_command: BasicCommand
 
 func has_effect(effect: TileEffect):
   return _effects.has(effect)
@@ -107,6 +108,9 @@ func execute(ctx: ExecutionContext, event: TileEffect.Event):
       _remaining_effects.push_back(effect)
 
 func unselect():
+  if _preview_command:
+    _preview_command.undo()
+  
   if GridManager.inst.hand_selected_tile == self:
     GridManager.inst.hand_selected_tile = null
   
@@ -317,7 +321,7 @@ func _placing(machine: CallableStateMachine, delta: float):
   var target := Basis.looking_at(direction, get_viewport().get_camera_3d().global_basis.y)
   target *= Basis.from_euler(Vector3(PI*0.5, 0.0, 0.0))
   stretcher.global_basis = stretcher.global_basis.orthonormalized().slerp(target, 0.1).scaled(curr_scale)
-  position = position.lerp(Vector3.UP, delta*10.0)
+  position = position.lerp(Vector3.UP*0.5, delta*10.0)
   
   var state = Selection.State.DEFAULT
   
@@ -361,7 +365,15 @@ func _on_select():
       selection.on_choose = _try_place_self.bind(selection)
 
       if GridManager.inst.try_start_selection(selection):
+        if _preview_command:
+          _preview_command.undo()
         GridManager.inst.hand_selected_tile = self
+        var preview := TileDataPreviewer.TilePreviewData.new()
+        preview.effects = get_effects()
+        preview.context = EffectContext.new()
+        preview.def = def
+        preview.priority = 2
+        _preview_command = UI.inst.tile_previewer.push_preview(preview)
     "placing":
       unselect()
     "placed":

@@ -1,8 +1,7 @@
 extends Node3D
 class_name TileHand
 
-const MAX_HAND_WIDTH = 4.0
-const MAX_RANGE = [Vector3(-MAX_HAND_WIDTH, -0.7, 2.0), Vector3(MAX_HAND_WIDTH, -0.7, 2.0)]
+const HAND_BUFFER_PX = 1.0
 
 static var inst: TileHand
 static var tiles = [
@@ -59,6 +58,10 @@ func _ready() -> void:
         "end_game":
           discard_hand()
   )
+  
+  await get_tree().process_frame
+  
+  print("tile viewport aspect: %.2f" % get_viewport().get_visible_rect().size.aspect())
     
 func _give(path: String):
   var tile = load(path)
@@ -70,10 +73,12 @@ func _process(delta: float) -> void:
     marker.visible = marker.get_child_count() > 0
     
   var visible_markers = _markers.filter(func(marker): return marker.visible)
+  var bounds := (get_viewport().get_visible_rect().size.aspect() * get_viewport().get_camera_3d().size)*0.5
+  var range = [Vector3(-bounds+HAND_BUFFER_PX, 0.0, 2.0), Vector3(bounds-HAND_BUFFER_PX, 0.0, 2.0)]
 
   if len(visible_markers) > 1:
     for i in len(visible_markers):
       var marker: Marker3D = visible_markers[i]
-      marker.position = marker.position.lerp(MAX_RANGE[0].lerp(MAX_RANGE[1], float(i)/float(len(visible_markers)-1)), 0.1)
+      marker.position = marker.position.lerp(range[0].lerp(range[1], float(i)/float(len(visible_markers)-1)), 0.1)
   elif len(visible_markers) == 1:
-    visible_markers[0].position = MAX_RANGE[0].lerp(MAX_RANGE[1], 0.5)
+    visible_markers[0].position = range[0].lerp(range[1], 0.5)

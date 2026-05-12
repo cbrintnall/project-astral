@@ -41,6 +41,8 @@ var _focus: Vector3 = Vector3.ZERO:
     )
   get:
     return _focus
+    
+var _default_pos: Vector3
 
 func shake(amt: float, time: float):
   _shake_intensity = amt
@@ -50,7 +52,7 @@ func try_set_focus(target: Vector3) -> bool:
   _focus = target
   return true
   
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
   if event.is_action_pressed("zoom_in"):
     target_fov -= 5.0
   elif event.is_action_pressed("zoom_out"):
@@ -68,8 +70,9 @@ func _process(delta: float) -> void:
   var offset := (normalized-Vector2(0.5, 0.5))*0.01
   
   camera.rotation = camera.rotation.lerp(default_rotation+Vector3(-offset.y, offset.x, 0.0), 0.02)      
+  global_position = global_position.lerp(_focus, 0.1)
   camera.fov = lerp(camera.fov, target_fov, 0.01)
-  
+
   if _shake_remaining:
     camera.h_offset = noise.get_noise_1d(Time.get_ticks_msec()*0.09)*_shake_intensity
     camera.v_offset = noise.get_noise_1d(550.0 + (Time.get_ticks_msec()*0.09))*_shake_intensity
@@ -80,8 +83,6 @@ func _process(delta: float) -> void:
     _chromatic_intensity = move_toward(_chromatic_intensity, .003, .001)
     
   _shake_remaining = move_toward(_shake_remaining, 0.0, delta)
-  
-  global_position = global_position.lerp(_focus, 0.1)
   
   var input = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
   var dir = (input.y * global_basis.z) + (input.x * global_basis.x)

@@ -16,14 +16,15 @@ var effect: TileEffect:
     return effect
     
 func _ready() -> void:
+  visible = false
+  
   if not effect:
     queue_free()
     set_process(false)
+    
+  get_tree().process_frame.connect(func(): visible = true, CONNECT_ONE_SHOT)
 
-func _process(delta: float) -> void:
-  if not is_instance_valid(effect_ctx.tile):
-    return 
-  
+func _process(_delta: float) -> void:
   if effect:
     event_text.text = effect.get_event_text()
     event_description.text = effect.get_description(effect_ctx, GameManager.inst.active_execution)

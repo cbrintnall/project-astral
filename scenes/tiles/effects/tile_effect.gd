@@ -73,10 +73,19 @@ func _reward_points(effect_ctx: EffectContext, amount: int):
   t.tween_callback(stars.queue_free)
 
 func _get_total_points(effect_ctx: EffectContext, base_amount: int) -> int:
-  var src_loc = GridManager.inst.get_tile_loc(effect_ctx.tile)
-  if not effect_ctx.tile.placed:
-    src_loc = effect_ctx.override_location
+  var src_loc = effect_ctx.override_location
+  
+  if not src_loc and effect_ctx.tile:
+    src_loc = GridManager.inst.get_tile_loc(effect_ctx.tile)
+  
   var grid_ctx := GridManager.inst.get_mods_at_point(src_loc)
-  var added_points = base_amount+grid_ctx.points_additional+effect_ctx.tile.stat.get_value(preload("res://data/stats/stat_additional_points.tres"))
+  var added_points = base_amount+grid_ctx.points_additional
+  
+  if effect_ctx.tile:
+    added_points += effect_ctx.tile.stat.get_value(preload("res://data/stats/stat_additional_points.tres"))
+  
+  if not effect_ctx.tile or not effect_ctx.tile.placed:
+    src_loc = effect_ctx.override_location
+  
   var total_points = floori(added_points+(added_points*grid_ctx.points_multipliers))
   return total_points

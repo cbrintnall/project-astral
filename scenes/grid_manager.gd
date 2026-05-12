@@ -21,8 +21,44 @@ signal mods_changed
 var grid_position_3d: Vector3i
 var center_tile: Tile
 
-var grid_hovered_tile: Tile
-var hand_hovered_tile: Tile
+var grid_hovered_tile: Tile:
+  set(val):
+    if val != grid_hovered_tile:
+      if _grid_tile_command:
+        _grid_tile_command.undo()
+        
+      grid_hovered_tile = val
+      
+      if grid_hovered_tile:
+        var data := TileDataPreviewer.TilePreviewData.new()
+        data.priority = 0
+        data.def = grid_hovered_tile.def
+        data.effects = grid_hovered_tile.get_effects()
+        data.context = EffectContext.new()
+        data.context.tile = grid_hovered_tile
+        _grid_tile_command = UI.inst.tile_previewer.push_preview(data)
+  get:
+    return grid_hovered_tile
+
+var hand_hovered_tile: Tile:
+  set(val):
+    if val != hand_hovered_tile:
+      if _hovered_tile_command:
+        _hovered_tile_command.undo()
+        
+      hand_hovered_tile = val
+      
+      if hand_hovered_tile:
+        var data := TileDataPreviewer.TilePreviewData.new()
+        data.priority = 1
+        data.def = hand_hovered_tile.def
+        data.effects = hand_hovered_tile.get_effects()
+        data.context = EffectContext.new()
+        data.context.tile = hand_hovered_tile
+        _hovered_tile_command = UI.inst.tile_previewer.push_preview(data)
+  get:
+    return hand_hovered_tile
+
 var hand_selected_tile: Tile
 
 var _choose_cd := BetterTimer.new(0.1)
@@ -36,6 +72,9 @@ var _tiles_dirty := false
 var _indicator_color := DEFAULT_COLOR
 var _grid_material: ShaderMaterial = preload("res://materials/material_grid_selection_box.tres")
 var _bounds := Rect2i()
+
+var _hovered_tile_command: Command
+var _grid_tile_command: Command
 
 func is_in_bounds(pos: Vector3i) -> bool:
   return _bounds.has_point(Vector2i(pos.x, pos.z))
@@ -243,6 +282,8 @@ func _process(delta: float) -> void:
   if selection.visible:
     _grid_material.set_shader_parameter("clr", _indicator_color)
 
+  DebugDraw2D.begin_text_group("-=-=-=- Grid -=-=-=-", 0, Color.AQUA)
   DebugDraw2D.set_text("hovered path", grid_hovered_tile.get_path() if grid_hovered_tile else "n/a")
   DebugDraw2D.set_text("hovered tile position", grid_position_3d)
   DebugDraw2D.set_text("hovered position", raw_pos)
+  DebugDraw2D.end_text_group()

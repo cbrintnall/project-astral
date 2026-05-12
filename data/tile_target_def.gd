@@ -55,10 +55,10 @@ func get_text():
 func get_target(ctx: EffectContext) -> Array:
   var targets := []
   var viable_options := tiles.duplicate()
-  var src = GridManager.inst.get_tile_loc(ctx.tile)
+  var src = ctx.override_location
 
-  if not ctx.tile.placed and ctx.override_location:
-    src = ctx.override_location
+  if not src and ctx.tile:
+    src = GridManager.inst.get_tile_loc(ctx.tile)
   #
   #if random_cardinal_direction:
     #targets.push_back(Constants.CARDINAL_DIRECTIONS.pick_random())

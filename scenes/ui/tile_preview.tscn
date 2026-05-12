@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://vxv80vfrjv71"]
+
+[ext_resource type="Script" uid="uid://bem7w5pvbj6gw" path="res://scenes/ui/tile_preview.gd" id="1_ar6w7"]
+[ext_resource type="Texture2D" uid="uid://bwey7wevp1mxt" path="res://assets/ui/ellipse-mask.png" id="1_fpvro"]
+[ext_resource type="Texture2D" uid="uid://dyo4ao2bdf0iv" path="res://assets/ring.png" id="2_ar6w7"]
+[ext_resource type="Texture2D" uid="uid://dwpxqxvwubq8x" path="res://assets/tiles/blackholeTile.png" id="3_xacd8"]
+
+[sub_resource type="Gradient" id="Gradient_lwlx3"]
+colors = PackedColorArray(0.15294118, 0.15294118, 0.26666668, 1, 0.15294118, 0.15294118, 0.26666668, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0de7l"]
+gradient = SubResource("Gradient_lwlx3")
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(0.52136755, 0.44444445)
+
+[sub_resource type="Gradient" id="Gradient_0de7l"]
+colors = PackedColorArray(1, 1, 1, 1, 0.15294118, 0.15294118, 0.26666668, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_87ddb"]
+gradient = SubResource("Gradient_0de7l")
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(0.52136755, 0.44444445)
+
+[node name="TilePreview" type="MarginContainer" unique_id=1920415334]
+size_flags_horizontal = 6
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+script = ExtResource("1_ar6w7")
+
+[node name="BackgroundMask" type="TextureRect" parent="." unique_id=646309676]
+clip_children = 1
+layout_mode = 2
+texture = ExtResource("1_fpvro")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BackgroundGradient" type="TextureRect" parent="BackgroundMask" unique_id=596179415]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = SubResource("GradientTexture2D_0de7l")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BorderMask" type="TextureRect" parent="." unique_id=966158021]
+clip_children = 1
+layout_mode = 2
+texture = ExtResource("2_ar6w7")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BorderGradient" type="TextureRect" parent="BorderMask" unique_id=500084067]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = SubResource("GradientTexture2D_87ddb")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="TileIcon" type="TextureRect" parent="." unique_id=1502391612]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+custom_maximum_size = Vector2(64, 64)
+layout_mode = 2
+offset_transform_enabled = true
+texture = ExtResource("3_xacd8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Button" type="Button" parent="." unique_id=1235666051]
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true

@@ -160,6 +160,11 @@ func _ready() -> void:
   )
   
 func _process(delta: float) -> void:
+  var hovered_ui = get_viewport().gui_get_hovered_control().get_path() if get_viewport().gui_get_hovered_control() else "none"
+  DebugDraw2D.begin_text_group("-=-=-=- Game -=-=-=-")
+  DebugDraw2D.set_text("hovered control", hovered_ui)
+  DebugDraw2D.end_text_group()
+  
   if _reset_sound_timer.check(delta):
     _sound_counter = 0.0
     

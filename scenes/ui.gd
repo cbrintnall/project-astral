@@ -8,9 +8,12 @@ static var inst: UI
 @onready var cycle_label: Label = %CycleLabel
 @onready var help: Control = $Help
 @onready var system_label: RichTextLabel = %SystemMessage
+@onready var tile_display: MarginContainer = %TileDisplay
+@onready var tile_previewer: TileDataPreviewer = %TileData
 
-var displayed_tile: Tile
-var displayed_context: EffectContext
+var _tile_display_offset := 0.0
+var _tile_display_open := false
+var _tile_displays := {}
 
 func show_system_message(text: String, audio: AudioStream = null):
   system_label.text = text
@@ -33,9 +36,11 @@ func show_system_message(text: String, audio: AudioStream = null):
 func _ready() -> void:
   inst = self
   
+  _tile_display_offset = tile_display.size.y
   system_label.self_modulate = Color.TRANSPARENT
 
   %TryAgainRoot.modulate.a = 0.0
+  %ToggleTileDisplay.pressed.connect(func(): _tile_display_open = not _tile_display_open)
   
   %Bluesky.pressed.connect(
     func():
@@ -78,27 +83,24 @@ func _unhandled_input(event: InputEvent) -> void:
   if event.is_action_pressed("ui_cancel"):
     help.visible = false
 
-func _sync_displayed():
-  NodeUtils.clear_children(%EffectsDisplayRoot)
-  
-  if displayed_tile:
-    %TileTitle.text = displayed_tile.def.name
-    displayed_context = EffectContext.new()
-    displayed_context.tile = displayed_tile
-    for effect in displayed_tile.get_effects():
-      var display: EffectsDisplayRoot = load("res://scenes/ui/tile_effect_display.tscn").instantiate()
-      display.effect_ctx = displayed_context
-      display.effect = effect
-      %EffectsDisplayRoot.add_child(display)
-
 func _process(delta: float) -> void:
   score_label.text = "%d/%d" % [ GameManager.inst.current_score, GameManager.inst.required_score ]
   turn_label.text = "Turn: %d/%d" % [ GameManager.inst.turn, Constants.TURNS_PER_SCORE ]
   cycle_label.text = "Cycle: %d" % [ GameManager.inst.cycle ]
   %MoneyLabel.text = "Money: %d" % [ GameManager.inst.money ]
-  
-  %TileData.visible = displayed_tile != null
   %PlayButton.disabled = GameManager.inst.active_execution and GameManager.inst.active_execution.active_round
+  
+  for i in len(HandManager.inst.hand):
+    if not _tile_displays.has(i):
+      var next = load("res://scenes/ui/tile_preview.tscn").instantiate()
+      next.tile = HandManager.inst.hand[i]
+      %TilePreviewRoot.add_child(next)
+      _tile_displays[i]=next
+  
+  if _tile_display_open:
+    tile_display.anchor_top = lerp(tile_display.anchor_top, 0.2, 0.1)
+  else:
+    tile_display.anchor_top = lerp(tile_display.anchor_top, 1.0, 0.1)
   
   var play_text := "Play"
   
@@ -114,32 +116,3 @@ func _process(delta: float) -> void:
         %TryAgainRoot.modulate.a = lerp(%TryAgainRoot.modulate.a, 1.0, delta*5.0)
       
   %PlayText.text = play_text
-
-  var desired_display: Tile = null
-  
-  if GameManager.inst.active_execution and GameManager.inst.active_execution.active_round:
-    var queue = GameManager.inst.get_current_execution_queue()
-    if queue and is_instance_valid(queue.front()):
-      desired_display = queue.front()
-  if GridManager.inst.hand_hovered_tile:
-    desired_display = GridManager.inst.hand_hovered_tile
-  elif GridManager.inst.grid_hovered_tile:
-    desired_display = GridManager.inst.grid_hovered_tile
-  elif GridManager.inst.hand_selected_tile:
-    desired_display = GridManager.inst.hand_selected_tile
-
-  if displayed_context:
-    displayed_context.override_location = GridManager.inst.grid_position_3d
-
-  if not displayed_tile:
-    if desired_display:
-      displayed_tile = desired_display
-      _sync_displayed()
-  else:
-    if desired_display != displayed_tile:
-      displayed_tile = desired_display
-      _sync_displayed()
-    
-    if not desired_display:
-      displayed_tile = null
-      _sync_displayed()
