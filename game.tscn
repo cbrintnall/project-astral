@@ -861,6 +861,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="BackBufferCopy" type="BackBufferCopy" parent="CanvasLayer" unique_id=1213374118]
 position = Vector2(651, 538)
@@ -875,6 +876,7 @@ offset_top = -3.0
 offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1757800547]
 transform = Transform3D(1, 0, 0, 0, 0.23705596, 0.971496, 0, -0.971496, 0.23705596, 0, 18.659317, 0)

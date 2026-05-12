@@ -30,6 +30,7 @@ var _face_material = preload("res://materials/extracted/Material_TileFace.materi
 var _effects := []
 var _constellation_satisfied := false
 var _preview_command: BasicCommand
+var _preview_highlighter := GridHighlights.new()
 
 func has_effect(effect: TileEffect):
   return _effects.has(effect)
@@ -227,6 +228,8 @@ func _ready() -> void:
     m.layers = 2
     
   constellation = def.constellation
+  _preview_highlighter.mesh = load("res://assets/extracted_mesh/area_indicator_mesh.tres")
+  add_child(_preview_highlighter)
   
 func _on_board_changed():
   var before = _constellation_satisfied
@@ -247,9 +250,6 @@ func _on_board_changed():
     })
 func _on_state_changed(state: String):
   match state:
-    "placing":
-      for m in _meshes:
-        m.layers = 2
     "selecting":
       input_ray_pickable = true
       for m in _meshes:
@@ -260,6 +260,8 @@ func _on_state_changed(state: String):
         m.layers = 1
     "placing":
       input_ray_pickable = false
+      for m in _meshes:
+        m.layers = 1
 
 func _on_stat_changed(changed: StatDef):
   match changed:
@@ -316,12 +318,14 @@ func _selecting(machine: CallableStateMachine, delta: float):
   position = position.lerp(Vector3.ZERO, delta*10.0)
 
 func _placing(machine: CallableStateMachine, delta: float):
+  #var direction = -get_viewport().get_camera_3d().global_basis.z
+  #position = position.lerp(Vector3.UP*0.5, delta*10.0)
+  
   var curr_scale := stretcher.global_basis.get_scale()
-  var direction = -get_viewport().get_camera_3d().global_basis.z
-  var target := Basis.looking_at(direction, get_viewport().get_camera_3d().global_basis.y)
-  target *= Basis.from_euler(Vector3(PI*0.5, 0.0, 0.0))
+  var target := Basis.looking_at(Vector3.UP)
+  target *= Basis.from_euler(Vector3(PI*0.5, -PI, 0.0))
   stretcher.global_basis = stretcher.global_basis.orthonormalized().slerp(target, 0.1).scaled(curr_scale)
-  position = position.lerp(Vector3.UP*0.5, delta*10.0)
+  global_position = global_position.lerp(GridManager.inst.grid_position_3d+Vector3i.UP, 0.3)
   
   var state = Selection.State.DEFAULT
   
@@ -329,6 +333,13 @@ func _placing(machine: CallableStateMachine, delta: float):
     state = Selection.State.ERROR
     
   _selection.state = state
+  var spots = []
+  var ctx := EffectContext.new()
+  ctx.tile = self
+  for effect: TileEffect in get_effects():
+    if effect.main_target:
+      spots.append_array(effect.main_target.get_target(ctx))
+  _preview_highlighter.spots = spots
 
 func _placed(machine: CallableStateMachine, delta: float):
   stretcher.rotation = Vector3.ZERO
@@ -358,6 +369,7 @@ func _on_select():
         func():
           stretcher.punch(3.0, 5.0)
           _state.current = "placing"
+          global_position = Vector3.UP*100.0
           AudioManager3d.play({ "stream": preload("res://audio/Light Drone Sound (button hover) 9.wav") })
           _selection = selection
       )
@@ -391,10 +403,6 @@ func _try_place_self(selection: Selection):
   if GridManager.inst.try_place_tile(self, GridManager.inst.grid_position_3d):
     BoardCamera.inst.shake(0.2, 0.01)
     selection.cancel()
-
-func _input_event(camera: Camera3D, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-  if event is InputEventMouseMotion:
-    pass
 
 func _unhandled_input(event: InputEvent) -> void:
   if not _mouse_entered: return

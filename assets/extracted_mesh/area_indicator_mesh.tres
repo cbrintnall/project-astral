@@ -1,0 +1,17 @@
+[gd_resource type="QuadMesh" format=3 uid="uid://cgut4fsmu84n7"]
+
+[ext_resource type="Texture2D" uid="uid://bwey7wevp1mxt" path="res://assets/ui/ellipse-mask.png" id="1_aak5p"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mljfx"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("1_aak5p")
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 7.99
+billboard_mode = 1
+
+[resource]
+material = SubResource("StandardMaterial3D_mljfx")
+size = Vector2(0.25, 0.25)

@@ -76,6 +76,8 @@ var _bounds := Rect2i()
 var _hovered_tile_command: Command
 var _grid_tile_command: Command
 
+var _hovered_tile_area_highlighter := GridHighlights.new()
+
 func is_in_bounds(pos: Vector3i) -> bool:
   return _bounds.has_point(Vector2i(pos.x, pos.z))
 
@@ -165,7 +167,7 @@ func try_start_selection(data: Selection) -> bool:
 
   return true
   
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
   if event.is_action_pressed("ui_cancel"):
     _cancel_current_selection()
     
@@ -182,7 +184,6 @@ func _input(event: InputEvent) -> void:
     if event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
       if _current_selection and _current_selection.on_choose.is_valid():
         _current_selection.on_choose.call()
-        get_viewport().set_input_as_handled()
   
 func _collect_tile(current: Tile, current_pos: Vector3i, collection: Array):
   if collection.has(current):
@@ -241,7 +242,8 @@ func _cancel_current_selection():
 
 func _ready() -> void:
   inst = self
-  
+  _hovered_tile_area_highlighter.mesh = load("res://assets/extracted_mesh/area_indicator_mesh.tres")
+  add_child(_hovered_tile_area_highlighter)
   map_bounds.scale = Vector3(size.x+2, size.x*0.25, size.y+2)
   _bounds = Rect2i(
     Vector2i((Vector2(-size)*Vector2(0.5, 0.5)).ceil()),
@@ -253,11 +255,23 @@ func _ready() -> void:
   
 func _process(delta: float) -> void:
   _choose_cd.check(delta, false)
+
   if _tiles_dirty:
     _update_dirty_grid()
     _tiles_dirty = false
   
+  _hovered_tile_area_highlighter.spots = []
+
   if not grid_cast.ray_data: return
+
+  if grid_hovered_tile:
+    var spots = []
+    var ctx := EffectContext.new()
+    ctx.override_location = grid_position_3d
+    for effect: TileEffect in grid_hovered_tile.get_effects():
+      if effect.main_target:
+        spots.append_array(effect.main_target.get_target(ctx))
+    _hovered_tile_area_highlighter.spots = spots
 
   var grid_pos: Vector3 = grid_cast.ray_data["position"]
   RenderingServer.global_shader_parameter_set("global_mouse_position", grid_pos)

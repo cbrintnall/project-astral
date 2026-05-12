@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://bi54uvkurhgh2" path="res://assets/blender/objects/objectTile.glb" id="4_xm3w6"]
 [ext_resource type="ArrayMesh" uid="uid://dufdhd4rdr3uv" path="res://assets/extracted_mesh/vfxConstellationBox.tres" id="5_w7oh7"]
 [ext_resource type="ArrayMesh" uid="uid://cgf2yg4i0yf6g" path="res://assets/vfx/vfxSelectionBox_Plane.res" id="6_abphe"]
-[ext_resource type="Material" uid="uid://bsmgkh28yoiet" path="res://materials/material_enemy_indicator.tres" id="7_npgv3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fc0e3"]
 
@@ -39,4 +38,3 @@ unique_name_in_owner = true
 
 [node name="SelectionBox" type="MeshInstance3D" parent="EnemyIndicator" unique_id=273233849]
 mesh = ExtResource("6_abphe")
-surface_material_override/0 = ExtResource("7_npgv3")
