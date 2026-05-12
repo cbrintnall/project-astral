@@ -400,6 +400,7 @@ cell_center_y = false
 cell_center_z = false
 
 [node name="GridHighlighter" type="Node3D" parent="GridManager" unique_id=1656823699]
+visible = false
 script = ExtResource("5_7sc4i")
 
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="GridManager/GridHighlighter" unique_id=1395147067]

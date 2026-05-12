@@ -13,6 +13,8 @@ func highlight(pos: Vector3i, clr: Color):
   highlights[pos*MULT] = clr
 
 func _ready() -> void:
+  visible = true
+  
   inst = self
   
   await Utils.wait_until(func(): return GridManager.inst != null)
