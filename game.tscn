@@ -63,6 +63,16 @@ gradient = SubResource("Gradient_0de7l")
 fill_from = Vector2(0.5, 1)
 fill_to = Vector2(0.491453, 0.3846154)
 
+[sub_resource type="Environment" id="Environment_0de7l"]
+tonemap_mode = 3
+tonemap_white = 2.0
+ssao_enabled = true
+glow_enabled = true
+glow_normalized = true
+
+[sub_resource type="World3D" id="World3D_0de7l"]
+environment = SubResource("Environment_0de7l")
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0de7l"]
 albedo_color = Color(1, 0.12156863, 1, 1)
 
@@ -301,10 +311,13 @@ layout_mode = 2
 stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="TileDisplayViewport/MarginContainer/SubViewportContainer" unique_id=458719368]
+own_world_3d = true
+world_3d = SubResource("World3D_0de7l")
 transparent_bg = true
-handle_input_locally = false
 msaa_3d = 2
 physics_object_picking = true
+physics_object_picking_sort = true
+physics_object_picking_first_only = true
 canvas_cull_mask = 4293918722
 size = Vector2i(1200, 150)
 render_target_update_mode = 4
@@ -324,6 +337,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.67, 0, -2.67)
 visible = false
 layers = 2
 mesh = SubResource("SphereMesh_0de7l")
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="TileDisplayViewport/MarginContainer/SubViewportContainer/SubViewport/TileSelectCamera" unique_id=1937415889]
+layers = 3
 
 [node name="GameManager" type="Node" parent="." unique_id=1080588153 node_paths=PackedStringArray("camera", "selection_svp", "enemy_tile_container", "light")]
 script = ExtResource("1_fc0e3")

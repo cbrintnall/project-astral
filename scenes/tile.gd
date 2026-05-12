@@ -32,6 +32,8 @@ var _constellation_satisfied := false
 var _preview_command: BasicCommand
 var _preview_highlighter := GridHighlights.new()
 
+var _original_hand_marker: Marker3D
+
 func has_effect(effect: TileEffect):
   return _effects.has(effect)
 
@@ -254,14 +256,18 @@ func _on_state_changed(state: String):
       input_ray_pickable = true
       for m in _meshes:
         m.layers = 2
+      reparent(_original_hand_marker)
     "placed":
       input_ray_pickable = false
       for m in _meshes:
         m.layers = 1
     "placing":
+      _original_hand_marker = get_parent()
+      assert(get_parent() is Marker3D)
       input_ray_pickable = false
       for m in _meshes:
         m.layers = 1
+      reparent(GridManager.inst)
 
 func _on_stat_changed(changed: StatDef):
   match changed:

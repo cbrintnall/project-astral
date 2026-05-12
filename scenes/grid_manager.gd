@@ -200,37 +200,6 @@ func _collect_tile(current: Tile, current_pos: Vector3i, collection: Array):
 func _update_dirty_grid():
   for node in get_tree().get_nodes_in_group("debug_path_text"):
     node.queue_free()
-  
-  #var execution_order = collect_tiles_in_execution_order()
-  #for i in len(execution_order):
-    #var text := Label3D.new()
-    #var tile = execution_order[i]
-    #
-    #tile.add_child(text)
-    #text.text = str(i+1)
-    #text.position = Vector3.UP*1.5
-    #text.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-    #text.add_to_group("debug_path_text")
-    #
-  #for path in _execution_paths:
-    #path.queue_free()
-    #
-  #_execution_paths = []
-  #_followers = []
-  #
-  #var path := Path3D.new()
-  #path.curve = Curve3D.new()
-  #var follower := PathFollow3D.new()
-  #for tile in execution_order:
-    #path.curve.add_point(path.to_local(tile.global_position))
-  #add_child(path)
-  #path.add_child(follower)
-  #var mesh := MeshInstance3D.new()
-  #mesh.mesh = SphereMesh.new()
-  #follower.add_child(mesh)
-  #
-  #_execution_paths.push_back(path)
-  #_followers.push_back(follower)
     
   board_changed.emit()
 
@@ -245,10 +214,7 @@ func _ready() -> void:
   _hovered_tile_area_highlighter.mesh = load("res://assets/extracted_mesh/area_indicator_mesh.tres")
   add_child(_hovered_tile_area_highlighter)
   map_bounds.scale = Vector3(size.x+2, size.x*0.25, size.y+2)
-  _bounds = Rect2i(
-    Vector2i((Vector2(-size)*Vector2(0.5, 0.5)).ceil()),
-    size+Vector2i.ONE
-  )
+  _bounds = Rect2i(Vector2i((Vector2(-size)*Vector2(0.5, 0.5)).ceil()), size+Vector2i.ONE)
   
   RenderingServer.global_shader_parameter_set("grid_size", Vector2(size))
   print("rendering server grid size %s" % str(Vector2(size)))
