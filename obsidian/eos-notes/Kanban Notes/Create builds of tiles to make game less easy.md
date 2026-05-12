@@ -1,0 +1,17 @@
+## Builds
+- Wrath Build
+	- Tiles that give or take wrath
+- Area Build
+	- Tiles that depend on area criteria (eg gives more per empty tile nearby)
+- Defense Build
+	- Tiles that defend against negative tiles
+- Moveable Build
+	- Tiles that move around the board
+- Quantity Build
+	- Tiles that scale based on certain quantities
+- Destruction Build
+	- Tiles that scale based on destroyed tiles
+- Enemy Build
+	- Tiles that scale with enemy factors, quantity, on spawn
+- Transform build
+	- Tiles based on transforming tiles into other tiles

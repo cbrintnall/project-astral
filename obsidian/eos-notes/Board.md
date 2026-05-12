@@ -10,6 +10,7 @@ kanban-plugin: board
 
 ## TODO
 
+- [ ] [[Create builds of tiles to make game less easy]]
 
 
 ## DONE
