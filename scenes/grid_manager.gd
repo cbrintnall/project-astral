@@ -170,10 +170,10 @@ func try_start_selection(data: Selection) -> bool:
   return true
   
 func submit_move_attempt(tile: Tile, target: Vector3i, ctx: ExecutionContext) -> MoveResolutionCommand:
-  var attempting_tiles = _move_attempts.get_or_add(target, [])
-  attempting_tiles.push_back(tile)
+  var attempting_tiles: Set = _move_attempts.get_or_add(target, Set.new())
+  attempting_tiles.add(tile)
   
-  print("trying to move from %s to %s" % [get_tile_loc(tile), str(target)])
+  print("trying to move (%s) from %s to %s" % [tile.def.name, get_tile_loc(tile), str(target)])
   
   var resolution := MoveResolutionCommand.new(ctx)
   

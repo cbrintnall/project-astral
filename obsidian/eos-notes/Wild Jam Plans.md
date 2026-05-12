@@ -21,7 +21,7 @@ updateIntervalInSeconds: 30
 - [ ] Tile deck removals in shop
 - [ ] Tile modification in shop (eg add buffs to tiles, add effects to tiles)
 - [ ] Two sided tiles (tiles can have two different sides, each act as different tiles, tiles can be flipped to activate one or the other depending on which is facing up)
-- [ ] Moveable tiles (support is already sort of there for this, more just need to see how it fits in with design)
+- [x] Moveable tiles (support is already sort of there for this, more just need to see how it fits in with design)
 - [ ] More statuses (more than just wrath right now)
 - [ ] Tile zone previewing on placement (already has dev support, just needs the visuals)
 - [ ] Grid events (areas that destroys tiles, areas that block placement of tiles, etc)

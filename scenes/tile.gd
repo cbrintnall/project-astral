@@ -112,6 +112,13 @@ func execute(ctx: ExecutionContext, event: TileEffect.Event):
   for effect: TileEffect in get_effects():
     if effect.event == event:
       _remaining_effects.push_back(effect)
+      
+func set_move(src: Vector3i, new: Vector3i):
+  global_position = Vector3(new)
+  
+  for effect: TileEffect in get_effects():
+    if effect.event == TileEffect.Event.ON_MOVE:
+      GameManager.inst.player_tasks.run(effect.run.bind(_get_effect_ctx(), GameManager.inst.active_execution))
 
 func unselect():
   if _preview_command:
@@ -126,22 +133,6 @@ func unselect():
     if _selection:
       _selection.cancel()
       _selection = null
-     
-func try_move(target: Vector3i) -> Tween:
-  var success = GridManager.inst.try_move(self, target)
-  var start = global_position
-  var t = create_tween()
-  t.tween_property(self, "global_position", Vector3(target), 1.0).set_trans(Tween.TRANS_CUBIC)
-  if not success:
-    t.tween_property(self, "global_position", start, 0.5).set_trans(Tween.TRANS_CUBIC)
-  return t
-    
-func set_move(src: Vector3i, new: Vector3i):
-  global_position = Vector3(new)
-  
-  for effect: TileEffect in get_effects():
-    if effect.event == TileEffect.Event.ON_MOVE:
-      GameManager.inst.player_tasks.run(effect.run.bind(_get_effect_ctx(), GameManager.inst.active_execution))
      
 func set_placed_at(_tile: Vector3i):
   _state.current = "placed"
@@ -158,9 +149,16 @@ func set_placed_at(_tile: Vector3i):
     "volume": 0.5
   })
   
-  for effect: TileEffect in get_effects():
-    if effect.event == TileEffect.Event.ON_PLACE:
-      GameManager.inst.player_tasks.run(effect.run.bind(_get_effect_ctx(), GameManager.inst.active_execution))
+  var place_executor := TileExecutor.new()
+  add_child(place_executor)
+  place_executor.tiles = [self]
+  place_executor.event = TileEffect.Event.ON_PLACE
+  
+  GameManager.inst.player_tasks.run(
+    func():
+      place_executor.start()
+      await place_executor.finished
+  )
       
 func register_effect(effect: TileEffect):
   _effects.push_back(effect)
@@ -309,9 +307,6 @@ func _selecting(machine: CallableStateMachine, delta: float):
   position = position.lerp(Vector3.ZERO, delta*10.0)
 
 func _placing(machine: CallableStateMachine, delta: float):
-  #var direction = -get_viewport().get_camera_3d().global_basis.z
-  #position = position.lerp(Vector3.UP*0.5, delta*10.0)
-  
   var curr_scale := stretcher.global_basis.get_scale()
   var target := Basis.looking_at(Vector3.UP)
   target *= Basis.from_euler(Vector3(PI*0.5, -PI, 0.0))

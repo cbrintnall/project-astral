@@ -1,6 +1,8 @@
 extends Node
 class_name TileExecutor
 
+signal finished
+
 var tiles := []
 var resolutions := []
 
@@ -71,8 +73,10 @@ func _resolve_tiles(machine: CallableStateMachine, delta: float):
         _context.start_execution()
         for res: ResolutionCommand in next_group:
           _remaining_resolutions.run(res.run)
+          _remaining_resolutions.group_finished.connect(res.cleanup, CONNECT_ONE_SHOT)
     else:
       if _end_timer.check(delta):
         if on_finish.is_valid():
           on_finish.call()
+        finished.emit()
         queue_free()

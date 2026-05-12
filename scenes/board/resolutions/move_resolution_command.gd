@@ -10,10 +10,14 @@ var target: Vector3i
 var _count := 0
 
 func cleanup():
-  attempts.get_or_add(target, []).erase(tile)
+  if attempts.has(target):
+    attempts[target].remove(tile)
 
 func check() -> bool:
-  if len(attempts.get_or_add(target, [])) <= 1:
+  if tile.def.initiates:
+    return false
+  
+  if attempts.get(target, Set.new()).count() <= 1:
     return true
 
   return false
@@ -31,7 +35,7 @@ func execute():
       _count += 1
       context.register_resolution(self)
     else:
-      print("Movement resolution gave up, hit max resolution count..")
+      push_warning("Movement resolution gave up, hit max resolution count (tile=%s).." % tile.def.name)
   
 func undo():
   tile.stretcher.punch(10.0, 15.0)

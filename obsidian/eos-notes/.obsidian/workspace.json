@@ -11,20 +11,14 @@
             "id": "6bbbd419e9c61b6e",
             "type": "leaf",
             "state": {
-              "type": "kanban",
+              "type": "markdown",
               "state": {
-                "file": "Board.md",
-                "kanbanViewState": {
-                  "kanban-plugin": "board",
-                  "list-collapse": [
-                    false,
-                    false,
-                    false
-                  ]
-                }
+                "file": "Wild Jam Plans.md",
+                "mode": "preview",
+                "source": false
               },
-              "icon": "lucide-trello",
-              "title": "Board"
+              "icon": "lucide-file",
+              "title": "Wild Jam Plans"
             }
           },
           {
@@ -100,8 +94,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -121,7 +114,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Board.md",
+                "file": "Wild Jam Plans.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -131,7 +124,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Board"
+              "title": "Backlinks for Wild Jam Plans"
             }
           },
           {
@@ -140,12 +133,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Board.md",
+                "file": "Wild Jam Plans.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Board"
+              "title": "Outgoing links from Wild Jam Plans"
             }
           },
           {
@@ -183,13 +176,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Board.md",
+                "file": "Wild Jam Plans.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Board"
+              "title": "Outline of Wild Jam Plans"
             }
           }
         ]
@@ -211,11 +204,11 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "e59ba8c6e540aa8b",
+  "active": "6bbbd419e9c61b6e",
   "lastOpenFiles": [
-    "Kanban Notes/Create builds of tiles to make game less easy.md",
-    "Wild Jam Plans.md",
     "Board.md",
+    "Wild Jam Plans.md",
+    "Kanban Notes/Create builds of tiles to make game less easy.md",
     "Kanban Notes",
     "temp_any_block_convert.md",
     "Untitled.md",
