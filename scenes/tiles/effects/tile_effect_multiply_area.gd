@@ -20,7 +20,6 @@ func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
       for pt in points:
         var ctx := GridManager.inst.get_mods_at_point(pt)
         ctx.points_multipliers -= multiplier
-        print(ctx.points_multipliers)
         GridManager.inst.upgrade_grid_context(pt, ctx),
     CONNECT_ONE_SHOT
   )

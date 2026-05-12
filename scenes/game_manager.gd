@@ -43,28 +43,18 @@ var _deal_timer := BetterTimer.new(0.1)
 
 var _initiate_tiles := []
 var _current_context: ExecutionContext
-var _execution_order := []
-var _pre_execution_order := []
-var _post_execution_order := []
 
 var _sound_counter := 0.0
 var _reset_sound_timer := BetterTimer.new(1.0)
 
-var _play_timer := BetterTimer.new(1.0)
-
 var _set_enemy_timer := BetterTimer.new(1.0)
 var _enemy_queue := {}
 
-var _execution_queue := []
+var _executor: TileExecutor
 
 func get_current_execution_queue() -> Array:
-  match _state.current:
-    "pre_execute":
-      return _pre_execution_order
-    "execute":
-      return _execution_order
-    "post_execute":
-      return _post_execution_order
+  if _executor:
+    return _executor.tiles
   return []
 
 func enter_shop():
@@ -106,11 +96,11 @@ func _ready() -> void:
   _state.register("deal", _deal)
   _state.register("wait_for_player", _wait_for_player)
   _state.register("begin_execution", _begin_execution)
-  _state.register("pre_execute", _pre_execute)
-  _state.register("execute", _execute_turn)
-  _state.register("post_execute", _post_execute)
+  _state.register("pre_execute", CallableStateMachine.noop)
+  _state.register("execute", CallableStateMachine.noop)
+  _state.register("post_execute", CallableStateMachine.noop)
   _state.register("post_round", _post_round)
-  _state.register("shop", _shop)
+  _state.register("shop", CallableStateMachine.noop)
   _state.register("enemies", _distribute_enemies)
   _state.register("wait_for_accept_shop", CallableStateMachine.noop)
   _state.register("end_game", _end_game)
@@ -184,9 +174,12 @@ func _start_round(machine: CallableStateMachine, delta: float):
   BoardCamera.inst.map_root = Vector3.ZERO
   BoardCamera.inst.try_set_focus(Vector3.ZERO)
   
-  _pre_execution_order = GridManager.inst.get_played_tiles().filter(func(tile: Tile): return tile.has_pre_round_effects())
-  _maintain_queue(_pre_execution_order)
-  print(_pre_execution_order)
+  _setup_executor(
+    GridManager.inst.get_played_tiles(),
+    TileEffect.Event.ON_ROUND_START,
+    func():
+      _state.current = "deal"
+  )
   
   _state.current = "pre_execute"
   
@@ -258,9 +251,6 @@ func _distribute_enemies(machine: CallableStateMachine, delta: float):
       _enemy_queue.erase(next)
   else:
     _state.current = "wait_for_accept_shop"
-    
-func _shop(machine: CallableStateMachine, delta: float):
-  pass
   
 func _begin_execution(machine: CallableStateMachine, delta: float):
   if not player_tasks.finished:
@@ -268,61 +258,28 @@ func _begin_execution(machine: CallableStateMachine, delta: float):
   
   var tiles = GridManager.inst.get_played_tiles()
   _initiate_tiles = tiles.filter(func(tile: Tile): return tile.def.initiates)
-  _current_context = ExecutionContext.new()
-  _current_context.active_round = true
-  _execution_order = GridManager.inst.collect_tiles_in_execution_order()
-  _post_execution_order = tiles.filter(func(tile: Tile): return tile.has_post_round_effects())
-  _maintain_queue(_execution_order)
-  _maintain_queue(_post_execution_order)
-  print("executing [pre=%d,mid=%d,post=%d]" % [ len(_pre_execution_order), len(_execution_order), len(_post_execution_order) ])
+  _setup_executor(
+    GridManager.inst.collect_tiles_in_execution_order(),
+    TileEffect.Event.ON_ACTIVATE,
+    func():
+      _setup_executor(
+        GridManager.inst.collect_tiles_in_execution_order(),
+        TileEffect.Event.ON_ROUND_END,
+        func():
+          _state.current = "post_round"
+      )
+      _state.current = "post_execute"
+  )
+
   _state.current = "execute"
   
-func _maintain_queue(queue: Array):
-  for tile: Tile in queue:
-    tile.tree_exiting.connect(queue.erase.bind(tile), CONNECT_ONE_SHOT)
+func _setup_executor(tiles: Array, event: TileEffect.Event, on_finish: Callable):
+  if _executor and _executor != null:
+    print("setting up new tile executor, but last one is still around (%s)" % _executor.get_path())
   
-func _pre_execute(machine: CallableStateMachine, delta: float):
-  _execute_tiles_from(
-    _pre_execution_order, 
-    "deal", 
-    TileEffect.Event.ON_ROUND_START, 
-    func(): _execution_order = GridManager.inst.collect_tiles_in_execution_order(),
-    delta
-  )
-  
-func _post_execute(machine: CallableStateMachine, delta: float):
-  _execute_tiles_from(
-    _post_execution_order, 
-    "post_round", 
-    TileEffect.Event.ON_ROUND_END,
-    func(): _current_context = null,
-    delta
-  )
-  
-func _execute_turn(machine: CallableStateMachine, delta: float):
-  _execute_tiles_from(
-    _execution_order, 
-    "post_execute", 
-    TileEffect.Event.ON_ACTIVATE, 
-    func(): _post_execution_order = GridManager.inst.collect_tiles_in_execution_order().filter(func(tile: Tile): return tile.has_post_round_effects()),
-    delta
-  )
-      
-func _execute_tiles_from(order: Array, next_state: String, event: TileEffect.Event, on_finished: Callable, delta: float):  
-  if order:
-    var next = order.pop_front()
-    if is_instance_valid(next):
-      _current_context.tile_execution_count += 1
-      _execution_queue.push_back(next.execute(_current_context, event))
-  elif _execution_queue:
-    if is_instance_valid(_execution_queue.front()):
-      # once it's finished executing remove it
-      if not _execution_queue.front().is_executing():
-        _execution_queue.pop_front()
-    else:
-      _execution_queue.pop_front()
-  else:
-    if _play_timer.check(delta):
-      _state.current = next_state
-      if on_finished.is_valid():
-        on_finished.call()
+  _executor = TileExecutor.new()
+  _executor.tiles = tiles
+  _executor.event = event
+  _executor.on_finish = on_finish
+  add_child(_executor)
+  _executor.start()
