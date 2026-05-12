@@ -177,6 +177,7 @@ func _end_game(machine: CallableStateMachine, delta: float):
     RenderingServer.global_shader_parameter_set("world_background", _background_color)
   
 func _start_round(machine: CallableStateMachine, delta: float):
+  RenderingServer.global_shader_parameter_set("grid_root", Vector3.ZERO)
   turn += 1
   
   BoardCamera.inst.map_size = GridManager.inst.size

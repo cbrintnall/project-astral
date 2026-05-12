@@ -17,6 +17,10 @@ func enter():
   BoardCamera.inst.map_root = root.global_position
   BoardCamera.inst.map_size = size
   BoardCamera.inst.try_set_focus(root.global_position)
+  
+  var corrected_position = Vector3(root.global_position.x, root.global_position.z, 0.0)
+  print("updating grid root to %s" % str(corrected_position))
+  RenderingServer.global_shader_parameter_set("grid_root", corrected_position)
     
   for child in displays_parent.get_children():
     if child is ShopOption:

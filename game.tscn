@@ -367,6 +367,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 60)
 
 [node name="ShopBounds" parent="ShopManager/Root" unique_id=1577216048 instance=ExtResource("18_boyg6")]
 transform = Transform3D(11, 0, 0, 0, 9.386, 0, 0, 0, 11, 0, 0, 0)
+visible = false
 
 [node name="DisplayOptions" type="Node3D" parent="ShopManager/Root" unique_id=1388792688]
 

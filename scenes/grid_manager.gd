@@ -216,8 +216,18 @@ func _ready() -> void:
   map_bounds.scale = Vector3(size.x+2, size.x*0.25, size.y+2)
   _bounds = Rect2i(Vector2i((Vector2(-size)*Vector2(0.5, 0.5)).ceil()), size+Vector2i.ONE)
   
-  RenderingServer.global_shader_parameter_set("grid_size", Vector2(size))
   print("rendering server grid size %s" % str(Vector2(size)))
+  
+  var t = create_tween()
+
+  t.tween_method(
+    func(time: float):
+      var current = Vector2.ZERO.lerp(Vector2(size), time)
+      RenderingServer.global_shader_parameter_set("grid_size", current),
+    0.0,
+    1.0,
+    2.0
+  ).set_trans(Tween.TRANS_QUART)
   
 func _process(delta: float) -> void:
   _choose_cd.check(delta, false)

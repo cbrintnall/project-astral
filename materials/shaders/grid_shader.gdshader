@@ -3,6 +3,7 @@ shader_type spatial;
 
 global uniform vec3 global_mouse_position;
 global uniform vec2 grid_size;
+global uniform vec3 grid_root;
 
 uniform sampler2D noise: repeat_enable;
 
@@ -12,7 +13,6 @@ uniform vec4 line_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 uniform vec4 fill_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
 
 const float mouse_distance = 10.0;
-const vec3 root_pos = vec3(0.0);
 
 void fragment() {
 	// Calculate world position
@@ -31,7 +31,7 @@ void fragment() {
   float line = min(step(width, grid_pos.x), step(width, grid_pos.y));
 
   const float tile_fade_length = 1.0;
-  vec3 dist = abs(world_pos - vec3(root_pos.x, 0.0, root_pos.y));
+  vec3 dist = abs(world_pos - vec3(grid_root.x, 0.0, grid_root.y));
   vec2 used_size = ((grid_size+vec2(2.0))*0.5)+vec2(0.5*sign(world_pos.xz));
   float alpha_base = max(
     1.0-smoothstep(dist.x, dist.x+tile_fade_length, used_size.x),
