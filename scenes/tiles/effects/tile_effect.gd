@@ -47,7 +47,8 @@ func run(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
 
 func _reward_points(effect_ctx: EffectContext, amount: int):
   var total_points = _get_total_points(effect_ctx, amount)
-  GameManager.inst.current_score += total_points
+  var point_source: PointSource = GridManager.inst.get_mods_at_point(effect_ctx.get_location()).get_point_source()
+  point_source.give(total_points)
   NotificationLabel.from("%+d" % total_points, effect_ctx.tile)
   if total_points <= 0: return
   var stars: MultiMeshInstance3D = load("res://scenes/fx/stars_multimesh.tscn").instantiate()
@@ -57,7 +58,7 @@ func _reward_points(effect_ctx: EffectContext, amount: int):
   var t = effect_ctx.tile.get_tree().current_scene.create_tween()
   for i in total_points:
     t.set_parallel(true)
-    var end = GridManager.inst.center_tile.global_position
+    var end = point_source.target_point
     var offset = (Vector3.ONE*randf())*(Vector3(1.0, 0.0, 1.0)).normalized()
     var start = effect_ctx.tile.global_position+Vector3.UP+offset
     var star_scale = randf_range(0.25, 0.6)
@@ -68,7 +69,7 @@ func _reward_points(effect_ctx: EffectContext, amount: int):
         var target := Transform3D().scaled(Vector3.ONE*star_scale).translated(pt)
         stars.multimesh.set_instance_transform(i, target)
         if time >= 1.0:
-          GameManager.inst.do_receive_points_fx()
+          point_source.notify_fx_finished()
         ,
       0.0,
       1.0,

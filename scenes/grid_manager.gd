@@ -19,7 +19,6 @@ signal mods_changed
 @onready var selection_boxes: MultiMeshInstance3D = %SelectionBoxes
 
 var grid_position_3d: Vector3i
-var center_tile: Tile
 
 var grid_hovered_tile: Tile:
   set(val):
@@ -172,9 +171,7 @@ func try_start_selection(data: Selection) -> bool:
 func submit_move_attempt(tile: Tile, target: Vector3i, ctx: ExecutionContext) -> MoveResolutionCommand:
   var attempting_tiles: Set = _move_attempts.get_or_add(target, Set.new())
   attempting_tiles.add(tile)
-  
-  print("trying to move (%s) from %s to %s" % [tile.def.name, get_tile_loc(tile), str(target)])
-  
+
   var resolution := MoveResolutionCommand.new(ctx)
   
   resolution.attempts = _move_attempts

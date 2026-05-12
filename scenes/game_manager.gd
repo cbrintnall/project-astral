@@ -11,11 +11,10 @@ signal points_fx
 
 @export var light: DirectionalLight3D
 
-var current_score: int = 0:
-  set(val):
-    current_score = maxi(val, 0)
+var current_score: int:
   get:
-    return current_score
+    return point_source.current
+
 var required_score: int:
   get:
     return Constants.REQUIRED_SCORES[mini(cycle, len(Constants.REQUIRED_SCORES)-1)]
@@ -27,6 +26,7 @@ var active_execution: ExecutionContext:
 var cycle := 0
 var turn := 0
 
+var point_source := PointSource.new()
 var player_tasks := TaskGroup.new()
 var money := 0
 
@@ -82,6 +82,7 @@ func _ready() -> void:
   Console.pause_enabled = true
 
   _current_context = ExecutionContext.new()
+  point_source.fx_finished.connect(do_receive_points_fx)
   
   inst = self
   add_child(_state)
@@ -109,15 +110,13 @@ func _ready() -> void:
   var start_tile = load("res://scenes/board/tile.tscn").instantiate()
   start_tile.def = load("res://data/tiles/tile_source_tile.tres")
   assert(GridManager.inst.try_place_tile(start_tile, Vector3i.ZERO), "This should never fail")
-  GridManager.inst.center_tile = start_tile
   BoardCamera.inst.try_set_focus(GridManager.inst.map_to_global(Vector3i.ZERO))
-  #var start_mesh: MeshInstance3D = NodeUtils.find_child_with_predicate(start_tile, func(node): return node is MeshInstance3D)
-  #start_mesh.material_override = preload("res://materials/material_debug.tres")
   var start_mesh: MeshInstance3D = NodeUtils.find_child_with_predicate(start_tile, func(node): return node is MeshInstance3D)
   if start_mesh:
-      start_mesh.queue_free()
-  var eos = load("res://assets/blender/objects/Eos.glb").instantiate()
+    start_mesh.queue_free()
+  var eos = load("res://assets/blender/objects/eos.tscn").instantiate()
   start_tile.add_child(eos)
+  point_source.target_point = NodeUtils.find_child_with_predicate(eos, func(node: Node): return node.name == "EosHand").global_position
   UI.inst.show_system_message("Begin Cycle")
   
   Console.add_command(

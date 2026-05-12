@@ -114,8 +114,6 @@ func execute(ctx: ExecutionContext, event: TileEffect.Event):
       _remaining_effects.push_back(effect)
       
 func set_move(src: Vector3i, new: Vector3i):
-  global_position = Vector3(new)
-  
   for effect: TileEffect in get_effects():
     if effect.event == TileEffect.Event.ON_MOVE:
       GameManager.inst.player_tasks.run(effect.run.bind(_get_effect_ctx(), GameManager.inst.active_execution))
@@ -329,6 +327,7 @@ func _placing(machine: CallableStateMachine, delta: float):
 
 func _placed(machine: CallableStateMachine, delta: float):
   stretcher.rotation = Vector3.ZERO
+  global_position = global_position.lerp(get_grid_origin_position(), 0.05)
 
 func _mouse_enter() -> void:
   GridManager.inst.hand_hovered_tile = self

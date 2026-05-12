@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "Wild Jam Plans.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
@@ -206,9 +206,9 @@
   },
   "active": "6bbbd419e9c61b6e",
   "lastOpenFiles": [
-    "Board.md",
-    "Wild Jam Plans.md",
     "Kanban Notes/Create builds of tiles to make game less easy.md",
+    "Wild Jam Plans.md",
+    "Board.md",
     "Kanban Notes",
     "temp_any_block_convert.md",
     "Untitled.md",

@@ -7,6 +7,8 @@
 	- Tiles that defend against negative tiles
 - Moveable Build
 	- Tiles that move around the board
+		- On move, gain 2 dawn
+		- 
 - Quantity Build
 	- Tiles that scale based on certain quantities
 - Destruction Build

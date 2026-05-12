@@ -35,6 +35,7 @@ updateIntervalInSeconds: 30
 - [ ] Shop isn't explained at all and there is no confirmation if you want to buy something
 - [ ] Need an actual hand / discard, right now the hand just gets random tiles which makes it hard to plan around what tiles you'll get in the future
 - [ ] Pauses in music / variations
+- [ ] Tiles spawn on the map "locked", placing tiles near them unlocks them (this helps with the player not getting tiles, encourages placing in different places). The dawn from the surrounding tile will instead go to the locked one, once the requirement is given the tile is gained
 ### Card Ideas:
 
 #### Player Card Ideas:
