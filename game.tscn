@@ -41,11 +41,20 @@
 [ext_resource type="Texture2D" uid="uid://dccsxygfvpdfy" path="res://assets/icons/uncertainty(1).png" id="25_xfvwf"]
 [ext_resource type="Shader" uid="uid://dhmhdf8o5gvdk" path="res://materials/shaders/vignette_shader.gdshader" id="28_dhpj7"]
 [ext_resource type="Material" uid="uid://b27lbq1oej8mq" path="res://materials/chromatic_ab_material.tres" id="29_7knny"]
+[ext_resource type="Script" uid="uid://cjmgforn577iu" path="res://scenes/all_tile_container.gd" id="32_87ddb"]
+[ext_resource type="Resource" uid="uid://cowwlcp100jpi" path="res://data/tiles/tile_bleed.tres" id="33_ib7ph"]
 [ext_resource type="Texture2D" uid="uid://35uxxspd0xt8" path="res://assets/bluesky-icon.blue.svg" id="33_klri6"]
+[ext_resource type="Resource" uid="uid://xqhsnxkqgont" path="res://data/tiles/tile_dead_end.tres" id="34_vuohh"]
+[ext_resource type="Resource" uid="uid://dkptkjfy2kbu0" path="res://data/tiles/tile_destruct.tres" id="35_3gvs5"]
 [ext_resource type="Script" uid="uid://bh3gkpa4a7vv8" path="res://scenes/ui/tile_data_previewer.gd" id="36_0de7l"]
+[ext_resource type="Resource" uid="uid://dx2eq3q7x2bpo" path="res://data/tiles/tile_extra_turn.tres" id="36_mc3al"]
+[ext_resource type="Resource" uid="uid://dd6l3bd1seddo" path="res://data/tiles/tile_no_effects.tres" id="37_bqa6y"]
 [ext_resource type="Texture2D" uid="uid://c5n62lu3y6qfo" path="res://assets/ui/tile-name-background.png" id="37_eu6ph"]
+[ext_resource type="Resource" uid="uid://crq1m38ptm2en" path="res://data/tiles/tile_per_turn_area_multiplier.tres" id="38_du4n2"]
+[ext_resource type="Resource" uid="uid://dxij2lavum48x" path="res://data/tiles/tile_refresh.tres" id="39_ra4rb"]
 [ext_resource type="Texture2D" uid="uid://dlmyj8km2qoyo" path="res://assets/ui/small-nine-patch-no-bottom.png" id="39_t46w6"]
 [ext_resource type="PackedScene" uid="uid://vxv80vfrjv71" path="res://scenes/ui/tile_preview.tscn" id="40_m28ev"]
+[ext_resource type="Resource" uid="uid://b627xyk02m145" path="res://data/tiles/tile_source_tile.tres" id="40_ple6s"]
 [ext_resource type="Texture2D" uid="uid://wtygyygsy5b3" path="res://assets/ui/test2.png" id="41_0de7l"]
 [ext_resource type="Shader" uid="uid://bi3dkwmqo5d3q" path="res://materials/shaders/grid_barrier_shader.gdshader" id="43_kq12w"]
 
@@ -314,6 +323,7 @@ stretch = true
 own_world_3d = true
 world_3d = SubResource("World3D_0de7l")
 transparent_bg = true
+handle_input_locally = false
 msaa_3d = 2
 physics_object_picking = true
 physics_object_picking_sort = true
@@ -339,7 +349,7 @@ layers = 2
 mesh = SubResource("SphereMesh_0de7l")
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="TileDisplayViewport/MarginContainer/SubViewportContainer/SubViewport/TileSelectCamera" unique_id=1937415889]
-layers = 3
+layers = 2
 
 [node name="GameManager" type="Node" parent="." unique_id=1080588153 node_paths=PackedStringArray("camera", "selection_svp", "enemy_tile_container", "light")]
 script = ExtResource("1_fc0e3")
@@ -441,6 +451,10 @@ resources = Array[Resource]([ExtResource("15_i2p71"), ExtResource("16_xa8c5"), E
 [node name="EnemyTileContainer" type="Node" parent="." unique_id=1200513788]
 script = ExtResource("20_5b14r")
 resources = Array[Resource]([ExtResource("23_082n1"), ExtResource("22_xfvwf"), ExtResource("24_082n1")])
+
+[node name="AllTileContainer" type="Node" parent="." unique_id=439354896]
+script = ExtResource("32_87ddb")
+resources = Array[Resource]([ExtResource("23_082n1"), ExtResource("22_xfvwf"), ExtResource("24_082n1"), ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("33_ib7ph"), ExtResource("19_4v2jo"), ExtResource("34_vuohh"), ExtResource("35_3gvs5"), ExtResource("19_xex6t"), ExtResource("36_mc3al"), ExtResource("21_l1i01"), ExtResource("15_vaj68"), ExtResource("37_bqa6y"), ExtResource("38_du4n2"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("39_ra4rb"), ExtResource("22_aa0lp"), ExtResource("40_ple6s")])
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=946420198]
 script = ExtResource("8_iotsf")

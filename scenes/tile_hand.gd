@@ -11,7 +11,9 @@ static var tiles = [
   load("res://data/tiles/tile_high_point_tick.tres")
 ]
 
-var _markers := []
+var _markers: Array:
+  get:
+    return get_children().filter(func(child: Node): return child is Marker3D)
 
 func get_tile_count() -> int:
   return len(_markers)
@@ -26,7 +28,6 @@ func add_to_hand(data: TileDef):
   if len(_markers) < Constants.MAX_HAND_SIZE:
     var marker := Marker3D.new()
     add_child(marker)
-    _markers.push_back(marker)
     var tile = load("res://scenes/board/tile.tscn").instantiate()
     tile.def = data
     marker.add_child(tile)
@@ -48,8 +49,6 @@ func _unhandled_input(event: InputEvent) -> void:
 func _ready() -> void:
   inst = self
   
-  Console.add_command("give", _give, ["path"])
-  
   await Utils.wait_until(func(): return GameManager.inst != null)
   
   GameManager.inst._state.state_changed.connect(
@@ -63,12 +62,7 @@ func _ready() -> void:
   
   print("tile viewport aspect: %.2f" % get_viewport().get_visible_rect().size.aspect())
     
-func _give(path: String):
-  var tile = load(path)
-  if tile and tile is TileDef:
-    add_to_hand(tile)
-    
-func _process(delta: float) -> void:  
+func _process(delta: float) -> void:
   for marker: Marker3D in _markers:
     marker.visible = marker.get_child_count() > 0
     

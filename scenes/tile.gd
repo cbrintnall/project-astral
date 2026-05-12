@@ -409,6 +409,10 @@ func _try_place_self(selection: Selection):
   if GridManager.inst.try_place_tile(self, GridManager.inst.grid_position_3d):
     BoardCamera.inst.shake(0.2, 0.01)
     selection.cancel()
+    
+    # NOTE: not a fan of having the tile clean up its parent, but for now it'll do
+    assert(_original_hand_marker != null)
+    _original_hand_marker.queue_free()
 
 func _unhandled_input(event: InputEvent) -> void:
   if not _mouse_entered: return

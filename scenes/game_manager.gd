@@ -115,8 +115,6 @@ func _ready() -> void:
   _state.register("wait_for_accept_shop", CallableStateMachine.noop)
   _state.register("end_game", _end_game)
   
-  selection_svp.world_3d = get_viewport().find_world_3d()
-  
   _state.state_changed.connect(
     func(state):
       print("game state changed: %s" % state)
