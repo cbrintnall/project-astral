@@ -58,15 +58,3 @@ func _process(delta: float) -> void:
   
   if current_preview:
     current_preview.context.override_location = GridManager.inst.grid_position_3d
-  
-  #if not _preview:
-    #if GameManager.inst.active_execution and GameManager.inst.active_execution.active_round:
-      #var queue = GameManager.inst.get_current_execution_queue()
-      #if queue and is_instance_valid(queue.front()):
-        #desired_display = queue.front()
-    #if GridManager.inst.hand_hovered_tile:
-      #desired_display = GridManager.inst.hand_hovered_tile
-    #elif GridManager.inst.grid_hovered_tile:
-      #desired_display = GridManager.inst.grid_hovered_tile
-    #elif GridManager.inst.hand_selected_tile:
-      #desired_display = GridManager.inst.hand_selected_tile

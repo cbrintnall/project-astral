@@ -53,6 +53,7 @@ updateIntervalInSeconds: 30
 - On place: “Protect” all neighbor tiles (requires protection support, where if a tile would be destroyed, it destroys this one instead) [dove/blessing]
 - On activate: Gain a random number of points in a range
 - Black hole: Any tile within 5x5 is pulled toward the black hole, if within 1 tile the target tile is destroyed
+- Bacteria like tile that moves around, when it bumps into another bacteria tile it combines their point total 2048 style
 
 #### Negative Card Ideas:
 - On activate: remove 10 points [arrowTile]

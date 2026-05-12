@@ -185,6 +185,15 @@ func get_neighbors() -> Array:
   var tiles := get_valid_neighbor_tiles()
   return tiles.map(func(pos: Vector3i): return GridManager.inst.get_tile_at(pos)).filter(func(tile: Tile): return tile != null)
 
+func do_execute_fx(ctx: ExecutionContext):
+  AudioManager3d.play({
+    "stream": preload("res://audio/Light Drone Sound (button hover) 40.wav"),
+    "pitch_additional": ctx.tile_execution_count*0.01,
+    "parent": self
+  })
+  
+  stretcher.punch(2.0, 5.0)
+
 func _ready() -> void:
   %EnemyIndicator.visible = def.is_enemy
   
@@ -196,10 +205,6 @@ func _ready() -> void:
   _state.register("selecting", _selecting)
   _state.register("placing", _placing)
   _state.register("placed", _placed)
-  _state.register("execute", _executing)
-  _state.register("no_execute", _no_execute)
-  _state.register("deferred", _deferred)
-  _state.register("waiting_for_end", _waiting_for_end)
   _state.register("display", _display)
   
   _state.state_changed.connect(_on_state_changed)
@@ -287,31 +292,6 @@ func _get_effect_ctx() -> EffectContext:
 func _display(machine: CallableStateMachine, delta: float):
   pass
 
-func _deferred(machine: CallableStateMachine, delta: float):
-  pass
-
-func _executing(machine: CallableStateMachine, delta: float):
-  stretcher.position = stretcher.position.lerp(Vector3.UP, 0.1)
-  
-  if not _current_effect_task:
-    if _remaining_effects:
-      _current_effect_task = Task.wait_for(_remaining_effects.pop_front().run.bind(_get_effect_ctx(), _ctx))
-    else:
-      _state.current = "waiting_for_end"
-      _ctx = null
-      stretcher.punch(1.0, 3.0)
-      
-  elif _current_effect_task.finished:
-    _current_effect_task = null
-
-func _no_execute(machine: CallableStateMachine, delta: float):
-  stretcher.position = stretcher.position.lerp(Vector3.UP, 0.1)
-  
-  if _timer.check(delta):
-    _state.current = "waiting_for_end"
-    _ctx = null
-    stretcher.punch(1.0, 3.0)
-
 func _selecting(machine: CallableStateMachine, delta: float):
   if _mouse_entered:
     var curr_scale := stretcher.global_basis.get_scale()
@@ -349,9 +329,6 @@ func _placing(machine: CallableStateMachine, delta: float):
 
 func _placed(machine: CallableStateMachine, delta: float):
   stretcher.rotation = Vector3.ZERO
-
-func _waiting_for_end(machine: CallableStateMachine, delta: float):
-  stretcher.position = stretcher.position.lerp(Vector3.ZERO, 0.05)
 
 func _mouse_enter() -> void:
   GridManager.inst.hand_hovered_tile = self

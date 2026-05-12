@@ -36,8 +36,13 @@ func get_event_text() -> String:
 @abstract func get_description(effect_ctx: EffectContext, exec_ctx: ExecutionContext) -> String
 @abstract func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext)
 
+func resolve(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
+  pass
+
 func run(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
-  for i in roundi(effect_ctx.tile.stat.get_value(preload("res://data/stats/stat_replay.tres")))+1:
+  var replays = roundi(effect_ctx.tile.stat.get_value(preload("res://data/stats/stat_replay.tres")))+1
+  
+  for i in replays:
     await execute(effect_ctx, exec_ctx)
 
 func _reward_points(effect_ctx: EffectContext, amount: int):

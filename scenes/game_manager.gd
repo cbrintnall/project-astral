@@ -52,11 +52,6 @@ var _enemy_queue := {}
 
 var _executor: TileExecutor
 
-func get_current_execution_queue() -> Array:
-  if _executor:
-    return _executor.tiles
-  return []
-
 func enter_shop():
   assert(current_state == "wait_for_accept_shop")
   _state.current = "shop"
@@ -90,7 +85,6 @@ func _ready() -> void:
   
   inst = self
   add_child(_state)
-  add_child(player_tasks)
   
   _state.register("start_round", _start_round)
   _state.register("deal", _deal)
