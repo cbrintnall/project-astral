@@ -12,6 +12,7 @@ var _context := ExecutionContext.new()
 var _end_timer := BetterTimer.new(1.0)
 
 var _remaining := []
+var _remaining_resolutions := TaskGroup.new()
 
 func start():
   _execution_state.current = "start"
@@ -27,6 +28,7 @@ func _ready() -> void:
 
 func _start(machine: CallableStateMachine, _delta: float):
   machine.current = "execute"
+  _context.start_execution()
   
 func _process_tiles(machine: CallableStateMachine, delta: float):
   if tiles:
@@ -56,26 +58,21 @@ func _process_tiles(machine: CallableStateMachine, delta: float):
     var payload: Dictionary = _remaining.pop_front()
     payload["queue"].queue_free()
     payload.erase("queue")
-    resolutions.push_back(payload)
     
   if not tiles and not _remaining:
     machine.current = "resolve"
 
 func _resolve_tiles(machine: CallableStateMachine, delta: float):
-  if resolutions:
-    var payload: Dictionary = resolutions.pop_front()
-    var queue := TaskQueue.new()
-    add_child(queue)
-    payload["queue"] = queue
-    for effect: TileEffect in payload["effects"]:
-      queue.register(effect.resolve.bind(payload["context"], _context))
-    _remaining.push_back(payload)
-  elif _remaining and _remaining.front()["queue"].finished:
-    var payload: Dictionary = _remaining.pop_front()
-    payload["queue"].queue_free()
-
-  if not resolutions and not _remaining:
-    if _end_timer.check(delta):
-      if on_finish.is_valid():
-        on_finish.call()
+  if _remaining_resolutions.finished:
+    if _context.resolutions:
+      # restart execution in case resolution itself pushes more resolutions
+      var next_group: Array = _context.resolutions.pop_front()
+      if next_group:
+        _context.start_execution()
+        for res: ResolutionCommand in next_group:
+          _remaining_resolutions.run(res.run)
+    else:
+      if _end_timer.check(delta):
+        if on_finish.is_valid():
+          on_finish.call()
         queue_free()

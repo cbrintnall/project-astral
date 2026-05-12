@@ -59,9 +59,9 @@ func get_target(ctx: EffectContext) -> Array:
 
   if not src and ctx.tile:
     src = GridManager.inst.get_tile_loc(ctx.tile)
-  #
-  #if random_cardinal_direction:
-    #targets.push_back(Constants.CARDINAL_DIRECTIONS.pick_random())
+
+  if random_cardinal_direction:
+    targets.push_back(src+Constants.CARDINAL_DIRECTIONS.pick_random())
   
   if size:
     var rect = Rect2i(Vector2i(src.x, src.z)-Vector2i((size*0.5).floor()), size)

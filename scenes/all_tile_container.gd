@@ -9,7 +9,11 @@ func is_resource(resource: Resource) -> bool:
 
 func _ready() -> void:
   for tile: TileDef in resources:
-    _tiles_by_name[tile.name.to_lower().replace(" ", "_")] = tile
+    var key := tile.name.to_lower().replace(" ", "_")
+    if not _tiles_by_name.has(key):
+      _tiles_by_name[key] = tile
+    else:
+      push_warning("Couldn't add tile to registrar (%s), slot already taken" % key)
     
   Console.add_command(
     "tiles",

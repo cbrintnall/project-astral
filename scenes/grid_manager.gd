@@ -78,6 +78,8 @@ var _grid_tile_command: Command
 
 var _hovered_tile_area_highlighter := GridHighlights.new()
 
+var _move_attempts := {}
+
 func is_in_bounds(pos: Vector3i) -> bool:
   return _bounds.has_point(Vector2i(pos.x, pos.z))
 
@@ -166,6 +168,20 @@ func try_start_selection(data: Selection) -> bool:
   _choose_cd.reset()
 
   return true
+  
+func submit_move_attempt(tile: Tile, target: Vector3i, ctx: ExecutionContext) -> MoveResolutionCommand:
+  var attempting_tiles = _move_attempts.get_or_add(target, [])
+  attempting_tiles.push_back(tile)
+  
+  print("trying to move from %s to %s" % [get_tile_loc(tile), str(target)])
+  
+  var resolution := MoveResolutionCommand.new(ctx)
+  
+  resolution.attempts = _move_attempts
+  resolution.tile = tile
+  resolution.target = target
+  
+  return resolution
   
 func _unhandled_input(event: InputEvent) -> void:
   if event.is_action_pressed("ui_cancel"):

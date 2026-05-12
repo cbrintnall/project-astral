@@ -34,6 +34,9 @@ var _preview_highlighter := GridHighlights.new()
 
 var _original_hand_marker: Marker3D
 
+func get_grid_origin_position() -> Vector3:
+  return Vector3(GridManager.inst.get_tile_loc(self))
+
 func has_effect(effect: TileEffect):
   return _effects.has(effect)
 
@@ -134,6 +137,8 @@ func try_move(target: Vector3i) -> Tween:
   return t
     
 func set_move(src: Vector3i, new: Vector3i):
+  global_position = Vector3(new)
+  
   for effect: TileEffect in get_effects():
     if effect.event == TileEffect.Event.ON_MOVE:
       GameManager.inst.player_tasks.run(effect.run.bind(_get_effect_ctx(), GameManager.inst.active_execution))

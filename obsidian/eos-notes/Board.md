@@ -11,6 +11,8 @@ kanban-plugin: board
 ## TODO
 
 - [ ] [[Create builds of tiles to make game less easy]]
+- [ ] Handle case where movement tries to "swap" tiles
+	#design
 
 
 ## DONE
