@@ -18,24 +18,33 @@ updateIntervalInSeconds: 30
 1. Tiles can **never** resolve sequentially, they must all resolve at the same time to prevent non-obvious turns. EG if two tiles next to each other will destroy each other, they both should be destroyed when they resolve instead of one only destroying the other.
 2. Generally statuses should accumulate before round start and resolve on round end
 ### Design updates (ideas, we can pull from this list):
-- [ ] Tile deck removals in shop
-- [ ] Tile modification in shop (eg add buffs to tiles, add effects to tiles)
+- [ ] **Shop Changes**
+	- [ ] Tile deck removals in shop
+	- [ ] Tile modification in shop (eg add buffs to tiles, add effects to tiles)
+	- [ ] Shop isn't explained at all and there is no confirmation if you want to buy something
+	- [ ] Shop selling individual tiles doesn’t really add much and makes it difficult to do “builds”, it should sell bundles of tiles with themes in addition to individual tiles.
+- [ ] Tile FX Updates
+	- [ ] Better sound when all tiles are activating
+	- [ ] More of a "slam" when tile is placed
+	- [ ] Tile should be put in proper position when returned to hand
+	- [ ] Tile could move along with velocity as it moves around board before placing
+- [ ] Update game to represent fight with Nyx
+	- [ ] Top bar should have a diablo-esque health orb for remaining health on Nyx
 - [ ] Two sided tiles (tiles can have two different sides, each act as different tiles, tiles can be flipped to activate one or the other depending on which is facing up)
 - [x] Moveable tiles (support is already sort of there for this, more just need to see how it fits in with design)
 - [ ] More statuses (more than just wrath right now)
-- [ ] Tile zone previewing on placement (already has dev support, just needs the visuals)
-- [ ] Grid events (areas that destroys tiles, areas that block placement of tiles, etc)
+	- [ ] Plan is to replace wrath with chipped
+	- [ ] Wrath will become another status, maybe it disables the tile at a certain amount of stacks?
+- [x] Tile zone previewing on placement (already has dev support, just needs the visuals
+	- [ ] Add preview when placing tile
 - [ ] “Potions”, items that have limited use that can perform actions
-- [ ] Better FX for tiles
 - [x] Updated UI (just for better visuals
-- [ ] Top bar should have a diablo-esque health orb for remaining health on Nyx
 - [x] Effect bar doesn’t even thematically fit the game
-- [ ] Shop selling individual tiles doesn’t really add much and makes it difficult to do “builds”, it should sell bundles of tiles with themes in addition to individual tiles.
 - [ ] Board modifiers per cycle to change up gameplay cycle over cycle
-- [ ] Shop isn't explained at all and there is no confirmation if you want to buy something
+	- [ ] Grid events (areas that destroys tiles, areas that block placement of tiles, etc)
+	- [ ] Tiles spawn on the map "locked", placing tiles near them unlocks them (this helps with the player not getting tiles, encourages placing in different places). The dawn from the surrounding tile will instead go to the locked one, once the requirement is given the tile is gained
 - [ ] Need an actual hand / discard, right now the hand just gets random tiles which makes it hard to plan around what tiles you'll get in the future
 - [ ] Pauses in music / variations
-- [ ] Tiles spawn on the map "locked", placing tiles near them unlocks them (this helps with the player not getting tiles, encourages placing in different places). The dawn from the surrounding tile will instead go to the locked one, once the requirement is given the tile is gained
 ### Card Ideas:
 
 #### Player Card Ideas:

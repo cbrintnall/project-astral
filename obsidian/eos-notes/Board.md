@@ -7,6 +7,7 @@ kanban-plugin: board
 ## BUGS
 
 - [ ] Dawn indicator paths should only show on tiles that will give or take dawn
+- [ ] Area multiply effect doesn't move areas when the tile itself is moved
 
 
 ## TODO

@@ -260,7 +260,7 @@ func _process(delta: float) -> void:
   if grid_hovered_tile:
     var spots = []
     var ctx := EffectContext.new()
-    ctx.override_location = grid_position_3d
+    ctx.tile = grid_hovered_tile
     for effect: TileEffect in grid_hovered_tile.get_effects():
       if effect.main_target:
         spots.append_array(effect.main_target.get_target(ctx))
