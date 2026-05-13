@@ -45,11 +45,17 @@ material = SubResource("StandardMaterial3D_upebc")
 [node name="Path3D" type="Path3D" unique_id=880653414]
 curve = SubResource("Curve3D_bqa6y")
 script = ExtResource("1_upebc")
+speed = 2.0
 
 [node name="PathFollow3D" type="PathFollow3D" parent="." unique_id=800604890]
-transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 0, 0, 0)
+transform = Transform3D(4.371139e-08, 0.048865326, 0.99879915, 0, 0.99879915, -0.048865326, -1, 2.1359712e-09, 4.3658897e-08, 1.8912863, 1.3191084, 0)
+progress = 2.5860786
+rotation_mode = 2
+use_model_front = true
+tilt_enabled = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PathFollow3D" unique_id=1181053067]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 mesh = ExtResource("2_x33vb")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="PathFollow3D" unique_id=1519322564]

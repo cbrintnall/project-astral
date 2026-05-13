@@ -34,8 +34,17 @@ var _preview_highlighter := GridHighlights.new()
 
 var _original_hand_marker: Marker3D
 
-func notify_failed_move(target: Vector3i, partial: bool):
+func notify_failed_move(target: Vector3i, attempt_data: Dictionary):
+  var partial = GridManager.inst.has_tile(target)
   var dist := 0.1 if partial else 0.75
+  var collision_ctx := TileCollisionContext.new()
+  
+  var other_tiles = attempt_data[target].to_array()
+  other_tiles.erase(self)
+
+  collision_ctx.initiator = self
+  collision_ctx.other_tiles = other_tiles
+  collision_ctx.source_tile = target
   
   var t = create_tween()
   
@@ -63,6 +72,21 @@ func notify_failed_move(target: Vector3i, partial: bool):
     get_grid_origin_position(),
     0.1
   ).set_trans(Tween.TRANS_CUBIC)
+  
+  t.tween_callback(
+    func():
+      var executor := TileExecutor.new()
+      executor.event = TileEffect.Event.ON_COLLIDE_TILE
+      executor.tiles = [self]
+      executor.finish_delay = 0.0
+      executor.give_execution_collision_data(collision_ctx)
+      add_child(executor)
+      GameManager.inst.player_tasks.run(
+        func():
+          executor.start()
+          await executor.finished
+      )
+  )
 
 func get_grid_origin_position() -> Vector3:
   return Vector3(GridManager.inst.get_tile_loc(self))

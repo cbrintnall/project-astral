@@ -10,7 +10,8 @@ enum Event {
   ON_ROUND_END = 4,
   ON_DESTROY = 8,
   ON_PLACE = 16,
-  ON_MOVE = 32
+  ON_MOVE = 32,
+  ON_COLLIDE_TILE = 64
 }
 
 @export var event := Event.ON_PLACE
@@ -30,6 +31,8 @@ func get_event_text() -> String:
       return "On Place"
     Event.ON_MOVE:
       return "[color=%s]On Move[/color]" % Constants.EFFECT_COLOR_STRING
+    Event.ON_COLLIDE_TILE:
+      return "[color=%s]On Collide Tile[/color]" % Constants.EFFECT_COLOR_STRING
 
   return "ERROR, NO EVENT"
 

@@ -30,6 +30,8 @@ func execute():
     
   if not GridManager.inst.try_move(tile, target):
     _try_defer_eval()
+  else:
+    attempts.get(target, Set.new()).erase(target)
   
 func undo():
   tile.stretcher.punch(10.0, 15.0)
@@ -39,7 +41,4 @@ func _try_defer_eval():
     _count += 1
     context.register_resolution(self)
   else:
-    tile.notify_failed_move(
-      target, 
-      GridManager.inst.has_tile(target)
-    )
+    tile.notify_failed_move(target, attempts)

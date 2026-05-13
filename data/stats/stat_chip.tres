@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatDef" format=3 uid="uid://cphias4wxo0pg"]
+
+[ext_resource type="Script" uid="uid://bemrh2m32ehhl" path="res://otterlib/resources/stat_def.gd" id="1_eu2vj"]
+
+[resource]
+script = ExtResource("1_eu2vj")
+name = "Chip"
+description = "The level of damage on this tile."
+base_value = 0.0
+metadata/_custom_type_script = "uid://bemrh2m32ehhl"

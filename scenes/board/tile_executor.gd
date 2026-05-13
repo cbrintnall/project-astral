@@ -20,6 +20,9 @@ var _remaining_resolutions := TaskGroup.new()
 var _remaining_cleanup_resolutions := []
 var _resolution_cleanup := TaskGroup.new()
 
+func give_execution_collision_data(data: TileCollisionContext):
+  _context.collision_data = data
+
 func start():
   _execution_state.current = "start"
   _context.active_round = true
