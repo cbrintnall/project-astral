@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://d2mkxko8vyw8j"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_vu6yh"]
+[ext_resource type="Resource" uid="uid://7164xr2gbmkb" path="res://data/tiles/tile_encourage.tres" id="2_2hqi8"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_qr06u"]
+[ext_resource type="Script" uid="uid://cfpwfi5w65ca6" path="res://scenes/tiles/effects/tile_effect_give_tile.gd" id="3_qmxqd"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="4_1upq4"]
+[ext_resource type="Script" uid="uid://om6wjwow2ghb" path="res://scenes/tiles/effects/tile_effect_destroy_if_matching.gd" id="4_qmxqd"]
+[ext_resource type="Script" uid="uid://coxe54w821lob" path="res://scenes/tiles/effects/tile_effect_multiply_area.gd" id="6_t8xld"]
+
+[sub_resource type="Resource" id="Resource_1upq4"]
+script = ExtResource("3_qmxqd")
+def = ExtResource("2_2hqi8")
+event = 8
+metadata/_custom_type_script = "uid://cfpwfi5w65ca6"
+
+[sub_resource type="Resource" id="Resource_0fv4i"]
+script = ExtResource("4_1upq4")
+tiles = Array[Vector3i]([Vector3i(1, 0, 0), Vector3i(0, 0, 1), Vector3i(-1, 0, 0), Vector3i(0, 0, -1), Vector3i(1, 0, 1), Vector3i(-1, 0, 1), Vector3i(1, 0, -1), Vector3i(-1, 0, -1)])
+include_self = false
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_t8xld"]
+script = ExtResource("4_qmxqd")
+event = 2
+main_target = SubResource("Resource_0fv4i")
+metadata/_custom_type_script = "uid://om6wjwow2ghb"
+
+[sub_resource type="Resource" id="Resource_bdgig"]
+script = ExtResource("4_1upq4")
+tiles = Array[Vector3i]([Vector3i(1, 0, 1), Vector3i(-1, 0, 1), Vector3i(-1, 0, -1), Vector3i(1, 0, -1), Vector3i(0, 0, 1), Vector3i(0, 0, -1), Vector3i(1, 0, 0), Vector3i(-1, 0, 0)])
+include_self = false
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_fk74y"]
+script = ExtResource("6_t8xld")
+size = Vector2i(3, 3)
+multiplier = -0.5
+main_target = SubResource("Resource_bdgig")
+metadata/_custom_type_script = "uid://coxe54w821lob"
+
+[resource]
+script = ExtResource("2_qr06u")
+name = "Unknown Tile"
+effects = Array[ExtResource("1_vu6yh")]([SubResource("Resource_1upq4"), SubResource("Resource_t8xld"), SubResource("Resource_fk74y")])
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"

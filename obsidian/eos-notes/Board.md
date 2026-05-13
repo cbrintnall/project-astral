@@ -6,6 +6,7 @@ kanban-plugin: board
 
 ## BUGS
 
+- [ ] Dawn indicator paths should only show on tiles that will give or take dawn
 
 
 ## TODO
@@ -15,14 +16,23 @@ kanban-plugin: board
 	#design
 
 
+## Doin
+
+- [ ] Add cycle effect where tiles spawn on cycle start
+- [ ] Add chipped build
+- [ ] Add move build
+- [ ] Add on move tile effect event
+
+
 ## DONE
 
+- [ ] Add tiles into board that can be claimed by the player by placing other tiles near it.
 
 
 
 
 %% kanban:settings
 ```
-{"kanban-plugin":"board","list-collapse":[false,false,false]}
+{"kanban-plugin":"board","list-collapse":[false,false,false,false]}
 ```
 %%

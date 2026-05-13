@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://c5c6yjrvfih3n"]
+
+[ext_resource type="Script" uid="uid://dvx3iqrve4q02" path="res://scenes/fx/path_previewer.gd" id="1_upebc"]
+[ext_resource type="QuadMesh" uid="uid://cgut4fsmu84n7" path="res://assets/extracted_mesh/area_indicator_mesh.tres" id="2_x33vb"]
+[ext_resource type="Texture2D" uid="uid://02euhmyf5ukn" path="res://assets/star.png" id="3_x33vb"]
+
+[sub_resource type="Curve3D" id="Curve3D_bqa6y"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 1.763, 0, 0, 0, 0, 0, 1.763, 0, 0, 0, 0, 3.525, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_x33vb"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.18965518, 1), 0.0, 0.0, 0, 0, Vector2(0.50862074, 0.50561804), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_hehcr"]
+curve = SubResource("Curve_x33vb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_x33vb"]
+emission_shape = 1
+emission_sphere_radius = 0.5
+gravity = Vector3(0, -1, 0)
+scale_min = 0.19999999
+scale_max = 0.59999996
+scale_curve = SubResource("CurveTexture_hehcr")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_upebc"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("3_x33vb")
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 2.86
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_x33vb"]
+material = SubResource("StandardMaterial3D_upebc")
+
+[node name="Path3D" type="Path3D" unique_id=880653414]
+curve = SubResource("Curve3D_bqa6y")
+script = ExtResource("1_upebc")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="." unique_id=800604890]
+transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PathFollow3D" unique_id=1181053067]
+mesh = ExtResource("2_x33vb")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="PathFollow3D" unique_id=1519322564]
+process_material = SubResource("ParticleProcessMaterial_x33vb")
+draw_pass_1 = SubResource("QuadMesh_x33vb")

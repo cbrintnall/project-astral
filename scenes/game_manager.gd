@@ -11,6 +11,9 @@ signal points_fx
 
 @export var light: DirectionalLight3D
 
+@export var default_cycle_tasks: Array[CycleEffect] = []
+@export var varied_cycle_tasks: Array[CycleEffect] = []
+
 var current_score: int:
   get:
     return point_source.current
@@ -28,6 +31,7 @@ var turn := 0
 
 var point_source := PointSource.new()
 var player_tasks := TaskGroup.new()
+var cycle_tasks := TaskQueue.new()
 var money := 0
 
 var current_state: String:
@@ -46,9 +50,6 @@ var _current_context: ExecutionContext
 
 var _sound_counter := 0.0
 var _reset_sound_timer := BetterTimer.new(1.0)
-
-var _set_enemy_timer := BetterTimer.new(1.0)
-var _enemy_queue := {}
 
 var _executor: TileExecutor
 
@@ -86,17 +87,18 @@ func _ready() -> void:
   
   inst = self
   add_child(_state)
+  add_child(cycle_tasks)
   
   _state.register("start_round", _start_round)
   _state.register("deal", _deal)
-  _state.register("wait_for_player", _wait_for_player)
+  _state.register("wait_for_player", CallableStateMachine.noop)
   _state.register("begin_execution", _begin_execution)
   _state.register("pre_execute", CallableStateMachine.noop)
   _state.register("execute", CallableStateMachine.noop)
   _state.register("post_execute", CallableStateMachine.noop)
   _state.register("post_round", _post_round)
   _state.register("shop", CallableStateMachine.noop)
-  _state.register("enemies", _distribute_enemies)
+  _state.register("start_cycle_events", _start_cycle_events)
   _state.register("wait_for_accept_shop", CallableStateMachine.noop)
   _state.register("end_game", _end_game)
   
@@ -185,8 +187,9 @@ func _deal(machine: CallableStateMachine, delta: float):
     var next = HandManager.inst.get_next_from_hand()
     TileHand.inst.add_to_hand(next)
 
-func _wait_for_player(machine: CallableStateMachine, delta: float):
-  pass
+func _start_cycle_events(machine: CallableStateMachine, _delta: float):
+  if cycle_tasks.finished:
+    machine.current = "wait_for_accept_shop"
 
 func _post_round(machine: CallableStateMachine, delta: float):
   if current_score >= required_score:
@@ -205,8 +208,12 @@ func _post_round(machine: CallableStateMachine, delta: float):
       turn = 0
       _current_context = ExecutionContext.new()
       _current_context.active_round = false
-      _setup_enemy_queue()
-      _state.current = "enemies"
+      var chosen_fx = []
+      chosen_fx.append_array(default_cycle_tasks)
+      # TODO: add varied tasks here as well
+      for task: CycleEffect in chosen_fx:
+        cycle_tasks.register(task.on_cycle_start)
+      _state.current = "start_cycle_events"
       return
     else:
       _state.current = "end_game"
@@ -216,34 +223,6 @@ func _post_round(machine: CallableStateMachine, delta: float):
   _state.current = "start_round"
   _current_context = ExecutionContext.new()
   _current_context.active_round = false
-  
-func _setup_enemy_queue():
-  var played = GridManager.inst.get_played_tiles().filter(func(tile: Tile): return not tile.def.initiates)
-  played.shuffle()
-  var amount = ceili(len(played)*0.1)
-  print("creating %d enemy tiles (10%% of current)" % amount)
-  var spawned := 0
-  for i in 1000:
-    if spawned > amount or not played: break
-
-    var spot = (played.pop_front() as Tile).get_open_neighbor()
-    if spot:
-      var data = enemy_tile_container.resources.pick_random()
-      _enemy_queue[spot] = data
-      spawned += 1
-  
-func _distribute_enemies(machine: CallableStateMachine, delta: float):
-  if _enemy_queue:
-    if _set_enemy_timer.check(delta):
-      var next = _enemy_queue.keys().front()
-      var tile = load("res://scenes/board/tile.tscn").instantiate()
-      tile.def = _enemy_queue[next]
-      
-      GridManager.inst.try_place_tile(tile, next)
-      
-      _enemy_queue.erase(next)
-  else:
-    _state.current = "wait_for_accept_shop"
   
 func _begin_execution(machine: CallableStateMachine, delta: float):
   if not player_tasks.finished:

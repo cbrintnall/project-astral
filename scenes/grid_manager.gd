@@ -76,6 +76,7 @@ var _hovered_tile_command: Command
 var _grid_tile_command: Command
 
 var _hovered_tile_area_highlighter := GridHighlights.new()
+var _point_source_previewer : Path3D
 
 var _move_attempts := {}
 
@@ -224,6 +225,8 @@ func _cancel_current_selection():
 
 func _ready() -> void:
   inst = self
+  _point_source_previewer = load("res://scenes/fx/path_previewer.tscn").instantiate()
+  add_child(_point_source_previewer)
   _hovered_tile_area_highlighter.mesh = load("res://assets/extracted_mesh/area_indicator_mesh.tres")
   add_child(_hovered_tile_area_highlighter)
   map_bounds.scale = Vector3(size.x+2, size.x*0.25, size.y+2)
@@ -253,6 +256,7 @@ func _process(delta: float) -> void:
 
   if not grid_cast.ray_data: return
 
+  _point_source_previewer.visible = grid_hovered_tile != null
   if grid_hovered_tile:
     var spots = []
     var ctx := EffectContext.new()
@@ -261,6 +265,9 @@ func _process(delta: float) -> void:
       if effect.main_target:
         spots.append_array(effect.main_target.get_target(ctx))
     _hovered_tile_area_highlighter.spots = spots
+    var src = get_mods_at_point(grid_position_3d)
+    _point_source_previewer.curve.set_point_position(0, _point_source_previewer.to_local(grid_hovered_tile.global_position))
+    _point_source_previewer.curve.set_point_position(1, _point_source_previewer.to_local(src.get_point_source().target_point))
 
   var grid_pos: Vector3 = grid_cast.ray_data["position"]
   RenderingServer.global_shader_parameter_set("global_mouse_position", grid_pos)

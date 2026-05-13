@@ -4,10 +4,16 @@ class_name AllTileContainer
 
 var _tiles_by_name := {}
 
+static var inst: AllTileContainer
+
 func is_resource(resource: Resource) -> bool:
   return resource is TileDef
 
 func _ready() -> void:
+  if Engine.is_editor_hint(): return
+  
+  inst = self
+  
   for tile: TileDef in resources:
     var key := tile.name.to_lower().replace(" ", "_")
     if not _tiles_by_name.has(key):

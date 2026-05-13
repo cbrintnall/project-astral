@@ -61,6 +61,8 @@ func set_display_mode():
   Springer.register("rotation", stretcher, Vector3.ZERO, Vector3.ZERO, 200.0, 20.0)
 
 func destroy():
+  if _state.current == "destroying": return
+  
   AudioManager3d.play({
     "stream": preload("res://audio/break-tile.ogg"),
     "pitch_variance": 0.05,
@@ -74,7 +76,19 @@ func destroy():
   
   p.global_position = global_position
   
-  queue_free()
+  var executor := TileExecutor.new()
+  executor.event = TileEffect.Event.ON_DESTROY
+  executor.tiles = [self]
+  executor.finish_delay = 0.0
+  add_child(executor)
+  GameManager.inst.player_tasks.run(
+    func():
+      executor.start()
+      await executor.finished
+      queue_free()
+  )
+
+  _state.current = "destroying"
 
 func select():
   _on_select()
@@ -207,6 +221,7 @@ func _ready() -> void:
   _state.register("placing", _placing)
   _state.register("placed", _placed)
   _state.register("display", _display)
+  _state.register("destroying", CallableStateMachine.noop)
   
   _state.state_changed.connect(_on_state_changed)
   
@@ -256,6 +271,7 @@ func _on_board_changed():
     AudioManager3d.play({
       "stream": preload("res://audio/constellation-complete.ogg")
     })
+
 func _on_state_changed(state: String):
   match state:
     "selecting":

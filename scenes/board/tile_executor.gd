@@ -5,6 +5,7 @@ signal finished
 
 var tiles := []
 var resolutions := []
+var finish_delay := 1.0
 
 var event: TileEffect.Event
 var on_finish: Callable
@@ -19,6 +20,7 @@ var _remaining_resolutions := TaskGroup.new()
 func start():
   _execution_state.current = "start"
   _context.active_round = true
+  _end_timer.reset_to(finish_delay)
 
 func _ready() -> void:
   add_child(_execution_state)
