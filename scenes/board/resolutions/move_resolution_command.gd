@@ -14,6 +14,9 @@ func cleanup():
     attempts[target].remove(tile)
 
 func check() -> bool:
+  if not is_instance_valid(tile):
+    return false
+  
   if tile.def.initiates:
     return false
 
@@ -31,10 +34,11 @@ func execute():
   if not GridManager.inst.try_move(tile, target):
     _try_defer_eval()
   else:
-    attempts.get(target, Set.new()).erase(target)
+    attempts.get(target, Set.new()).remove(target)
   
 func undo():
-  tile.stretcher.punch(10.0, 15.0)
+  if is_instance_valid(tile):
+    tile.stretcher.punch(10.0, 15.0)
   
 func _try_defer_eval():
   if _count < Constants.MAX_RESOLUTIONS_BEFORE_GIVE_UP:

@@ -4,6 +4,19 @@
 [ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_hm88j"]
 [ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_w61id"]
 [ext_resource type="Script" uid="uid://binru4wh38qxc" path="res://scenes/tiles/effects/tile_effect_move_toward_me.gd" id="3_w61id"]
+[ext_resource type="Script" uid="uid://dlil8lhl4obst" path="res://scenes/tiles/effects/destroy/tile_effect_destroy_marked.gd" id="4_v0pkh"]
+
+[sub_resource type="Resource" id="Resource_b73gc"]
+script = ExtResource("2_w61id")
+tiles = Array[Vector3i]([Vector3i(1, 0, 0), Vector3i(0, 0, 1), Vector3i(-1, 0, 0), Vector3i(0, 0, -1)])
+include_self = false
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_hf5sm"]
+script = ExtResource("4_v0pkh")
+event = 4
+main_target = SubResource("Resource_b73gc")
+metadata/_custom_type_script = "uid://dlil8lhl4obst"
 
 [sub_resource type="Resource" id="Resource_462ec"]
 script = ExtResource("2_w61id")
@@ -21,5 +34,5 @@ metadata/_custom_type_script = "uid://binru4wh38qxc"
 [resource]
 script = ExtResource("2_hm88j")
 name = "Black Hole"
-effects = Array[ExtResource("1_4uxe7")]([SubResource("Resource_v0pkh")])
+effects = Array[ExtResource("1_4uxe7")]([SubResource("Resource_hf5sm"), SubResource("Resource_v0pkh")])
 metadata/_custom_type_script = "uid://cssx7lcdl5o45"

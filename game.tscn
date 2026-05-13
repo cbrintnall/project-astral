@@ -65,6 +65,7 @@
 [ext_resource type="Resource" uid="uid://b627xyk02m145" path="res://data/tiles/tile_source_tile.tres" id="40_ple6s"]
 [ext_resource type="Texture2D" uid="uid://wtygyygsy5b3" path="res://assets/ui/test2.png" id="41_0de7l"]
 [ext_resource type="Shader" uid="uid://bi3dkwmqo5d3q" path="res://materials/shaders/grid_barrier_shader.gdshader" id="43_kq12w"]
+[ext_resource type="Script" uid="uid://dqesb21oc6arv" path="res://scenes/ui/choose_tiles.gd" id="60_56gn1"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0de7l"]
 texture = ExtResource("39_t46w6")
@@ -895,6 +896,106 @@ offset_right = 110.0
 offset_bottom = -11.0
 focus_mode = 0
 text = "Toggle"
+
+[node name="ChooseTiles" type="MarginContainer" parent="UI" unique_id=1540384907]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("60_56gn1")
+
+[node name="Panel" type="Panel" parent="UI/ChooseTiles" unique_id=977182946]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/ChooseTiles" unique_id=1750272286]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/ChooseTiles/MarginContainer" unique_id=1179493572]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/ChooseTiles/MarginContainer/VBoxContainer" unique_id=965206791]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Take up to 4"
+horizontal_alignment = 1
+
+[node name="Options" type="GridContainer" parent="UI/ChooseTiles/MarginContainer/VBoxContainer" unique_id=451607818]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 4
+
+[node name="TilePreview" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Options" unique_id=803386325 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="TilePreview2" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Options" unique_id=459599562 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="TilePreview3" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Options" unique_id=267669923 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="TilePreview4" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Options" unique_id=1914913996 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="TilePreview5" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Options" unique_id=1845702643 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="TilePreview6" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Options" unique_id=1110420433 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="TilePreview7" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Options" unique_id=853271447 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="TilePreview8" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Options" unique_id=1192122271 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="UI/ChooseTiles/MarginContainer/VBoxContainer" unique_id=2708852]
+layout_mode = 2
+
+[node name="Selections" type="GridContainer" parent="UI/ChooseTiles/MarginContainer/VBoxContainer" unique_id=135368726]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 4
+
+[node name="TilePreview" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Selections" unique_id=2015394879 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="TilePreview2" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Selections" unique_id=138868885 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="TilePreview3" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Selections" unique_id=837386906 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="TilePreview4" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Selections" unique_id=102073818 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="TilePreview5" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Selections" unique_id=1224352376 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="TilePreview6" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Selections" unique_id=392991391 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="TilePreview7" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Selections" unique_id=1776666447 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="TilePreview8" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/Selections" unique_id=902441486 instance=ExtResource("40_m28ev")]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/ChooseTiles/MarginContainer/VBoxContainer" unique_id=346996107]
+layout_mode = 2
+theme_override_constants/margin_top = 24
+
+[node name="SelectionSubmit" type="Button" parent="UI/ChooseTiles/MarginContainer/VBoxContainer/MarginContainer" unique_id=1298646722]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "OK"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=94658656]
 layer = 0

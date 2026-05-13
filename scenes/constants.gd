@@ -7,6 +7,8 @@ static var wrath := preload("res://data/stats/stat_wrath.tres")
 const TURNS_PER_SCORE = 3
 const DEFAULT_HAND_SIZE = 5
 const MAX_HAND_SIZE = 10
+const TILE_OPTIONS_PER_TURN = 8
+const TILE_OPTIONS_ALLOWED_SELECTIONS = 4
 
 const EFFECT_COLOR_STRING = "#fbf5ef"
 

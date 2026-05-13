@@ -10,6 +10,7 @@ static var inst: UI
 @onready var system_label: RichTextLabel = %SystemMessage
 @onready var tile_display: MarginContainer = %TileDisplay
 @onready var tile_previewer: TileDataPreviewer = %TileData
+@onready var choose_tiles: ChooseTilesUI = $ChooseTiles
 
 var _tile_display_offset := 0.0
 var _tile_display_open := false

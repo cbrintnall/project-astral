@@ -98,6 +98,8 @@ func try_move(tile: Tile, target: Vector3i) -> bool:
   
   tile.set_move(original, target)
   
+  _watch_tile(tile)
+  
   return true
   
 func could_place_tile(loc: Vector3i) -> bool:
@@ -145,13 +147,7 @@ func try_place_tile(tile: Tile, pos: Vector3i) -> bool:
   tile.global_position = pos
   tile.set_placed_at(pos)
   _tiles_dirty = true
-  tile.tree_exiting.connect(
-    func():
-      _tiles.erase(tile)
-      _placements.erase(pos)
-      _tiles_dirty = true,
-    CONNECT_ONE_SHOT
-  )
+  _watch_tile(tile)
   
   return true
 
@@ -181,14 +177,19 @@ func submit_move_attempt(tile: Tile, target: Vector3i, ctx: ExecutionContext) ->
   
   return resolution
   
+func _watch_tile(tile: Tile):
+  if not tile.tree_exiting.is_connected(_cleanup_tile_on_exit.bind(tile)):
+    tile.tree_exiting.connect(_cleanup_tile_on_exit.bind(tile))
+  
+func _cleanup_tile_on_exit(tile: Tile):
+  var pos = _tiles[tile]
+  _tiles.erase(tile)
+  _placements.erase(pos)
+  _tiles_dirty = true
+  
 func _unhandled_input(event: InputEvent) -> void:
   if event.is_action_pressed("ui_cancel"):
     _cancel_current_selection()
-    
-  match Utils.get_key_pressed(event):
-    KEY_Z:
-      if get_tile_at(grid_position_3d):
-        get_tile_at(grid_position_3d).destroy()
     
   # timer cooldown so we don't immediately do something after creating selection
   # everything below this if statement should be selection related

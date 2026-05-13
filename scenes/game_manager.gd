@@ -173,6 +173,7 @@ func _start_round(machine: CallableStateMachine, delta: float):
     GridManager.inst.get_played_tiles(),
     TileEffect.Event.ON_ROUND_START,
     func():
+      UI.inst.choose_tiles.setup()
       _state.current = "deal"
   )
   

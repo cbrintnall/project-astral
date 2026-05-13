@@ -76,8 +76,11 @@ func notify_failed_move(target: Vector3i, attempt_data: Dictionary):
   t.tween_callback(
     func():
       var executor := TileExecutor.new()
+      var involved_tiles = [self]
+      if partial:
+        involved_tiles.push_back(GridManager.inst.get_tile_at(target))
       executor.event = TileEffect.Event.ON_COLLIDE_TILE
-      executor.tiles = [self]
+      executor.tiles = involved_tiles
       executor.finish_delay = 0.0
       executor.give_execution_collision_data(collision_ctx)
       add_child(executor)
