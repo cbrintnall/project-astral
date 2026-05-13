@@ -35,6 +35,7 @@ updateIntervalInSeconds: 30
 - [ ] More statuses (more than just wrath right now)
 	- [ ] Plan is to replace wrath with chipped
 	- [ ] Wrath will become another status, maybe it disables the tile at a certain amount of stacks?
+	- [ ] Charm could have a chance to negate point rewards
 - [x] Tile zone previewing on placement (already has dev support, just needs the visuals
 	- [ ] Add preview when placing tile
 - [ ] “Potions”, items that have limited use that can perform actions
@@ -68,3 +69,4 @@ updateIntervalInSeconds: 30
 #### Negative Card Ideas:
 - On activate: remove 10 points [arrowTile]
 - On end of round, 50% chance to spawn a minion tile, who removes 1 point per turn
+- Rain X meteors on random spots across the grid, if it hits a tile that tile receives 2 chipped

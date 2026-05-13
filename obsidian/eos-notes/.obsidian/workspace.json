@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Wild Jam Plans.md",
+                "file": "Kanban Notes/Create builds of tiles to make game less easy.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Wild Jam Plans"
+              "title": "Create builds of tiles to make game less easy"
             }
           },
           {
@@ -115,7 +115,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Wild Jam Plans.md",
+                "file": "Kanban Notes/Create builds of tiles to make game less easy.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -125,7 +125,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Wild Jam Plans"
+              "title": "Backlinks for Create builds of tiles to make game less easy"
             }
           },
           {
@@ -134,12 +134,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Wild Jam Plans.md",
+                "file": "Kanban Notes/Create builds of tiles to make game less easy.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Wild Jam Plans"
+              "title": "Outgoing links from Create builds of tiles to make game less easy"
             }
           },
           {
@@ -177,13 +177,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Wild Jam Plans.md",
+                "file": "Kanban Notes/Create builds of tiles to make game less easy.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Wild Jam Plans"
+              "title": "Outline of Create builds of tiles to make game less easy"
             }
           }
         ]
@@ -207,9 +207,9 @@
   },
   "active": "6bbbd419e9c61b6e",
   "lastOpenFiles": [
+    "Wild Jam Plans.md",
     "Board.md",
     "Kanban Notes/Create builds of tiles to make game less easy.md",
-    "Wild Jam Plans.md",
     "Kanban Notes",
     "temp_any_block_convert.md",
     "Untitled.md",

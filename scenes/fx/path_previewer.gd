@@ -8,7 +8,7 @@ class_name PathPreviewer
 func _ready() -> void:
   curve = Curve3D.new()
   curve.add_point(Vector3.ZERO)
-  curve.add_point(Vector3.ZERO)
+  curve.add_point(Vector3.ONE)
 
 func _process(delta: float) -> void:
   follower.progress += delta*speed

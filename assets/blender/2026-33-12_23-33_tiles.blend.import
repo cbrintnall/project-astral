@@ -3,12 +3,12 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bthd3dxkhbblp"
+uid="uid://bd1wlefhsnhj7"
 valid=false
 
 [deps]
 
-source_file="res://assets/blender/Eos.blend"
+source_file="res://assets/blender/2026-33-12_23-33_tiles.blend"
 
 [params]
 

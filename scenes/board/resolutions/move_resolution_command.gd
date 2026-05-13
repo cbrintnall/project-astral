@@ -35,7 +35,8 @@ func execute():
       _count += 1
       context.register_resolution(self)
     else:
-      push_warning("Movement resolution gave up, hit max resolution count (tile=%s).." % tile.def.name)
+      tile.notify_failed_move(target)
+      print("%s failed to move" % tile.def.name)
   
 func undo():
   tile.stretcher.punch(10.0, 15.0)

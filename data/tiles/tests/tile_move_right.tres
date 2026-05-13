@@ -7,12 +7,17 @@
 
 [sub_resource type="Resource" id="Resource_2klk5"]
 script = ExtResource("2_pyb32")
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_x6sr0"]
+script = ExtResource("2_pyb32")
 tiles = Array[Vector3i]([Vector3i(1, 0, 0)])
 include_self = false
 metadata/_custom_type_script = "uid://di6fi4200kyxe"
 
 [sub_resource type="Resource" id="Resource_pyb32"]
 script = ExtResource("3_x6sr0")
+move_target = SubResource("Resource_x6sr0")
 event = 4
 main_target = SubResource("Resource_2klk5")
 metadata/_custom_type_script = "uid://baxb22jbkxker"

@@ -34,6 +34,34 @@ var _preview_highlighter := GridHighlights.new()
 
 var _original_hand_marker: Marker3D
 
+func notify_failed_move(target: Vector3i):
+  var t = create_tween()
+  
+  t.tween_property(
+    self,
+    "global_position",
+    global_position.lerp(Vector3(target), 0.1),
+    0.2
+  ).set_trans(Tween.TRANS_BACK)
+  
+  t.tween_callback(
+    func():
+      stretcher.punch(5.0, 10.0)
+      Springer.data[stretcher]["rotation"]["velocity"] = Utils.random_unit_sphere() * 25.0
+      AudioManager3d.play({
+        "stream": preload("res://audio/crack-tile.ogg"),
+        "pitch_variance": 0.1,
+        "parent": self
+      })
+  )
+  
+  t.tween_property(
+    self,
+    "global_position",
+    get_grid_origin_position(),
+    0.1
+  ).set_trans(Tween.TRANS_CUBIC)
+
 func get_grid_origin_position() -> Vector3:
   return Vector3(GridManager.inst.get_tile_loc(self))
 
@@ -128,6 +156,14 @@ func execute(ctx: ExecutionContext, event: TileEffect.Event):
       _remaining_effects.push_back(effect)
       
 func set_move(src: Vector3i, new: Vector3i):
+  var t = create_tween()
+  t.tween_property(
+    self,
+    "global_position",
+    Vector3(new),
+    0.3
+  ).set_trans(Tween.TRANS_CUBIC)
+  
   for effect: TileEffect in get_effects():
     if effect.event == TileEffect.Event.ON_MOVE:
       GameManager.inst.player_tasks.run(effect.run.bind(_get_effect_ctx(), GameManager.inst.active_execution))
@@ -219,7 +255,7 @@ func _ready() -> void:
   
   _state.register("selecting", _selecting)
   _state.register("placing", _placing)
-  _state.register("placed", _placed)
+  _state.register("placed", CallableStateMachine.noop)
   _state.register("display", _display)
   _state.register("destroying", CallableStateMachine.noop)
   
@@ -283,6 +319,7 @@ func _on_state_changed(state: String):
       input_ray_pickable = false
       for m in _meshes:
         m.layers = 1
+      Springer.register("rotation", stretcher, Vector3.ZERO, Vector3.ZERO, 200.0, 20.0)
     "placing":
       _original_hand_marker = get_parent()
       assert(get_parent() is Marker3D)
@@ -322,8 +359,8 @@ func _selecting(machine: CallableStateMachine, delta: float):
 
 func _placing(machine: CallableStateMachine, delta: float):
   var curr_scale := stretcher.global_basis.get_scale()
-  var target := Basis.looking_at(Vector3.UP)
-  target *= Basis.from_euler(Vector3(PI*0.5, -PI, 0.0))
+  # NOTE: identity basis points straight up, no need for another direction
+  var target := Basis()
   stretcher.global_basis = stretcher.global_basis.orthonormalized().slerp(target, 0.1).scaled(curr_scale)
   global_position = global_position.lerp(GridManager.inst.grid_position_3d+Vector3i.UP, 0.3)
   
@@ -340,10 +377,6 @@ func _placing(machine: CallableStateMachine, delta: float):
     if effect.main_target:
       spots.append_array(effect.main_target.get_target(ctx))
   _preview_highlighter.spots = spots
-
-func _placed(machine: CallableStateMachine, delta: float):
-  stretcher.rotation = Vector3.ZERO
-  global_position = global_position.lerp(get_grid_origin_position(), 0.05)
 
 func _mouse_enter() -> void:
   GridManager.inst.hand_hovered_tile = self
