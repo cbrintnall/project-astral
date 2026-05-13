@@ -278,7 +278,10 @@ func _process(delta: float) -> void:
   selection.global_position = grid_position_3d
   selection.visible = _current_selection != null
   
-  grid_hovered_tile = get_tile_at(grid_position_3d)
+  if get_viewport().gui_get_hovered_control() == null:
+    grid_hovered_tile = get_tile_at(grid_position_3d)
+  else:
+    grid_hovered_tile = null
   
   if _current_selection:
     var target = DEFAULT_COLOR
