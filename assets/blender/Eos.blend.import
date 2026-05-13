@@ -4,11 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bthd3dxkhbblp"
-valid=false
+path="res://.godot/imported/Eos.blend-291f28fffe4e18266a47a0ce9e95b82f.scn"
 
 [deps]
 
 source_file="res://assets/blender/Eos.blend"
+dest_files=["res://.godot/imported/Eos.blend-291f28fffe4e18266a47a0ce9e95b82f.scn"]
 
 [params]
 

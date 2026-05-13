@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Your Game Title — itch.io</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Habibi&family=MuseoModerno:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --cream:      #F7EFE3;
+      --blush:      #E8C9AE;
+      --rose:       #C4A5A8;
+      --mauve:      #7B7191;
+      --navy:       #3C3A55;
+      --navy-deep:  #25243A;
+      --text-body:  #2E2C3E;
+      --text-muted: #7B7191;
+      --border:     rgba(60, 58, 85, 0.18);
+      --panel-bg:   rgba(247, 239, 227, 0.6);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--cream);
+      color: var(--text-body);
+      font-family: 'MuseoModerno', sans-serif;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Habibi', serif;
+      color: var(--navy-deep);
+      line-height: 1.2;
+    }
+
+    a { color: var(--mauve); text-decoration: none; }
+    a:hover { color: var(--navy); text-decoration: underline; }
+
+    /* ── HEADER ─────────────────────────────────── */
+    .page-header {
+      background: var(--navy-deep);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      height: 56px;
+      border-bottom: 1px solid rgba(196, 165, 168, 0.25);
+    }
+
+    .page-header .logo {
+      font-family: 'Habibi', serif;
+      font-size: 1.3rem;
+      color: var(--blush);
+      letter-spacing: 0.04em;
+    }
+
+    .page-header nav {
+      display: flex;
+      gap: 1.5rem;
+      margin-left: auto;
+    }
+
+    .page-header nav a {
+      color: rgba(232, 201, 174, 0.7);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .page-header nav a:hover {
+      color: var(--blush);
+      text-decoration: none;
+    }
+
+    /* ── GAME TITLE BANNER ──────────────────────── */
+    .game-banner {
+      background: linear-gradient(175deg, var(--navy-deep) 0%, var(--navy) 55%, var(--mauve) 100%);
+      padding: 3rem 2rem 0;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .game-banner .cover-image {
+      width: 100%;
+      max-width: 640px;
+      border-radius: 6px 6px 0 0;
+      display: block;
+      /* Replace with your actual cover image */
+      background: linear-gradient(135deg, var(--mauve) 0%, var(--rose) 50%, var(--blush) 100%);
+      aspect-ratio: 16/9;
+    }
+
+    /* ── MAIN LAYOUT ────────────────────────────── */
+    .wrapper {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 720px) {
+      .wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── LEFT COL ───────────────────────────────── */
+    .left-col {}
+
+    .game-title-row {
+      margin-bottom: 2rem;
+    }
+
+    .game-title-row h1 {
+      font-size: 2.8rem;
+      margin-bottom: 0.4rem;
+      color: var(--navy-deep);
+    }
+
+    .game-title-row .tagline {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    .game-title-row .author-line {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .game-title-row .author-line a {
+      color: var(--mauve);
+      font-weight: 500;
+    }
+
+    /* embed placeholder */
+    .game-embed-placeholder {
+      background: var(--navy-deep);
+      aspect-ratio: 16/9;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      cursor: pointer;
+    }
+
+    .game-embed-placeholder .play-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--rose);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .game-embed-placeholder:hover .play-btn {
+      background: var(--blush);
+      transform: scale(1.08);
+    }
+
+    .game-embed-placeholder .play-btn svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--navy-deep);
+      margin-left: 4px;
+    }
+
+    .game-embed-placeholder span {
+      font-size: 0.9rem;
+      color: rgba(232, 201, 174, 0.6);
+      font-family: 'MuseoModerno', sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+    }
+
+    /* description */
+    .description {
+      margin-bottom: 2.5rem;
+    }
+
+    .description p {
+      margin-bottom: 1rem;
+      font-size: 0.97rem;
+      color: var(--text-body);
+    }
+
+    .description h2 {
+      font-size: 1.4rem;
+      margin: 1.8rem 0 0.8rem;
+      color: var(--navy-deep);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.4rem;
+    }
+
+    /* screenshots */
+    .screenshots-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .screenshots-row .shot {
+      aspect-ratio: 4/3;
+      border-radius: 6px;
+      background: var(--rose);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .screenshots-row .shot:hover { transform: scale(1.03); }
+
+    .screenshots-row .shot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* devlog */
+    .section-heading {
+      font-family: 'Habibi', serif;
+      font-size: 1.5rem;
+      color: var(--navy-deep);
+      margin-bottom: 1rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .devlog-list {
+      list-style: none;
+      margin-bottom: 2.5rem;
+    }
+
+    .devlog-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border);
+      gap: 1rem;
+    }
+
+    .devlog-list li a {
+      font-size: 0.95rem;
+      color: var(--mauve);
+      font-weight: 500;
+    }
+
+    .devlog-list li a:hover { color: var(--navy); }
+
+    .devlog-list li .post-date {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* comments */
+    .comment {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .comment .comment-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .comment .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--mauve);
+      flex-shrink: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: var(--cream);
+      font-weight: 600;
+    }
+
+    .comment .comment-meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+
+    .comment .username {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .comment .timestamp {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .comment .comment-body {
+      font-size: 0.9rem;
+      color: var(--text-body);
+    }
+
+    .comment-reply {
+      margin-left: 2rem;
+      background: rgba(123, 113, 145, 0.07);
+    }
+
+    /* ── RIGHT COL ──────────────────────────────── */
+    .right-col {}
+
+    /* download / price panel */
+    .buy-panel {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .btn-download {
+      display: block;
+      width: 100%;
+      padding: 0.85rem 1.5rem;
+      background: var(--navy-deep);
+      color: var(--blush);
+      font-family: 'MuseoModerno', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      text-align: center;
+      transition: background 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-download:hover {
+      background: var(--mauve);
+      color: var(--cream);
+      text-decoration: none;
+    }
+
+    .buy-panel .price-note {
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* downloads list */
+    .download-files {
+      margin-top: 1rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+      text-align: left;
+    }
+
+    .download-files p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .file-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .file-row .file-name {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--navy);
+    }
+
+    .file-row .file-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* info panel */
+    .info-panel {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .info-panel-toggle {
+      padding: 0.85rem 1.25rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--navy);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--panel-bg);
+      border: none;
+      width: 100%;
+      font-family: 'MuseoModerno', sans-serif;
+      letter-spacing: 0.03em;
+    }
+
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    .info-table tr td {
+      padding: 0.5rem 1.25rem;
+      border-top: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .info-table tr td:first-child {
+      color: var(--text-muted);
+      white-space: nowrap;
+      width: 38%;
+    }
+
+    .info-table tr td:last-child {
+      color: var(--text-body);
+    }
+
+    .info-table a {
+      color: var(--mauve);
+    }
+
+    /* rating stars */
+    .stars {
+      color: var(--rose);
+      letter-spacing: 1px;
+      font-size: 1rem;
+    }
+
+    /* action buttons (sidebar) */
+    .action-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 1rem;
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: var(--navy);
+      font-family: 'MuseoModerno', sans-serif;
+      cursor: pointer;
+      transition: background 0.12s ease;
+      text-decoration: none;
+    }
+
+    .action-btn:hover {
+      background: rgba(123, 113, 145, 0.12);
+      text-decoration: none;
+      color: var(--navy-deep);
+    }
+
+    .action-btn svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      stroke: var(--mauve);
+    }
+
+    /* social links */
+    .social-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--mauve);
+    }
+
+    /* ── FOOTER ─────────────────────────────────── */
+    .page-footer {
+      margin-top: 3rem;
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      max-width: 1040px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .page-footer a { color: var(--text-muted); }
+    .page-footer a:hover { color: var(--mauve); text-decoration: none; }
+    .page-footer .dot { opacity: 0.4; }
+
+    /* ── DECORATIVE RULE ────────────────────────── */
+    .ornament {
+      text-align: center;
+      color: var(--rose);
+      opacity: 0.5;
+      font-size: 1rem;
+      letter-spacing: 0.4em;
+      margin: 1.5rem 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── TOP NAV ───────────────────────────────────── -->
+<header class="page-header">
+  <span class="logo">itch.io</span>
+  <nav>
+    <a href="#">Browse</a>
+    <a href="#">Jams</a>
+    <a href="#">Dashboard</a>
+    <a href="#">Community</a>
+  </nav>
+</header>
+
+<!-- ── GAME BANNER ───────────────────────────────── -->
+<div class="game-banner">
+  <!-- Replace src with your actual cover GIF or image -->
+  <img
+    class="cover-image"
+    src="YOUR_COVER_IMAGE_URL_HERE"
+    alt="Your Game Title cover art"
+    onerror="this.style.background='linear-gradient(135deg, #7B7191 0%, #C4A5A8 50%, #E8C9AE 100%)'"
+  />
+</div>
+
+<!-- ── MAIN ──────────────────────────────────────── -->
+<main class="wrapper" id="maincontent">
+
+  <!-- LEFT COLUMN -->
+  <div class="left-col">
+
+    <div class="game-title-row">
+      <h1>Your Game Title</h1>
+      <p class="tagline">A short punchy tagline goes here — what makes this game special?</p>
+      <p class="author-line">By <a href="#">Your Studio Name</a></p>
+    </div>
+
+    <!-- Game embed (replace placeholder with actual iframe when published) -->
+    <div class="game-embed-placeholder" onclick="this.innerHTML='<iframe src=\'YOUR_GAME_URL_HERE\' style=\'width:100%;height:100%;border:none;\' allowfullscreen></iframe>'">
+      <div class="play-btn">
+        <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </div>
+      <span>Click to play in browser</span>
+    </div>
+
+    <!-- Screenshots -->
+    <div class="screenshots-row">
+      <!-- Replace these with your actual screenshot images -->
+      <div class="shot">
+        <img src="YOUR_SCREENSHOT_1_URL" alt="Screenshot 1" onerror="this.style.display='none'"/>
+      </div>
+      <div class="shot">
+        <img src="YOUR_SCREENSHOT_2_URL" alt="Screenshot 2" onerror="this.style.display='none'"/>
+      </div>
+      <div class="shot">
+        <img src="YOUR_SCREENSHOT_3_URL" alt="Screenshot 3" onerror="this.style.display='none'"/>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="description">
+      <div class="ornament">— ✦ —</div>
+
+      <p>
+        Write your main game description here. Tell players what this game is about, what
+        makes the mechanic special, and why they should play it. Keep it punchy and exciting.
+      </p>
+
+      <p>
+        More details here — controls, story context, anything else worth sharing. You can
+        add as many paragraphs as you like.
+      </p>
+
+      <h2>How to Play</h2>
+      <p>Explain your controls and core mechanic here.</p>
+
+      <h2>Follow My Work</h2>
+      <div class="social-links">
+        <a href="https://bsky.app/profile/YOURHANDLE.bsky.social">🦋 Bluesky — @YOURHANDLE.bsky.social</a>
+        <a href="https://discord.gg/YOURINVITE">🎮 Discord — Join the server</a>
+      </div>
+
+      <div class="ornament">— ✦ —</div>
+
+      <h2>Credits</h2>
+      <p>
+        Music — <a href="#">Artist Name</a><br/>
+        Sound effects — <a href="#">Source Name</a><br/>
+        Special thanks — everyone who played and gave feedback
+      </p>
+    </div>
+
+    <!-- Development log -->
+    <h2 class="section-heading">Development log</h2>
+    <ul class="devlog-list">
+      <li>
+        <a href="#">Post-jam patch — bug fixes and polish</a>
+        <span class="post-date">Aug 08, 2025</span>
+      </li>
+      <li>
+        <a href="#">Add another devlog entry here</a>
+        <span class="post-date">Aug 03, 2025</span>
+      </li>
+    </ul>
+
+    <!-- Comments -->
+    <h2 class="section-heading">Comments</h2>
+
+    <div class="comment">
+      <div class="comment-header">
+        <div class="avatar">U1</div>
+        <div class="comment-meta">
+          <span class="username">PlayerName</span>
+          <span class="timestamp">Aug 10, 2025</span>
+        </div>
+      </div>
+      <p class="comment-body">
+        This is where player comments will appear. The layout mirrors itch.io's comment thread style.
+      </p>
+    </div>
+
+    <div class="comment comment-reply">
+      <div class="comment-header">
+        <div class="avatar" style="background: var(--navy);">YS</div>
+        <div class="comment-meta">
+          <span class="username">Your Studio Name</span>
+          <span class="timestamp">Aug 11, 2025 — Developer reply</span>
+        </div>
+      </div>
+      <p class="comment-body">
+        Developer replies get slightly indented and a different background to stand out.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="right-col">
+
+    <!-- Download / buy panel -->
+    <div class="buy-panel">
+      <a class="btn-download" href="#">Download Now</a>
+      <p class="price-note">Name your own price</p>
+
+      <div class="download-files">
+        <p>Available files:</p>
+        <div class="file-row">
+          <span class="file-name">GameTitle_Windows.zip</span>
+          <span class="file-meta">24 MB · Windows</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name">GameTitle_Mac.zip</span>
+          <span class="file-meta">26 MB · macOS</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info panel -->
+    <div class="info-panel">
+      <button class="info-panel-toggle">
+        More information <span>↓</span>
+      </button>
+      <table class="info-table">
+        <tbody>
+          <tr><td>Updated</td><td>Aug 08, 2025</td></tr>
+          <tr><td>Published</td><td>Aug 03, 2025</td></tr>
+          <tr><td>Status</td><td><a href="#">Released</a></td></tr>
+          <tr><td>Platforms</td><td><a href="#">HTML5</a>, <a href="#">Windows</a></td></tr>
+          <tr><td>Rating</td><td>
+            <span class="stars">★★★★★</span>
+            <span style="font-size:0.78rem; color:var(--text-muted);"> 4.8 (60 ratings)</span>
+          </td></tr>
+          <tr><td>Author</td><td><a href="#">Your Studio Name</a></td></tr>
+          <tr><td>Genre</td><td><a href="#">Puzzle</a></td></tr>
+          <tr><td>Made with</td><td><a href="#">Unity</a></td></tr>
+          <tr><td>Tags</td><td>
+            <a href="#">Game Jam</a>,
+            <a href="#">Pixel Art</a>,
+            <a href="#">Short</a>
+          </td></tr>
+          <tr><td>Content</td><td><a href="#">No generative AI</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Quick action links -->
+    <div class="action-links">
+      <a class="action-btn" href="#">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Rate this game
+      </a>
+      <a class="action-btn" href="#">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Add to collection
+      </a>
+      <a class="action-btn" href="#">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Comments
+      </a>
+      <a class="action-btn" href="#">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="22" height="18" rx="2" ry="2"/><line x1="6" y1="8" x2="18" y2="8"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="6" y1="16" x2="18" y2="16"/></svg>
+        Devlog
+      </a>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- ── FOOTER ─────────────────────────────────────── -->
+<footer class="page-footer">
+  <a href="#">itch.io</a>
+  <span class="dot">·</span>
+  <a href="#">View all by Your Studio</a>
+  <span class="dot">·</span>
+  <a href="#">Report</a>
+  <span class="dot">·</span>
+  <a href="#">Embed</a>
+  <span class="dot">·</span>
+  <span>Updated Aug 08, 2025</span>
+</footer>
+
+</body>
+</html>
