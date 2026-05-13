@@ -61,6 +61,7 @@ func enter_shop():
 func leave_shop():
   assert(current_state == "shop")
   _state.current = "start_round"
+  BoardCamera.inst.try_set_focus(Vector3.ZERO)
 
 func do_receive_points_fx():
   _sound_counter += 0.01
@@ -167,7 +168,6 @@ func _start_round(machine: CallableStateMachine, delta: float):
   
   BoardCamera.inst.map_size = GridManager.inst.size
   BoardCamera.inst.map_root = Vector3.ZERO
-  BoardCamera.inst.try_set_focus(Vector3.ZERO)
   
   _setup_executor(
     GridManager.inst.get_played_tiles(),

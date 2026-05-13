@@ -34,13 +34,15 @@ var _preview_highlighter := GridHighlights.new()
 
 var _original_hand_marker: Marker3D
 
-func notify_failed_move(target: Vector3i):
+func notify_failed_move(target: Vector3i, partial: bool):
+  var dist := 0.1 if partial else 0.75
+  
   var t = create_tween()
   
   t.tween_property(
     self,
     "global_position",
-    global_position.lerp(Vector3(target), 0.1),
+    global_position.lerp(Vector3(target), dist),
     0.2
   ).set_trans(Tween.TRANS_BACK)
   

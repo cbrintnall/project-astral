@@ -16,27 +16,30 @@ func cleanup():
 func check() -> bool:
   if tile.def.initiates:
     return false
-  
-  if attempts.get(target, Set.new()).count() <= 1:
-    return true
 
-  return false
+  return true
 
 func execute():
-  var prev = max_resolution_count
   max_resolution_count = maxi(max_resolution_count, _count)
   
-  # Keep track of the highest resolutions, for stat purposes
-  if max_resolution_count > prev:
-    print("new move resolution max, %d" % max_resolution_count)
+  var tile_over_claimed = attempts.get(target, Set.new()).count() > 1
   
+  if tile_over_claimed:
+    _try_defer_eval()
+    return
+    
   if not GridManager.inst.try_move(tile, target):
-    if _count < Constants.MAX_RESOLUTIONS_BEFORE_GIVE_UP:
-      _count += 1
-      context.register_resolution(self)
-    else:
-      tile.notify_failed_move(target)
-      print("%s failed to move" % tile.def.name)
+    _try_defer_eval()
   
 func undo():
   tile.stretcher.punch(10.0, 15.0)
+  
+func _try_defer_eval():
+  if _count < Constants.MAX_RESOLUTIONS_BEFORE_GIVE_UP:
+    _count += 1
+    context.register_resolution(self)
+  else:
+    tile.notify_failed_move(
+      target, 
+      GridManager.inst.has_tile(target)
+    )

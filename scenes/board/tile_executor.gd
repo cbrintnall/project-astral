@@ -17,6 +17,9 @@ var _end_timer := BetterTimer.new(1.0)
 var _remaining := []
 var _remaining_resolutions := TaskGroup.new()
 
+var _remaining_cleanup_resolutions := []
+var _resolution_cleanup := TaskGroup.new()
+
 func start():
   _execution_state.current = "start"
   _context.active_round = true
@@ -75,8 +78,9 @@ func _resolve_tiles(machine: CallableStateMachine, delta: float):
         _context.start_execution()
         for res: ResolutionCommand in next_group:
           _remaining_resolutions.run(res.run)
-          _remaining_resolutions.group_finished.connect(res.cleanup, CONNECT_ONE_SHOT)
-    else:
+    elif _remaining_cleanup_resolutions:
+      _resolution_cleanup.run(_remaining_cleanup_resolutions.pop_front().cleanup)
+    elif _resolution_cleanup.finished:
       if _end_timer.check(delta):
         if on_finish.is_valid():
           on_finish.call()

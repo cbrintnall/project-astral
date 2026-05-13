@@ -15,6 +15,8 @@ kanban-plugin: board
 - [ ] [[Create builds of tiles to make game less easy]]
 - [ ] Handle case where movement tries to "swap" tiles
 	#design
+- [ ] Add effect forging
+- [ ] Add tile rewards after turn ends
 
 
 ## Doin
