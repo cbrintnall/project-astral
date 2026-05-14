@@ -22,6 +22,7 @@ kanban-plugin: board
 - [ ] Add effect forging
 - [ ] Remove purchasing individual tiles from shop, add forging to shop
 - [ ] [[Add deadlock check in tile moves]]
+- [ ] Rifts need to auto-leave after 2 turns
 
 
 ## Doin

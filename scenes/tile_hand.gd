@@ -4,12 +4,6 @@ class_name TileHand
 const HAND_BUFFER_PX = 1.0
 
 static var inst: TileHand
-static var tiles = [
-  load("res://data/tiles/tile_basic_points.tres"),
-  load("res://data/tiles/tile_basic_multiply_area.tres"),
-  load("res://data/tiles/tile_basic_points_no_neighbors.tres"),
-  load("res://data/tiles/tile_high_point_tick.tres")
-]
 
 var _markers: Array:
   get:
@@ -20,6 +14,10 @@ func get_tile_count() -> int:
   
 func discard_hand():
   for marker in _markers:
+    if marker.get_child(0) is Tile:
+      var tile: Tile = marker.get_child(0)
+      if tile.def != null:
+        HandManager.inst.return_to_discard(tile.def)
     marker.queue_free()
     
   _markers = []
