@@ -33,7 +33,7 @@ func _handle_display(state: bool):
     _preview_command = null
     
 func _process(delta: float) -> void:
-  if not tile:
+  if tile == null:
     queue_free()
     set_process(false)
     return

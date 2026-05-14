@@ -13,14 +13,14 @@ noise = SubResource("FastNoiseLite_d4ysy")
 seamless = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o0vk5"]
-render_priority = 0
+render_priority = -1
 shader = ExtResource("2_0h2rq")
 shader_parameter/star_noise = SubResource("NoiseTexture2D_o0vk5")
 shader_parameter/clr_a = Color(0.28627452, 0.3019608, 0.49411765, 1)
 shader_parameter/clr_b = Color(0.54509807, 0.42745098, 0.6117647, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pmdnf"]
-render_priority = 0
+render_priority = -1
 shader = ExtResource("3_kgv4w")
 shader_parameter/star_noise = SubResource("NoiseTexture2D_o0vk5")
 shader_parameter/color = Color(0.59376603, 0.46657774, 0.6658394, 1)

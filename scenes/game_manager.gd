@@ -16,6 +16,9 @@ signal points_fx
 @export var default_cycle_tasks: Array[CycleEffect] = []
 @export var varied_cycle_tasks: Array[CycleEffect] = []
 
+@export var default_turn_tasks: Array[CycleEffect] = []
+@export var varied_turn_tasks: Array[CycleEffect] = []
+
 var current_score: int:
   get:
     return point_source.current
@@ -146,6 +149,7 @@ func _ready() -> void:
   )
   
 func _process(delta: float) -> void:
+  DebugDraw2D.debug_enabled = GameManager.debug
   var hovered_ui = get_viewport().gui_get_hovered_control().get_path() if get_viewport().gui_get_hovered_control() else "none"
   DebugDraw2D.begin_text_group("-=-=-=- Game -=-=-=-")
   DebugDraw2D.set_text("hovered control", hovered_ui)
@@ -178,7 +182,7 @@ func _start_round(machine: CallableStateMachine, delta: float):
       if Constants.CHOOSE_TILES_EACH_ROUND:
         UI.inst.choose_tiles.setup()
       var chosen_fx = []
-      chosen_fx.append_array(default_cycle_tasks)
+      chosen_fx.append_array(default_turn_tasks)
       # TODO: add varied tasks here as well
       for task: CycleEffect in chosen_fx:
         cycle_tasks.register(task.on_cycle_start)

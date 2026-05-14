@@ -7,42 +7,38 @@ var attempts := {}
 var tile: Tile
 var target: Vector3i
 
-var _count := 0
-
 func cleanup():
   if attempts.has(target):
     attempts[target].remove(tile)
 
-func check() -> bool:
+func check():
+  if state != ResolutionState.WAITING:
+    return
+  
   if not is_instance_valid(tile):
-    return false
+    state = ResolutionState.FAILED
+    return
   
   if tile.def.initiates:
-    return false
+    state = ResolutionState.FAILED
+    return
 
-  return true
-
-func execute():
-  max_resolution_count = maxi(max_resolution_count, _count)
+  if attempts.get(target, Set.new()).count() > 1:
+    state = ResolutionState.SHOULD_DEFER
+    return
   
-  var tile_over_claimed = attempts.get(target, Set.new()).count() > 1
-  
-  if tile_over_claimed:
-    _try_defer_eval()
+  if not GridManager.inst.could_place(tile, target):
+    state = ResolutionState.SHOULD_DEFER
     return
     
-  if not GridManager.inst.try_place_tile(tile, target):
-    _try_defer_eval()
-  else:
-    attempts.get(target, Set.new()).remove(target)
+  state = ResolutionState.CAN_EXECUTE
+
+func execute():
+  assert(GridManager.inst.try_place_tile(tile, target), "Check step failed but made it to execution")
   
 func undo():
   if is_instance_valid(tile):
     tile.stretcher.punch(10.0, 15.0)
   
-func _try_defer_eval():
-  if _count < Constants.MAX_RESOLUTIONS_BEFORE_GIVE_UP:
-    _count += 1
-    context.register_resolution(self)
-  else:
-    tile.notify_failed_move(target, attempts)
+func deadlock():
+  tile.notify_failed_move(target, attempts)

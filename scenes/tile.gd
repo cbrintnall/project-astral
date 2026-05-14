@@ -45,7 +45,15 @@ var _original_hand_marker: Marker3D
 func register_bind_command(cmd: TileBind, command: Command):
   _bind_commands.get_or_add(cmd, Set.new()).add(command)
 
+func notify_moved(src: Vector3i, dest: Vector3i):
+  _drain_bind(TileBind.POSITION)
+  
+  for effect: TileEffect in get_effects():
+    if effect.event == TileEffect.Event.ON_MOVE:
+      GameManager.inst.player_tasks.run(effect.run.bind(_get_effect_ctx(), GameManager.inst.active_execution))
+
 func notify_failed_move(target: Vector3i, attempt_data: Dictionary):
+  print("%s failed to move, blocking" % def.name)
   var partial = GridManager.inst.has_tile(target)
   var dist := 0.1 if partial else 0.75
   var collision_ctx := TileCollisionContext.new()
@@ -195,19 +203,6 @@ func execute(ctx: ExecutionContext, event: TileEffect.Event):
   for effect: TileEffect in get_effects():
     if effect.event == event:
       _remaining_effects.push_back(effect)
-      
-func set_move(src: Vector3i, new: Vector3i):
-  var t = create_tween()
-  t.tween_property(
-    self,
-    "global_position",
-    Vector3(new),
-    0.3
-  ).set_trans(Tween.TRANS_CUBIC)
-  
-  for effect: TileEffect in get_effects():
-    if effect.event == TileEffect.Event.ON_MOVE:
-      GameManager.inst.player_tasks.run(effect.run.bind(_get_effect_ctx(), GameManager.inst.active_execution))
 
 func unselect():
   if _preview_command:
@@ -224,6 +219,7 @@ func unselect():
       _selection = null
      
 func set_placed_at(_tile: Vector3i):
+  var prev_state = _state.current
   _state.current = "placed"
   for m in _meshes:
     m.layers = 1
@@ -237,17 +233,18 @@ func set_placed_at(_tile: Vector3i):
     "parent": self,
     "volume": 0.5
   })
-  
-  var place_executor := TileExecutor.new()
-  add_child(place_executor)
-  place_executor.tiles = [self]
-  place_executor.event = TileEffect.Event.ON_PLACE
-  
-  GameManager.inst.player_tasks.run(
-    func():
-      place_executor.start()
-      await place_executor.finished
-  )
+
+  if prev_state != "placed":
+    var place_executor := TileExecutor.new()
+    add_child(place_executor)
+    place_executor.tiles = [self]
+    place_executor.event = TileEffect.Event.ON_PLACE
+    
+    GameManager.inst.player_tasks.run(
+      func():
+        place_executor.start()
+        await place_executor.finished
+    )
       
 func register_effect(effect: TileEffect):
   _effects.push_back(effect)
@@ -344,11 +341,10 @@ func _load_def():
   (%Constellations as MultiMeshInstance3D).multimesh = (%Constellations as MultiMeshInstance3D).multimesh.duplicate()
   
 func _drain_bind(bind: TileBind):
-  while _bind_commands.get(bind, Set.new()).count() > 0:
-    var container = _bind_commands.get(bind, Set.new())
-    var next: Command = container.pop()
-    next.undo()
-    container.remove(next)
+  var remaining: Array = _bind_commands.get(bind, Set.new()).to_array()
+  _bind_commands[bind] = Set.new()
+  while remaining:
+    remaining.pop_front().undo()
   
 func _on_board_changed():
   var before = _constellation_satisfied

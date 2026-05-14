@@ -8,13 +8,10 @@ static var inst: UI
 @onready var cycle_label: Label = %CycleLabel
 @onready var help: Control = $Help
 @onready var system_label: RichTextLabel = %SystemMessage
-@onready var tile_display: MarginContainer = %TileDisplay
+@onready var draw_pile_display: MarginContainer = %HandTileDisplay
+@onready var discard_pile_display: = %DiscardTileDisplay
 @onready var tile_previewer: TileDataPreviewer = %TileData
 @onready var choose_tiles: ChooseTilesUI = $ChooseTiles
-
-var _tile_display_offset := 0.0
-var _tile_display_open := false
-var _tile_displays := {}
 
 func show_system_message(text: String, audio: AudioStream = null):
   system_label.text = text
@@ -36,12 +33,10 @@ func show_system_message(text: String, audio: AudioStream = null):
 
 func _ready() -> void:
   inst = self
-  
-  _tile_display_offset = tile_display.size.y
+
   system_label.self_modulate = Color.TRANSPARENT
 
   %TryAgainRoot.modulate.a = 0.0
-  %ToggleTileDisplay.pressed.connect(func(): _tile_display_open = not _tile_display_open)
   
   %Bluesky.pressed.connect(
     func():
@@ -116,18 +111,6 @@ func _process(delta: float) -> void:
     target_position -= %OverrideData.get_combined_pivot_offset()
     %OverrideData.global_position = %OverrideData.global_position.lerp(target_position, 0.3)
     %OverrideData.reset_size()
-  
-  for i in len(HandManager.inst.hand):
-    if not _tile_displays.has(i):
-      var next = load("res://scenes/ui/tile_preview.tscn").instantiate()
-      next.tile = HandManager.inst.hand[i]
-      %TilePreviewRoot.add_child(next)
-      _tile_displays[i]=next
-  
-  if _tile_display_open:
-    tile_display.anchor_top = lerp(tile_display.anchor_top, 0.2, 0.1)
-  else:
-    tile_display.anchor_top = lerp(tile_display.anchor_top, 1.0, 0.1)
   
   var play_text := "Play"
   

@@ -2,16 +2,24 @@
 extends Command
 class_name ResolutionCommand
 
+enum ResolutionState {
+  WAITING,
+  CAN_EXECUTE,
+  SHOULD_DEFER,
+  FAILED
+}
+
 var context: ExecutionContext
+var state := ResolutionState.WAITING
 
 func _init(ctx: ExecutionContext):
   context = ctx
 
 @abstract func cleanup()
-@abstract func check() -> bool
+@abstract func check()
 
-func run():
-  if check():
-    await execute()
-  else:
-    await undo()
+func reset():
+  state = ResolutionState.WAITING
+
+func deadlock():
+  pass

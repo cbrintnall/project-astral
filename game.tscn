@@ -19,7 +19,6 @@
 [ext_resource type="Shader" uid="uid://dlr12wnc408j" path="res://materials/shaders/position_indicator_shader.gdshader" id="11_7knny"]
 [ext_resource type="FontFile" uid="uid://bwa1eluxk04vt" path="res://assets/fonts/Habibi-Regular.ttf" id="11_215e1"]
 [ext_resource type="Script" uid="uid://b88mkbokfc4re" path="res://scenes/board_camera.gd" id="11_mfdv2"]
-[ext_resource type="PackedScene" uid="uid://bnqtmlp86jrw8" path="res://scenes/ui/tile_effect_display.tscn" id="12_7sc4i"]
 [ext_resource type="AudioStream" uid="uid://d4k6gbh8djvh1" path="res://audio/music/minijam_loop.ogg" id="12_hb5m1"]
 [ext_resource type="Shader" uid="uid://cbmhcoe13d8g4" path="res://materials/shaders/grid_backing_shader.gdshader" id="12_lc2xo"]
 [ext_resource type="Script" uid="uid://iq0mu5bomd0v" path="res://scenes/hand_manager.gd" id="13_hb5m1"]
@@ -52,10 +51,8 @@
 [ext_resource type="Resource" uid="uid://xqhsnxkqgont" path="res://data/tiles/tile_dead_end.tres" id="34_vuohh"]
 [ext_resource type="Resource" uid="uid://dkptkjfy2kbu0" path="res://data/tiles/tile_destruct.tres" id="35_3gvs5"]
 [ext_resource type="Resource" uid="uid://dnlw3hilgu7sj" path="res://data/tiles/tests/tile_move_down.tres" id="35_jo4nb"]
-[ext_resource type="Script" uid="uid://bh3gkpa4a7vv8" path="res://scenes/ui/tile_data_previewer.gd" id="36_0de7l"]
 [ext_resource type="Resource" uid="uid://dx2eq3q7x2bpo" path="res://data/tiles/tile_extra_turn.tres" id="36_mc3al"]
 [ext_resource type="Resource" uid="uid://dd6l3bd1seddo" path="res://data/tiles/tile_no_effects.tres" id="37_bqa6y"]
-[ext_resource type="Texture2D" uid="uid://c5n62lu3y6qfo" path="res://assets/ui/tile-name-background.png" id="37_eu6ph"]
 [ext_resource type="Resource" uid="uid://crq1m38ptm2en" path="res://data/tiles/tile_per_turn_area_multiplier.tres" id="38_du4n2"]
 [ext_resource type="Resource" uid="uid://d2mkxko8vyw8j" path="res://data/tiles/tile_cycle_reward.tres" id="38_ra4rb"]
 [ext_resource type="Resource" uid="uid://21sqhj42f5qn" path="res://data/tiles/tile_black_hole.tres" id="39_jo4nb"]
@@ -63,9 +60,10 @@
 [ext_resource type="Texture2D" uid="uid://dlmyj8km2qoyo" path="res://assets/ui/small-nine-patch-no-bottom.png" id="39_t46w6"]
 [ext_resource type="PackedScene" uid="uid://vxv80vfrjv71" path="res://scenes/ui/tile_preview.tscn" id="40_m28ev"]
 [ext_resource type="Resource" uid="uid://b627xyk02m145" path="res://data/tiles/tile_source_tile.tres" id="40_ple6s"]
-[ext_resource type="Texture2D" uid="uid://wtygyygsy5b3" path="res://assets/ui/test2.png" id="41_0de7l"]
 [ext_resource type="Shader" uid="uid://bi3dkwmqo5d3q" path="res://materials/shaders/grid_barrier_shader.gdshader" id="43_kq12w"]
 [ext_resource type="Texture2D" uid="uid://c3mk3f4rf4v27" path="res://assets/ui/blocked-nine-patch.png" id="50_avmo2"]
+[ext_resource type="PackedScene" uid="uid://b0sf5l21nejxn" path="res://scenes/ui/tile_data.tscn" id="55_jo4nb"]
+[ext_resource type="PackedScene" uid="uid://b0thg0yeu365q" path="res://scenes/ui/tile_display.tscn" id="57_jo4nb"]
 [ext_resource type="Script" uid="uid://dqesb21oc6arv" path="res://scenes/ui/choose_tiles.gd" id="60_56gn1"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0de7l"]
@@ -98,11 +96,11 @@ albedo_color = Color(1, 0.12156863, 1, 1)
 [sub_resource type="SphereMesh" id="SphereMesh_0de7l"]
 material = SubResource("StandardMaterial3D_0de7l")
 
-[sub_resource type="Resource" id="Resource_56gn1"]
+[sub_resource type="Resource" id="Resource_jo4nb"]
 script = ExtResource("5_jo4nb")
 metadata/_custom_type_script = "uid://yqxfojxum3as"
 
-[sub_resource type="Resource" id="Resource_vyqle"]
+[sub_resource type="Resource" id="Resource_56gn1"]
 script = ExtResource("6_avmo2")
 metadata/_custom_type_script = "uid://c6365ba3jmivv"
 
@@ -186,34 +184,12 @@ texture_margin_right = 32.0
 texture_margin_bottom = 32.0
 region_rect = Rect2(0, 0, 1024, 1024)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_eu6ph"]
-texture = ExtResource("37_eu6ph")
-texture_margin_left = 32.0
-texture_margin_top = 32.0
-texture_margin_right = 32.0
-texture_margin_bottom = 29.0
-region_rect = Rect2(0, 0, 960, 61)
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xfvwf"]
 texture = ExtResource("8_hve3p")
 texture_margin_left = 32.0
 texture_margin_top = 32.0
 texture_margin_right = 32.0
 texture_margin_bottom = 32.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_m28ev"]
-texture = ExtResource("39_t46w6")
-texture_margin_left = 32.0
-texture_margin_top = 32.0
-texture_margin_right = 32.0
-region_rect = Rect2(0, 0, 1024, 1024)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_87ddb"]
-texture = ExtResource("41_0de7l")
-texture_margin_left = 16.0
-texture_margin_top = 16.0
-texture_margin_right = 16.0
-region_rect = Rect2(0, 0, 32, 40)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7knny"]
 shader = ExtResource("28_dhpj7")
@@ -373,7 +349,7 @@ camera = NodePath("../CameraArm/Camera3D")
 selection_svp = NodePath("../TileDisplayViewport/MarginContainer/SubViewportContainer/SubViewport")
 enemy_tile_container = NodePath("../EnemyTileContainer")
 light = NodePath("../DirectionalLight3D")
-default_cycle_tasks = Array[ExtResource("4_ple6s")]([SubResource("Resource_56gn1"), SubResource("Resource_vyqle")])
+default_turn_tasks = Array[ExtResource("4_ple6s")]([SubResource("Resource_jo4nb"), SubResource("Resource_56gn1")])
 
 [node name="ShopManager" type="Node" parent="." unique_id=1207696944]
 script = ExtResource("3_boyg6")
@@ -405,7 +381,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4, 0
 
 [node name="GridManager" type="Node" parent="." unique_id=735757972]
 script = ExtResource("2_feb5d")
-size = Vector2i(24, 24)
+size = Vector2i(20, 20)
 
 [node name="Gridcast" type="Node3D" parent="GridManager" unique_id=1771723510]
 script = ExtResource("3_j5wjh")
@@ -684,59 +660,8 @@ theme_override_font_sizes/font_size = 64
 theme_override_styles/normal = SubResource("StyleBoxTexture_mfdv2")
 flat = true
 
-[node name="TileData" type="MarginContainer" parent="UI" unique_id=1551545257]
+[node name="TileData" parent="UI" unique_id=1217769138 instance=ExtResource("55_jo4nb")]
 unique_name_in_owner = true
-anchors_preset = -1
-anchor_left = 0.01
-anchor_top = 0.242
-anchor_right = 0.01
-anchor_bottom = 0.736
-grow_vertical = 2
-script = ExtResource("36_0de7l")
-
-[node name="MarginContainer" type="MarginContainer" parent="UI/TileData" unique_id=1567435387]
-custom_minimum_size = Vector2(400, 0)
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/TileData/MarginContainer" unique_id=1614693962]
-layout_mode = 2
-theme_override_constants/separation = -2
-
-[node name="MarginContainer" type="MarginContainer" parent="UI/TileData/MarginContainer/VBoxContainer" unique_id=1310165273]
-layout_mode = 2
-
-[node name="Panel" type="Panel" parent="UI/TileData/MarginContainer/VBoxContainer/MarginContainer" unique_id=59150819]
-self_modulate = Color(0.9490196, 0.827451, 0.67058825, 1)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_eu6ph")
-
-[node name="TileTitle" type="RichTextLabel" parent="UI/TileData/MarginContainer/VBoxContainer/MarginContainer" unique_id=533354277]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_fonts/normal_font = ExtResource("11_215e1")
-theme_override_font_sizes/normal_font_size = 48
-bbcode_enabled = true
-text = "Sunlight"
-fit_content = true
-scroll_active = false
-autowrap_mode = 0
-horizontal_alignment = 1
-
-[node name="EffectsDisplayRoot" type="VBoxContainer" parent="UI/TileData/MarginContainer/VBoxContainer" unique_id=1328159812]
-unique_name_in_owner = true
-show_behind_parent = true
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="TileEffectDisplay" parent="UI/TileData/MarginContainer/VBoxContainer/EffectsDisplayRoot" unique_id=1392376793 instance=ExtResource("12_7sc4i")]
-layout_mode = 2
-
-[node name="TileEffectDisplay2" parent="UI/TileData/MarginContainer/VBoxContainer/EffectsDisplayRoot" unique_id=1926668300 instance=ExtResource("12_7sc4i")]
-layout_mode = 2
-
-[node name="TileEffectDisplay3" parent="UI/TileData/MarginContainer/VBoxContainer/EffectsDisplayRoot" unique_id=149793436 instance=ExtResource("12_7sc4i")]
-layout_mode = 2
 
 [node name="Help" type="MarginContainer" parent="UI" unique_id=490620865]
 visible = false
@@ -885,82 +810,22 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 flat = true
 
-[node name="TileDisplay" type="MarginContainer" parent="UI" unique_id=1548669992]
+[node name="HandTileDisplay" parent="UI" unique_id=1072643956 instance=ExtResource("57_jo4nb")]
 unique_name_in_owner = true
-anchors_preset = -1
-anchor_left = 0.85
-anchor_top = 0.2
-anchor_right = 0.85
-anchor_bottom = 1.0
-offset_right = 60.0
+offset_left = 101.0
+offset_top = 4.0
+offset_right = 281.0
+offset_bottom = 4.0
+category = "Hand"
 
-[node name="Panel" type="Panel" parent="UI/TileDisplay" unique_id=1526236329]
-visible = false
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_m28ev")
-
-[node name="Panel2" type="Panel" parent="UI/TileDisplay" unique_id=969989752]
-self_modulate = Color(0.15294118, 0.15294118, 0.26666668, 1)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_87ddb")
-
-[node name="MarginContainer" type="MarginContainer" parent="UI/TileDisplay" unique_id=1199703287]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 32
-theme_override_constants/margin_right = 12
-
-[node name="ScrollContainer" type="ScrollContainer" parent="UI/TileDisplay/MarginContainer" unique_id=646492741]
-layout_mode = 2
-horizontal_scroll_mode = 5
-
-[node name="TilePreviewRoot" type="GridContainer" parent="UI/TileDisplay/MarginContainer/ScrollContainer" unique_id=651857996]
+[node name="DiscardTileDisplay" parent="UI" unique_id=2033615560 instance=ExtResource("57_jo4nb")]
 unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-columns = 2
-
-[node name="TilePreview" parent="UI/TileDisplay/MarginContainer/ScrollContainer/TilePreviewRoot" unique_id=1920415334 instance=ExtResource("40_m28ev")]
-layout_mode = 2
-
-[node name="TilePreview2" parent="UI/TileDisplay/MarginContainer/ScrollContainer/TilePreviewRoot" unique_id=983785570 instance=ExtResource("40_m28ev")]
-layout_mode = 2
-
-[node name="TilePreview3" parent="UI/TileDisplay/MarginContainer/ScrollContainer/TilePreviewRoot" unique_id=335395364 instance=ExtResource("40_m28ev")]
-layout_mode = 2
-
-[node name="TilePreview4" parent="UI/TileDisplay/MarginContainer/ScrollContainer/TilePreviewRoot" unique_id=704352816 instance=ExtResource("40_m28ev")]
-layout_mode = 2
-
-[node name="TilePreview5" parent="UI/TileDisplay/MarginContainer/ScrollContainer/TilePreviewRoot" unique_id=1785977056 instance=ExtResource("40_m28ev")]
-layout_mode = 2
-
-[node name="TilePreview6" parent="UI/TileDisplay/MarginContainer/ScrollContainer/TilePreviewRoot" unique_id=1937653291 instance=ExtResource("40_m28ev")]
-layout_mode = 2
-
-[node name="TilePreview7" parent="UI/TileDisplay/MarginContainer/ScrollContainer/TilePreviewRoot" unique_id=233409886 instance=ExtResource("40_m28ev")]
-layout_mode = 2
-
-[node name="TilePreview8" parent="UI/TileDisplay/MarginContainer/ScrollContainer/TilePreviewRoot" unique_id=1663422580 instance=ExtResource("40_m28ev")]
-layout_mode = 2
-
-[node name="TilePreview9" parent="UI/TileDisplay/MarginContainer/ScrollContainer/TilePreviewRoot" unique_id=466798841 instance=ExtResource("40_m28ev")]
-layout_mode = 2
-
-[node name="Control" type="Control" parent="UI/TileDisplay" unique_id=976012856]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="ToggleTileDisplay" type="Button" parent="UI/TileDisplay/Control" unique_id=1712090486]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 50.0
-offset_top = -46.0
-offset_right = 110.0
-offset_bottom = -11.0
-focus_mode = 0
-text = "Toggle"
+offset_left = -103.0
+offset_top = 4.0
+offset_right = 77.0
+offset_bottom = 4.0
+category = "Discard"
+deck = 1
 
 [node name="ChooseTiles" type="MarginContainer" parent="UI" unique_id=1540384907]
 anchors_preset = -1

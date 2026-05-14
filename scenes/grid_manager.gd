@@ -91,27 +91,6 @@ func try_claim_random_open_tile() -> Vector3i:
 
 func is_in_bounds(pos: Vector3i) -> bool:
   return _bounds.has_point(Vector2i(pos.x, pos.z))
-
-func try_move(tile: Tile, target: Vector3i) -> bool:
-  if has_tile(target):
-    return false
-    
-  assert(_tiles.has(tile))
-    
-  var original = get_tile_loc(tile)
-  _tiles.erase(tile)
-  _placements.erase(original)
-  _open_tiles.add(original)
-
-  _tiles[tile] = target
-  _placements[target] = tile
-  _open_tiles.remove(target)
-  
-  tile.set_move(original, target)
-  
-  _watch_tile(tile)
-  
-  return true
   
 func could_place_tile(loc: Vector3i) -> bool:
   return not get_tile_at(loc) and is_in_bounds(loc)
@@ -146,10 +125,18 @@ func map_to_global(tile: Vector3i) -> Vector3:
 
 func has_tile(loc: Vector3i) -> bool:
   return get_tile_at(loc) != null
+  
+func could_place(tile: Tile, pos: Vector3i) -> bool:
+  return not _placements.has(pos) and is_in_bounds(pos)
 
 func try_place_tile(tile: Tile, pos: Vector3i) -> bool:
   if _placements.has(pos): return false
   if not is_in_bounds(pos): return false
+  
+  var src := Vector3i.MIN
+  var on_board := _tiles.has(tile) 
+  if on_board:
+    src = _tiles[tile]
   
   _placements[pos] = tile
   _tiles[tile] = pos
@@ -158,6 +145,8 @@ func try_place_tile(tile: Tile, pos: Vector3i) -> bool:
   NodeUtils.force_child(grid_map, tile)
   tile.global_position = pos
   tile.set_placed_at(pos)
+  if on_board:
+    tile.notify_moved(src, pos)
   _tiles_dirty = true
   _watch_tile(tile)
   

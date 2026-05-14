@@ -7,7 +7,6 @@ kanban-plugin: board
 ## BUGS
 
 - [ ] Dawn indicator paths should only show on tiles that will give or take dawn
-- [ ] Area multiply effect doesn't move areas when the tile itself is moved
 - [ ] Area indicator became an arrow
 - [ ] Weird issue where tile cache's immediately attempt to free(), but nothing actually happens besides errors in console.
 
@@ -23,12 +22,13 @@ kanban-plugin: board
 - [ ] Remove purchasing individual tiles from shop, add forging to shop
 - [ ] [[Add deadlock check in tile moves]]
 - [ ] Rifts need to auto-leave after 2 turns
+- [ ] Rifts need more tile-esque art
+- [ ] [[Create overview UI for round to make decisions easier post round (tiles destroyed, max points gained from tile, min points, friendly tiles active enemy tiles active)]]
 
 
 ## Doin
 
 - [ ] Hovering a tile needs to also show what stacks of debuffs (and buffs) it has
-- [ ] Add tile movement binding commands
 
 
 ## DONE
@@ -39,6 +39,8 @@ kanban-plugin: board
 - [ ] Add tile rewards after turn ends
 - [ ] Add cycle effect where tiles spawn on cycle start
 - [ ] Add tile lifetime binding commands
+- [ ] Area multiply effect doesn't move areas when the tile itself is moved
+- [ ] Add tile movement binding commands
 
 
 

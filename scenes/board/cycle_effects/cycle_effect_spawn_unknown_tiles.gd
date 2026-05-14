@@ -1,15 +1,16 @@
 extends CycleEffect
 class_name CycleEffectSpawnUnknownTiles
 
-@export var amount := 4
+@export var range_given := Vector2i(1, 2)
 
 func on_cycle_end():
   pass
   
 func on_cycle_start():
   var claimed := []
+  var amount := randi_range(range_given.x, range_given.y)
   
-  for i in randi_range(1,2):
+  for i in amount:
     var spot = GridManager.inst.try_claim_random_open_tile()
     if spot != Vector3i.MIN:
       claimed.push_back(spot)

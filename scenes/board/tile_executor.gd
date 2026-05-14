@@ -42,10 +42,11 @@ func _start(machine: CallableStateMachine, _delta: float):
   
 func _process_tiles(machine: CallableStateMachine, delta: float):
   if tiles:
+    if not is_instance_valid(tiles.front()): 
+      tiles.pop_front()
+      return
+    
     var next: Tile = tiles.pop_front()
-    
-    if not is_instance_valid(next): return
-    
     var fx = next.get_effects().filter(func(effect: TileEffect): return effect.event == event)
     
     if not fx: return
@@ -77,10 +78,31 @@ func _resolve_tiles(machine: CallableStateMachine, delta: float):
     if _context.resolutions:
       # restart execution in case resolution itself pushes more resolutions
       var next_group: Array = _context.resolutions.pop_front()
-      if next_group:
-        _context.start_execution()
-        for res: ResolutionCommand in next_group:
-          _remaining_resolutions.run(res.run)
+      
+      if not next_group:
+        return
+      
+      _context.start_execution()
+      for command: ResolutionCommand in next_group:
+        command.check()
+      var deadlocked = next_group.all(func(command: ResolutionCommand): return command.state == ResolutionCommand.ResolutionState.SHOULD_DEFER)
+      if deadlocked:
+        for command: ResolutionCommand in next_group:
+          _remaining_resolutions.run(command.deadlock)
+      else:
+        var deferrals = []
+        for command: ResolutionCommand in next_group:
+          match command.state:
+            ResolutionCommand.ResolutionState.FAILED:
+              _remaining_resolutions.run(command.undo)
+              _remaining_cleanup_resolutions.push_back(command)
+            ResolutionCommand.ResolutionState.CAN_EXECUTE:
+              _remaining_resolutions.run(command.execute)
+              _remaining_cleanup_resolutions.push_back(command)
+            ResolutionCommand.ResolutionState.SHOULD_DEFER:
+              deferrals.push_back(command)
+              command.reset()
+        _context.resolutions.push_front(deferrals)
     elif _remaining_cleanup_resolutions:
       _resolution_cleanup.run(_remaining_cleanup_resolutions.pop_front().cleanup)
     elif _resolution_cleanup.finished:
