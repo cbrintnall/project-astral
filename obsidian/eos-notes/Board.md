@@ -17,7 +17,6 @@ kanban-plugin: board
 - [ ] Handle case where movement tries to "swap" tiles
 	#design
 - [ ] Add chipped build
-- [ ] Add move build
 - [ ] Add effect forging
 - [ ] Remove purchasing individual tiles from shop, add forging to shop
 - [ ] [[Add deadlock check in tile moves]]

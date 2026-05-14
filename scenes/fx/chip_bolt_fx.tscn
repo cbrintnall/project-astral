@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://br85tv0pvq7bh"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_absyv"]
+
+[node name="ChipBoltFx" type="Node3D" unique_id=1199412752]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1751430497]
+mesh = SubResource("SphereMesh_absyv")

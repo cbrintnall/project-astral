@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://c2r2d8kyd66jf"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_ullcy"]
+[ext_resource type="Resource" uid="uid://23sejm0wxvux" path="res://data/targets/tile_target_surrounding.tres" id="2_0d5cr"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_8xn0w"]
+[ext_resource type="Script" uid="uid://d382tt1tvmdrt" path="res://scenes/tiles/effects/tile_effect_chip.gd" id="2_h40wb"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="4_0d5cr"]
+[ext_resource type="Script" uid="uid://dlil8lhl4obst" path="res://scenes/tiles/effects/destroy/tile_effect_destroy_marked.gd" id="4_rfcxm"]
+
+[sub_resource type="Resource" id="Resource_0d5cr"]
+script = ExtResource("2_h40wb")
+amount = null
+main_target = ExtResource("2_0d5cr")
+metadata/_custom_type_script = "uid://d382tt1tvmdrt"
+
+[sub_resource type="Resource" id="Resource_iyvx4"]
+script = ExtResource("4_0d5cr")
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_lfisu"]
+script = ExtResource("4_rfcxm")
+event = 4
+main_target = SubResource("Resource_iyvx4")
+metadata/_custom_type_script = "uid://dlil8lhl4obst"
+
+[resource]
+script = ExtResource("2_8xn0w")
+name = "Chaotic"
+effects = Array[ExtResource("1_ullcy")]([SubResource("Resource_0d5cr"), SubResource("Resource_lfisu")])
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"

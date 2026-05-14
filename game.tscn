@@ -50,6 +50,7 @@
 [ext_resource type="Resource" uid="uid://bq6a5c62bdjqw" path="res://data/tiles/tests/tile_move_test.tres" id="33_vuohh"]
 [ext_resource type="Resource" uid="uid://xqhsnxkqgont" path="res://data/tiles/tile_dead_end.tres" id="34_vuohh"]
 [ext_resource type="Resource" uid="uid://dkptkjfy2kbu0" path="res://data/tiles/tile_destruct.tres" id="35_3gvs5"]
+[ext_resource type="Resource" uid="uid://c2r2d8kyd66jf" path="res://data/tiles/chip/tile_def_chip_surrounding.tres" id="35_56gn1"]
 [ext_resource type="Resource" uid="uid://dnlw3hilgu7sj" path="res://data/tiles/tests/tile_move_down.tres" id="35_jo4nb"]
 [ext_resource type="Resource" uid="uid://dx2eq3q7x2bpo" path="res://data/tiles/tile_extra_turn.tres" id="36_mc3al"]
 [ext_resource type="Resource" uid="uid://dd6l3bd1seddo" path="res://data/tiles/tile_no_effects.tres" id="37_bqa6y"]
@@ -381,7 +382,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4, 0
 
 [node name="GridManager" type="Node" parent="." unique_id=735757972]
 script = ExtResource("2_feb5d")
-size = Vector2i(20, 20)
+size = Vector2i(10, 10)
 
 [node name="Gridcast" type="Node3D" parent="GridManager" unique_id=1771723510]
 script = ExtResource("3_j5wjh")
@@ -446,7 +447,7 @@ resources = Array[Resource]([ExtResource("23_082n1"), ExtResource("22_xfvwf"), E
 
 [node name="AllTileContainer" type="Node" parent="." unique_id=439354896]
 script = ExtResource("32_87ddb")
-resources = Array[Resource]([ExtResource("23_082n1"), ExtResource("22_xfvwf"), ExtResource("24_082n1"), ExtResource("35_jo4nb"), ExtResource("33_mc3al"), ExtResource("33_3gvs5"), ExtResource("33_vuohh"), ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("39_jo4nb"), ExtResource("33_ib7ph"), ExtResource("19_4v2jo"), ExtResource("38_ra4rb"), ExtResource("34_vuohh"), ExtResource("35_3gvs5"), ExtResource("19_xex6t"), ExtResource("36_mc3al"), ExtResource("21_l1i01"), ExtResource("15_vaj68"), ExtResource("37_bqa6y"), ExtResource("38_du4n2"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("39_ra4rb"), ExtResource("22_aa0lp"), ExtResource("40_ple6s")])
+resources = Array[Resource]([ExtResource("35_56gn1"), ExtResource("23_082n1"), ExtResource("22_xfvwf"), ExtResource("24_082n1"), ExtResource("35_jo4nb"), ExtResource("33_mc3al"), ExtResource("33_3gvs5"), ExtResource("33_vuohh"), ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("39_jo4nb"), ExtResource("33_ib7ph"), ExtResource("19_4v2jo"), ExtResource("38_ra4rb"), ExtResource("34_vuohh"), ExtResource("35_3gvs5"), ExtResource("19_xex6t"), ExtResource("36_mc3al"), ExtResource("21_l1i01"), ExtResource("15_vaj68"), ExtResource("37_bqa6y"), ExtResource("38_du4n2"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("39_ra4rb"), ExtResource("22_aa0lp"), ExtResource("40_ple6s")])
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=946420198]
 script = ExtResource("8_iotsf")

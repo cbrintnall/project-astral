@@ -22,6 +22,7 @@ var default_state := "selecting"
 var stat := StatStore.new()
 var placed := false
 var constellation: ConstellationDef
+var health: int = 0
 
 var _state := CallableStateMachine.new()
 var _mouse_entered := false
@@ -292,6 +293,7 @@ func _notification(what: int) -> void:
       push_warning("tried to free %s, but not via destroy, use destroy() instead!" % get_path())
 
 func _ready() -> void:
+  health = stat.get_value(preload("res://data/stats/stat_starter_health.tres"))
   _meshes = NodeUtils.get_nodes_with_predicate(self, func(node): return node is MeshInstance3D)
   _face_mesh = NodeUtils.find_child_with_predicate(
     self, 
@@ -392,6 +394,19 @@ func _on_stat_changed(changed: StatDef):
         var has_debuff = get_effects().any(func(effect: TileEffect): return effect == preload("res://data/effects/effect_destroy_from_wrath.tres"))
         if not has_debuff:
           register_effect(preload("res://data/effects/effect_destroy_from_wrath.tres"))
+    Constants.chip:
+      if stat.get_value(Constants.chip) >= stat.get_value(Constants.defense):
+        health -= 1
+        stretcher.punch(5.0, 10.0)
+        Springer.data[stretcher]["rotation"]["velocity"] = Utils.random_unit_sphere() * 25.0
+        AudioManager3d.play({
+          "stream": preload("res://audio/crack-tile.ogg"),
+          "pitch_variance": 0.1,
+          "parent": self
+        })
+
+      if health <= 0:
+        destroy()
 
 func _get_effect_ctx() -> EffectContext:
   var ctx := EffectContext.new()

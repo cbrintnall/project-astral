@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatDef" format=3 uid="uid://83v7a63fx3g2"]
+
+[ext_resource type="Script" uid="uid://bemrh2m32ehhl" path="res://otterlib/resources/stat_def.gd" id="1_au3m5"]
+
+[resource]
+script = ExtResource("1_au3m5")
+name = "Defense"
+description = "Defends against chip damage."
+base_value = 0.0
+metadata/_custom_type_script = "uid://bemrh2m32ehhl"

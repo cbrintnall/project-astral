@@ -3,6 +3,8 @@ class_name Constants
 
 static var dawn_provided := preload("res://data/stats/stat_dawn_given.tres")
 static var wrath := preload("res://data/stats/stat_wrath.tres")
+static var chip := preload("res://data/stats/stat_chip.tres")
+static var defense := preload("res://data/stats/stat_defense.tres")
 
 const TURNS_PER_SCORE = 3
 const DEFAULT_HAND_SIZE = 5
