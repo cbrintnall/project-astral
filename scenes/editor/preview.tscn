@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://cjj014psj3hk5"]
+
+[ext_resource type="Shader" uid="uid://bwvtcdhd0hfny" path="res://materials/shaders/grid_shader.gdshader" id="1_8dc35"]
+[ext_resource type="Shader" uid="uid://cbmhcoe13d8g4" path="res://materials/shaders/grid_backing_shader.gdshader" id="2_bg1ie"]
+[ext_resource type="Shader" uid="uid://bi3dkwmqo5d3q" path="res://materials/shaders/grid_barrier_shader.gdshader" id="3_d4ysy"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_80nbo"]
+noise_type = 2
+frequency = 0.0156
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bx5xx"]
+generate_mipmaps = false
+noise = SubResource("FastNoiseLite_80nbo")
+seamless = true
+seamless_blend_skirt = 0.65
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e2o6t"]
+render_priority = 0
+shader = ExtResource("1_8dc35")
+shader_parameter/noise = SubResource("NoiseTexture2D_bx5xx")
+shader_parameter/line_width = 0.010000000475
+shader_parameter/visual_grid_size = 1.0
+shader_parameter/line_color = Color(0.9843137, 0.9607843, 0.9372549, 1)
+shader_parameter/fill_color = Color(0, 0, 0, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_o0vk5"]
+material = SubResource("ShaderMaterial_e2o6t")
+size = Vector2(5000, 5000)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_lc2xo"]
+noise_type = 2
+frequency = 0.1483
+fractal_octaves = 1
+fractal_lacunarity = 0.0
+fractal_gain = 0.0
+fractal_weighted_strength = 1.0
+fractal_ping_pong_strength = 0.0
+cellular_jitter = 0.2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pmdnf"]
+noise = SubResource("FastNoiseLite_lc2xo")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iotsf"]
+render_priority = 0
+shader = ExtResource("2_bg1ie")
+shader_parameter/clr_a = Color(0.9490196, 0.827451, 0.67058825, 1)
+shader_parameter/clr_b = Color(0.15294118, 0.15294118, 0.26666668, 1)
+shader_parameter/base_edge = 0.1
+shader_parameter/noise = SubResource("NoiseTexture2D_pmdnf")
+
+[sub_resource type="QuadMesh" id="QuadMesh_sd3n6"]
+material = SubResource("ShaderMaterial_iotsf")
+size = Vector2(5000, 5000)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_kq12w"]
+noise_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_705c1"]
+noise = SubResource("FastNoiseLite_kq12w")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t46w6"]
+render_priority = 0
+shader = ExtResource("3_d4ysy")
+shader_parameter/border_margin = 0.0
+shader_parameter/mist_margin = 3.0
+shader_parameter/color = Color(0.15294118, 0.15294118, 0.26666668, 1)
+shader_parameter/base_color = Color(0, 0, 0, 1)
+shader_parameter/noise = SubResource("NoiseTexture2D_705c1")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0r16l"]
+material = SubResource("ShaderMaterial_t46w6")
+size = Vector2(5000, 5000)
+orientation = 2
+
+[sub_resource type="Environment" id="Environment_8dc35"]
+tonemap_mode = 3
+tonemap_white = 2.0
+ssao_enabled = true
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 0.76
+
+[node name="Preview" type="Node3D" unique_id=1648037897]
+
+[node name="GridVisual" type="MeshInstance3D" parent="." unique_id=72769842]
+transform = Transform3D(1, 0, 0, 0, -5.9604645e-08, 1, 0, -1, -5.9604645e-08, 0, 0, 0)
+mesh = SubResource("QuadMesh_o0vk5")
+
+[node name="BackgroundMesh" type="MeshInstance3D" parent="GridVisual" unique_id=628157671]
+transform = Transform3D(1, 0, 0, 0, 1, -1.5893256e-08, 0, 1.5893256e-08, 1, 0, 1.5893257e-09, -0.1)
+mesh = SubResource("QuadMesh_sd3n6")
+
+[node name="BorderMesh" type="MeshInstance3D" parent="GridVisual" unique_id=45462485]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.7881394e-08, 0.3)
+mesh = SubResource("PlaneMesh_0r16l")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=509155125]
+transform = Transform3D(1, 0, 0, 0, 0.7285969, 0.6849427, 0, -0.6849427, 0.7285969, 0, 3.9478369, 7.515106)
+fov = 35.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1182419316]
+environment = SubResource("Environment_8dc35")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=10707713]
+transform = Transform3D(1, 0, 0, 0, 0.35219166, 0.9359279, 0, -0.9359279, 0.35219166, 0, 1.6002688, 4.4480863)

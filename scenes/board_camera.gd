@@ -41,7 +41,9 @@ var _focus: Vector3 = Vector3.ZERO:
     )
   get:
     return _focus
-    
+  
+var _default_rotation: Vector3
+var _rotation := 0.0
 var _default_pos: Vector3
 
 func shake(amt: float, time: float):
@@ -61,6 +63,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _ready() -> void:
   inst = self
 
+  _default_rotation = rotation
   _focus = global_position
   
 func _process(delta: float) -> void:
@@ -73,6 +76,7 @@ func _process(delta: float) -> void:
   global_position = global_position.lerp(_focus, 0.1)
   camera.fov = lerp(camera.fov, target_fov, 0.01)
 
+
   if _shake_remaining:
     camera.h_offset = noise.get_noise_1d(Time.get_ticks_msec()*0.09)*_shake_intensity
     camera.v_offset = noise.get_noise_1d(550.0 + (Time.get_ticks_msec()*0.09))*_shake_intensity
@@ -83,6 +87,12 @@ func _process(delta: float) -> void:
     _chromatic_intensity = move_toward(_chromatic_intensity, .003, .001)
     
   _shake_remaining = move_toward(_shake_remaining, 0.0, delta)
+  
+  var clamped = PI*0.05
+  var rot = Input.get_axis("rotate_cam_left","rotate_cam_right")
+  _rotation += rot*0.003
+  _rotation = clampf(_rotation, -clamped, clamped)
+  rotation = rotation.lerp(_default_rotation+(Vector3.UP*_rotation), 0.1)
   
   var input = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
   var dir = (input.y * global_basis.z) + (input.x * global_basis.x)

@@ -9,7 +9,7 @@ func on_cycle_end():
 func on_cycle_start():
   var claimed := []
   
-  for i in amount:
+  for i in randi_range(1,2):
     var spot = GridManager.inst.try_claim_random_open_tile()
     if spot != Vector3i.MIN:
       claimed.push_back(spot)

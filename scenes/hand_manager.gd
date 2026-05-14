@@ -13,7 +13,7 @@ func _ready() -> void:
     add_tile(tile)
   
 func add_tile(tile: TileDef):
-  hand.push_back(tile.duplicate())
+  discard.push_back(tile.duplicate())
   
 func return_to_discard(tile: TileDef):
   discard.push_back(tile)

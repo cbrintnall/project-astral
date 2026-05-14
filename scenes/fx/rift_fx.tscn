@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://dkrn1r2bf7dgf"]
+
+[ext_resource type="ArrayMesh" uid="uid://oibydny8w56o" path="res://assets/vfx/vfxRift_Plane_002.res" id="1_nxrbc"]
+[ext_resource type="Shader" uid="uid://cgcjr3j2t1uba" path="res://materials/shaders/rift_inner.gdshader" id="2_0h2rq"]
+[ext_resource type="Shader" uid="uid://47iof12ky35g" path="res://materials/shaders/rift_outer_shader.gdshader" id="3_kgv4w"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_d4ysy"]
+noise_type = 2
+frequency = 0.0033
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_o0vk5"]
+noise = SubResource("FastNoiseLite_d4ysy")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o0vk5"]
+render_priority = 0
+shader = ExtResource("2_0h2rq")
+shader_parameter/star_noise = SubResource("NoiseTexture2D_o0vk5")
+shader_parameter/clr_a = Color(0.28627452, 0.3019608, 0.49411765, 1)
+shader_parameter/clr_b = Color(0.54509807, 0.42745098, 0.6117647, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pmdnf"]
+render_priority = 0
+shader = ExtResource("3_kgv4w")
+shader_parameter/star_noise = SubResource("NoiseTexture2D_o0vk5")
+shader_parameter/color = Color(0.59376603, 0.46657774, 0.6658394, 1)
+
+[node name="RiftFX" type="MeshInstance3D" unique_id=1944597772]
+mesh = ExtResource("1_nxrbc")
+surface_material_override/0 = SubResource("ShaderMaterial_o0vk5")
+surface_material_override/1 = SubResource("ShaderMaterial_pmdnf")

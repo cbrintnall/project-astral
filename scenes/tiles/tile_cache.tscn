@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cgo46vph0m5di" path="res://scenes/tiles/tile_cache.gd" id="1_c38ld"]
 [ext_resource type="Script" uid="uid://b140lw26qadyg" path="res://otterlib/stretcher3d.gd" id="2_565ns"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_c38ld"]
+[ext_resource type="PackedScene" uid="uid://dkrn1r2bf7dgf" path="res://scenes/fx/rift_fx.tscn" id="3_nsb6o"]
+[ext_resource type="ArrayMesh" uid="uid://ba4glr30b4w0v" path="res://assets/vfx/vfxPointVortex.tres" id="4_1pkqf"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c38ld"]
 
@@ -16,10 +16,13 @@ metadata/_custom_type_script = "uid://cvepy4rsfup2v"
 script = ExtResource("2_565ns")
 metadata/_custom_type_script = "uid://b140lw26qadyg"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Stretcher3D" unique_id=1912261863]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-mesh = SubResource("BoxMesh_c38ld")
+[node name="RiftFX" parent="Stretcher3D" unique_id=1944597772 instance=ExtResource("3_nsb6o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.3)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1055991510]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_c38ld")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1223776535]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, -0.099999994)
+mesh = ExtResource("4_1pkqf")

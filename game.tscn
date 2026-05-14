@@ -229,17 +229,17 @@ glow_enabled = true
 glow_normalized = true
 glow_bloom = 0.99
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_80nbo"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_avmo2"]
 noise_type = 2
 frequency = 0.0156
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_80nbo"]
 generate_mipmaps = false
-noise = SubResource("FastNoiseLite_80nbo")
+noise = SubResource("FastNoiseLite_avmo2")
 seamless = true
 seamless_blend_skirt = 0.65
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_e2o6t"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vyqle"]
 render_priority = 0
 shader = ExtResource("1_80nbo")
 shader_parameter/noise = SubResource("NoiseTexture2D_80nbo")
@@ -249,10 +249,10 @@ shader_parameter/line_color = Color(0.9843137, 0.9607843, 0.9372549, 1)
 shader_parameter/fill_color = Color(0, 0, 0, 0)
 
 [sub_resource type="QuadMesh" id="QuadMesh_mwb40"]
-material = SubResource("ShaderMaterial_e2o6t")
+material = SubResource("ShaderMaterial_vyqle")
 size = Vector2(5000, 5000)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_lc2xo"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xoeau"]
 noise_type = 2
 frequency = 0.1483
 fractal_octaves = 1
@@ -263,9 +263,9 @@ fractal_ping_pong_strength = 0.0
 cellular_jitter = 0.2
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_215e1"]
-noise = SubResource("FastNoiseLite_lc2xo")
+noise = SubResource("FastNoiseLite_xoeau")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_iotsf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6qn5j"]
 render_priority = 0
 shader = ExtResource("12_lc2xo")
 shader_parameter/clr_a = Color(0.9490196, 0.827451, 0.67058825, 1)
@@ -274,17 +274,17 @@ shader_parameter/base_edge = 0.1
 shader_parameter/noise = SubResource("NoiseTexture2D_215e1")
 
 [sub_resource type="QuadMesh" id="QuadMesh_80nbo"]
-material = SubResource("ShaderMaterial_iotsf")
+material = SubResource("ShaderMaterial_6qn5j")
 size = Vector2(5000, 5000)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_kq12w"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_wj41c"]
 noise_type = 2
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_t46w6"]
-noise = SubResource("FastNoiseLite_kq12w")
+noise = SubResource("FastNoiseLite_wj41c")
 seamless = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_t46w6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_baljx"]
 render_priority = 0
 shader = ExtResource("43_kq12w")
 shader_parameter/border_margin = 0.0
@@ -294,7 +294,7 @@ shader_parameter/base_color = Color(0, 0, 0, 1)
 shader_parameter/noise = SubResource("NoiseTexture2D_t46w6")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_edr7y"]
-material = SubResource("ShaderMaterial_t46w6")
+material = SubResource("ShaderMaterial_baljx")
 size = Vector2(5000, 5000)
 orientation = 2
 
@@ -349,7 +349,7 @@ size = Vector2i(1200, 150)
 render_target_update_mode = 4
 
 [node name="TileSelectCamera" type="Camera3D" parent="TileDisplayViewport/MarginContainer/SubViewportContainer/SubViewport" unique_id=890270172]
-transform = Transform3D(0.9396927, -0.28214622, 0.19331655, 0, 0.5652198, 0.8249403, -0.34202015, -0.77519035, 0.5311329, 2.8581064, 12.571944, 7.852583)
+transform = Transform3D(0.9396926, -0.2821462, 0.19331658, 0, 0.5652199, 0.8249403, -0.34202012, -0.77519035, 0.531133, 2.8581061, 12.571944, 7.8525825)
 cull_mask = 2
 projection = 1
 size = 2.0
@@ -519,14 +519,17 @@ mouse_filter = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/OverrideData" unique_id=1141926590]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Panel" type="Panel" parent="UI/OverrideData/MarginContainer" unique_id=40494162]
 self_modulate = Color(0.15294118, 0.15294118, 0.26666668, 0.8862745)
 layout_mode = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_vyqle")
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/OverrideData/MarginContainer" unique_id=1046294739]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_right = 12
 
@@ -1104,7 +1107,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.7881394e-08, 0.3)
 mesh = SubResource("PlaneMesh_edr7y")
 
 [node name="CameraArm" type="Node3D" parent="." unique_id=515860464]
-transform = Transform3D(0.9396926, 0, 0.34202012, 0, 1, 0, -0.34202012, 0, 0.9396926, 0, 0, 0)
+transform = Transform3D(0.93969256, 0, 0.3420201, 0, 1, 0, -0.3420201, 0, 0.93969256, 0, 0, 0)
 script = ExtResource("11_mfdv2")
 noise = SubResource("FastNoiseLite_iotsf")
 

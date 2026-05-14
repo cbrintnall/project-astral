@@ -31,7 +31,7 @@ func execute():
     _try_defer_eval()
     return
     
-  if not GridManager.inst.try_move(tile, target):
+  if not GridManager.inst.try_place_tile(tile, target):
     _try_defer_eval()
   else:
     attempts.get(target, Set.new()).remove(target)

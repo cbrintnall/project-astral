@@ -490,6 +490,7 @@ func _on_select():
       
 func _try_place_self(selection: Selection):
   if GridManager.inst.try_place_tile(self, GridManager.inst.grid_position_3d):
+    HandManager.inst.discard.push_back(def)
     BoardCamera.inst.shake(0.2, 0.01)
     selection.cancel()
     

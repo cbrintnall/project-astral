@@ -3,7 +3,10 @@ class_name TileCache
 
 static var _cache_targets: TileTargetDef
 
+@onready var rift = $Stretcher3D/RiftFX
+
 var _point_source := PointSource.new()
+
 
 static func _static_init() -> void:
   _cache_targets = load("res://data/targets/tile_target_surrounding.tres").duplicate()
@@ -22,7 +25,7 @@ func _ready() -> void:
     GridManager.inst.upgrade_grid_context(target, mod)
     
   def = TileDef.new()
-  def.name = "Tile Cache"
+  def.name = "Rift"
     
   var src_effect := TileEffectDestroyIfPointSatisfied.new()
   src_effect.pt_source = _point_source
@@ -36,10 +39,13 @@ func _ready() -> void:
   _effects.push_back(give_tile_effect)
 
 func get_tile_name() -> String:
-  return "Tile Cache"
+  return "An Ominous Rift"
 
 func _load_def():
   pass
 
 func _process(delta: float) -> void:
   _point_source.target_point = global_position
+  var dir = stretcher.global_position.direction_to(get_viewport().get_camera_3d().global_position)
+  var rot = atan2(dir.x, dir.z)
+  stretcher.global_rotation = Vector3.UP*(rot+(PI*0.5))
