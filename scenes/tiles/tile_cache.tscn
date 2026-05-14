@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://70wj8ibktcgn"]
+
+[ext_resource type="Script" uid="uid://cgo46vph0m5di" path="res://scenes/tiles/tile_cache.gd" id="1_c38ld"]
+[ext_resource type="Script" uid="uid://b140lw26qadyg" path="res://otterlib/stretcher3d.gd" id="2_565ns"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_c38ld"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c38ld"]
+
+[node name="TileCache" type="StaticBody3D" unique_id=83971767 node_paths=PackedStringArray("stretcher")]
+script = ExtResource("1_c38ld")
+stretcher = NodePath("Stretcher3D")
+metadata/_custom_type_script = "uid://cvepy4rsfup2v"
+
+[node name="Stretcher3D" type="Node3D" parent="." unique_id=1409993391]
+script = ExtResource("2_565ns")
+metadata/_custom_type_script = "uid://b140lw26qadyg"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Stretcher3D" unique_id=1912261863]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("BoxMesh_c38ld")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1055991510]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_c38ld")

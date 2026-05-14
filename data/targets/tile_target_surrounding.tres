@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TileTargetDef" format=3 uid="uid://23sejm0wxvux"]
+
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="1_vff2r"]
+
+[resource]
+script = ExtResource("1_vff2r")
+tiles = Array[Vector3i]([Vector3i(1, 0, 0), Vector3i(-1, 0, 0), Vector3i(1, 0, 1), Vector3i(1, 0, -1), Vector3i(-1, 0, 1), Vector3i(-1, 0, -1), Vector3i(0, 0, 1), Vector3i(0, 0, -1)])
+include_self = false
+metadata/_custom_type_script = "uid://di6fi4200kyxe"

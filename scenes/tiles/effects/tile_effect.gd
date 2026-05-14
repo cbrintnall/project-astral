@@ -50,20 +50,31 @@ func run(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
 
 func _reward_points(effect_ctx: EffectContext, amount: int):
   var total_points = _get_total_points(effect_ctx, amount)
-  var point_source: PointSource = GridManager.inst.get_mods_at_point(effect_ctx.get_location()).get_point_source()
-  point_source.give(total_points)
+  var first_source: PointSource = GridManager.inst.get_mods_at_point(effect_ctx.get_location()).get_point_source()
+  var remaining = first_source.give(total_points)
+  var second_source = GridManager.inst.get_mods_at_point(effect_ctx.get_location()).get_point_source()
+  var final_remaining = second_source.give(remaining)
+  assert(final_remaining <= 0, "Not sure why this would happen but it probably can")
   NotificationLabel.from("%+d" % total_points, effect_ctx.tile)
-  if total_points <= 0: return
+
+  var first_animation = total_points-remaining
+  if first_animation > 0:
+    _animate_points_to_source(first_source, first_animation, effect_ctx.tile)
+  
+  if remaining > 0:
+    _animate_points_to_source(second_source, remaining-final_remaining, effect_ctx.tile)
+  
+func _animate_points_to_source(src: PointSource, amount: int, tile: Tile):
   var stars: MultiMeshInstance3D = load("res://scenes/fx/stars_multimesh.tscn").instantiate()
-  effect_ctx.tile.get_tree().current_scene.add_child(stars)
+  tile.get_tree().current_scene.add_child(stars)
   stars.multimesh = stars.multimesh.duplicate()
-  stars.multimesh.instance_count = total_points
-  var t = effect_ctx.tile.get_tree().current_scene.create_tween()
-  for i in total_points:
+  stars.multimesh.instance_count = amount
+  var t = tile.get_tree().current_scene.create_tween()
+  for i in amount:
     t.set_parallel(true)
-    var end = point_source.target_point
+    var end = src.target_point
     var offset = (Vector3.ONE*randf())*(Vector3(1.0, 0.0, 1.0)).normalized()
-    var start = effect_ctx.tile.global_position+Vector3.UP+offset
+    var start = tile.global_position+Vector3.UP+offset
     var star_scale = randf_range(0.25, 0.6)
     t.tween_method(
       func(time: float):
@@ -72,7 +83,7 @@ func _reward_points(effect_ctx: EffectContext, amount: int):
         var target := Transform3D().scaled(Vector3.ONE*star_scale).translated(pt)
         stars.multimesh.set_instance_transform(i, target)
         if time >= 1.0:
-          point_source.notify_fx_finished()
+          src.notify_fx_finished()
         ,
       0.0,
       1.0,

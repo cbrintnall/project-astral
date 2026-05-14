@@ -22,7 +22,7 @@ func _handle_display(state: bool):
   if state:
     assert(_preview_command == null)
     var preview := TileDataPreviewer.TilePreviewData.new()
-    preview.def = tile
+    preview.name = tile.name
     preview.effects = tile.effects
     preview.context = EffectContext.new()
     preview.priority = 0

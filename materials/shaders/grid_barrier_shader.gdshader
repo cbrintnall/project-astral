@@ -31,5 +31,5 @@ void fragment() {
     1.0-step(dist.z, used_size.y+n*mist_margin)
   );
   
-	ALPHA = max(min(alpha_base, pow(n1,2.0)*5.0), 0.5);
+	ALPHA = min(alpha_base, pow(n1,2.0)*5.0);
 }

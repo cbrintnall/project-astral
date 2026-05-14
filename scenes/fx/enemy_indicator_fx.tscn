@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://umkgb1sle8om"]
+
+[ext_resource type="ArrayMesh" uid="uid://dnje3apsblpul" path="res://assets/vfx/vfxSelectionBox_Plane.res" id="1_xg6ko"]
+
+[node name="EnemyIndicator" type="Node3D" unique_id=1899608712]
+
+[node name="SelectionBox" type="MeshInstance3D" parent="." unique_id=1864537744]
+mesh = ExtResource("1_xg6ko")

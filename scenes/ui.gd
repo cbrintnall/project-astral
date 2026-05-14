@@ -91,6 +91,32 @@ func _process(delta: float) -> void:
   %MoneyLabel.text = "Money: %d" % [ GameManager.inst.money ]
   %PlayButton.disabled = GameManager.inst.active_execution and GameManager.inst.active_execution.active_round
   
+  %MultData.visible = false
+  %OverrideData.visible = false
+
+  var hovered := GridManager.inst.grid_position_3d
+  var ctx: GridContext = GridManager.inst.get_mods_at_point(GridManager.inst.grid_position_3d)
+
+  if ctx.has_mult():
+    %MultLabel.text = "%+00.0f%%" % [ ctx.points_multipliers*100.0 ]
+    %MultData.visible = true
+    var target_position = GridManager.inst.get_viewport().get_camera_3d().unproject_position(Vector3(hovered))
+    target_position -= %MultData.get_combined_pivot_offset()
+    target_position += Vector2.UP*50.0
+    %MultData.global_position = %MultData.global_position.lerp(target_position, 0.1)
+    %MultData.reset_size()
+    
+  if ctx.has_information():
+    if ctx.point_source_override.target:
+      %OverrideAmount.text = "%d/%d" % [ctx.point_source_override.current, ctx.point_source_override.target]
+    else:
+      %OverrideAmount.text = "%d" % [ctx.point_source_override.current]
+    %OverrideData.visible = true
+    var target_position = GridManager.inst.get_viewport().get_camera_3d().unproject_position(ctx.point_source_override.target_point+(Vector3.UP))
+    target_position -= %OverrideData.get_combined_pivot_offset()
+    %OverrideData.global_position = %OverrideData.global_position.lerp(target_position, 0.3)
+    %OverrideData.reset_size()
+  
   for i in len(HandManager.inst.hand):
     if not _tile_displays.has(i):
       var next = load("res://scenes/ui/tile_preview.tscn").instantiate()

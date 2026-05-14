@@ -2,6 +2,8 @@ extends Node
 class_name GameManager
 
 static var inst: GameManager
+static var debug := false
+static var game_closing := false
 
 signal points_fx
 
@@ -79,8 +81,11 @@ func try_execute_turn():
   _state.current = "begin_execution"
   TileHand.inst.discard_hand()
 
+func _notification(what: int) -> void:
+  if what == NOTIFICATION_WM_CLOSE_REQUEST:
+    game_closing = true
+
 func _ready() -> void:
-  DebugDraw2D.debug_enabled = false
   Console.pause_enabled = true
 
   _current_context = ExecutionContext.new()
@@ -103,12 +108,9 @@ func _ready() -> void:
   _state.register("wait_for_accept_shop", CallableStateMachine.noop)
   _state.register("end_game", _end_game)
   
-  _state.state_changed.connect(
-    func(state):
-      print("game state changed: %s" % state)
-  )
+  _state.state_changed.connect(func(state): print("game state changed: %s" % state))
   
-  await Utils.wait_until(func(): return GridManager.inst != null)
+  await Utils.wait_until(func(): return GridManager.inst != null and GridManager.inst.is_node_ready())
   
   var start_tile = load("res://scenes/board/tile.tscn").instantiate()
   start_tile.def = load("res://data/tiles/tile_source_tile.tres")
@@ -140,7 +142,7 @@ func _ready() -> void:
   Console.add_command(
     "debug",
     func():
-      DebugDraw2D.debug_enabled = not DebugDraw2D.debug_enabled
+      GameManager.debug = not GameManager.debug
   )
   
 func _process(delta: float) -> void:
@@ -173,8 +175,14 @@ func _start_round(machine: CallableStateMachine, delta: float):
     GridManager.inst.get_played_tiles(),
     TileEffect.Event.ON_ROUND_START,
     func():
-      UI.inst.choose_tiles.setup()
-      _state.current = "deal"
+      if Constants.CHOOSE_TILES_EACH_ROUND:
+        UI.inst.choose_tiles.setup()
+      var chosen_fx = []
+      chosen_fx.append_array(default_cycle_tasks)
+      # TODO: add varied tasks here as well
+      for task: CycleEffect in chosen_fx:
+        cycle_tasks.register(task.on_cycle_start)
+      cycle_tasks.just_finished.connect(func(): _state.current = "deal", CONNECT_ONE_SHOT)
   )
   
   _state.current = "pre_execute"
@@ -230,7 +238,7 @@ func _begin_execution(machine: CallableStateMachine, delta: float):
     return
   
   var tiles = GridManager.inst.get_played_tiles()
-  _initiate_tiles = tiles.filter(func(tile: Tile): return tile.def.initiates)
+  _initiate_tiles = tiles.filter(func(tile: Tile): return tile.def != null and tile.def.initiates)
   _setup_executor(
     GridManager.inst.collect_tiles_in_execution_order(),
     TileEffect.Event.ON_ACTIVATE,

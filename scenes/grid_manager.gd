@@ -31,7 +31,7 @@ var grid_hovered_tile: Tile:
       if grid_hovered_tile:
         var data := TileDataPreviewer.TilePreviewData.new()
         data.priority = 0
-        data.def = grid_hovered_tile.def
+        data.name = grid_hovered_tile.get_tile_name()
         data.effects = grid_hovered_tile.get_effects()
         data.context = EffectContext.new()
         data.context.tile = grid_hovered_tile
@@ -50,7 +50,7 @@ var hand_hovered_tile: Tile:
       if hand_hovered_tile:
         var data := TileDataPreviewer.TilePreviewData.new()
         data.priority = 1
-        data.def = hand_hovered_tile.def
+        data.name = hand_hovered_tile.get_tile_name()
         data.effects = hand_hovered_tile.get_effects()
         data.context = EffectContext.new()
         data.context.tile = hand_hovered_tile
@@ -79,6 +79,15 @@ var _hovered_tile_area_highlighter := GridHighlights.new()
 var _point_source_previewer : Path3D
 
 var _move_attempts := {}
+var _open_tiles := Set.new()
+
+func try_claim_random_open_tile() -> Vector3i:
+  var open = _open_tiles.to_array()
+  if open:
+    var chosen = open.pick_random()
+    _open_tiles.remove(chosen)
+    return chosen
+  return Vector3i.MIN
 
 func is_in_bounds(pos: Vector3i) -> bool:
   return _bounds.has_point(Vector2i(pos.x, pos.z))
@@ -92,9 +101,11 @@ func try_move(tile: Tile, target: Vector3i) -> bool:
   var original = get_tile_loc(tile)
   _tiles.erase(tile)
   _placements.erase(original)
+  _open_tiles.add(original)
 
   _tiles[tile] = target
   _placements[target] = tile
+  _open_tiles.remove(target)
   
   tile.set_move(original, target)
   
@@ -142,6 +153,7 @@ func try_place_tile(tile: Tile, pos: Vector3i) -> bool:
   
   _placements[pos] = tile
   _tiles[tile] = pos
+  _open_tiles.erase(pos)
 
   NodeUtils.force_child(grid_map, tile)
   tile.global_position = pos
@@ -185,11 +197,18 @@ func _cleanup_tile_on_exit(tile: Tile):
   var pos = _tiles[tile]
   _tiles.erase(tile)
   _placements.erase(pos)
+  _open_tiles.add(pos)
   _tiles_dirty = true
   
 func _unhandled_input(event: InputEvent) -> void:
   if event.is_action_pressed("ui_cancel"):
     _cancel_current_selection()
+    
+  if GameManager.debug:
+    match Utils.get_key_pressed(event):
+      KEY_Z:
+        if get_tile_at(grid_position_3d):
+          get_tile_at(grid_position_3d).destroy()
     
   # timer cooldown so we don't immediately do something after creating selection
   # everything below this if statement should be selection related
@@ -232,7 +251,8 @@ func _ready() -> void:
   add_child(_hovered_tile_area_highlighter)
   map_bounds.scale = Vector3(size.x+2, size.x*0.25, size.y+2)
   _bounds = Rect2i(Vector2i((Vector2(-size)*Vector2(0.5, 0.5)).ceil()), size+Vector2i.ONE)
-  
+  _open_tiles = Set.new(Utils.get_points(_bounds).map(func(pt: Vector2i): return Vector3i(pt.x, 0, pt.y)))
+  _open_tiles.remove(Vector3i.ZERO)
   print("rendering server grid size %s" % str(Vector2(size)))
   
   var t = create_tween()

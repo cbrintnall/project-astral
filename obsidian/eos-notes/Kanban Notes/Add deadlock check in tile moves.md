@@ -1,0 +1,1 @@
+ResolutionMoveCommands should instead all have their checks ran at once. If all result in a failure, the grid is in deadlock. If one or more are true then the resolutions can continue to resolve. This should increase performance and allow us to increase the number of resolution iterations.

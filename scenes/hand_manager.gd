@@ -15,5 +15,13 @@ func _ready() -> void:
 func add_tile(tile: TileDef):
   hand.push_back(tile.duplicate())
   
+func return_to_discard(tile: TileDef):
+  discard.push_back(tile)
+  
 func get_next_from_hand() -> TileDef:
-  return hand.pick_random()
+  if not hand:
+    hand.append_array(discard)
+    hand.shuffle()
+    discard = []
+
+  return hand.pop_front()

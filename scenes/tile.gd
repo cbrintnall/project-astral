@@ -8,11 +8,17 @@ const DIRECTION_EXECUTION_ORDER = [
   Vector2i.LEFT,
 ]
 
-@export var def: TileDef
+enum TileBind {
+  LIFETIME = 0,
+  POSITION = 1
+}
 
-@onready var stretcher: Stretcher3D = $Stretcher3D
+@export var def: TileDef
+@export var stretcher: Stretcher3D
+
 @onready var rotation_axis := Vector3(randf(), randf(), randf()).normalized()
 
+var default_state := "selecting"
 var stat := StatStore.new()
 var placed := false
 var constellation: ConstellationDef
@@ -31,8 +37,13 @@ var _effects := []
 var _constellation_satisfied := false
 var _preview_command: BasicCommand
 var _preview_highlighter := GridHighlights.new()
+var _bind_commands := {}
 
 var _original_hand_marker: Marker3D
+
+## NOTE: this will NOT call execute, just undo when the bind fires
+func register_bind_command(cmd: TileBind, command: Command):
+  _bind_commands.get_or_add(cmd, Set.new()).add(command)
 
 func notify_failed_move(target: Vector3i, attempt_data: Dictionary):
   var partial = GridManager.inst.has_tile(target)
@@ -142,6 +153,7 @@ func destroy():
     func():
       executor.start()
       await executor.finished
+      _drain_bind(TileBind.LIFETIME)
       queue_free()
   )
 
@@ -274,50 +286,69 @@ func do_execute_fx(ctx: ExecutionContext):
   
   stretcher.punch(2.0, 5.0)
 
+func get_tile_name() -> String:
+  return def.name
+
+func _notification(what: int) -> void:
+  if what == NOTIFICATION_PREDELETE and not GameManager.game_closing and not _state.current == "display":
+    if _state.current != "destroying":
+      push_warning("tried to free %s, but not via destroy, use destroy() instead!" % get_path())
+
 func _ready() -> void:
-  %EnemyIndicator.visible = def.is_enemy
+  _meshes = NodeUtils.get_nodes_with_predicate(self, func(node): return node is MeshInstance3D)
+  _face_mesh = NodeUtils.find_child_with_predicate(
+    self, 
+    func(node): return node is MeshInstance3D and node.mesh.get_surface_count() > 1 and node.mesh.surface_get_material(1) == preload("res://materials/extracted/Material_TileFace.material")
+  )
+  
+  if _face_mesh:
+    _face_material = preload("res://materials/extracted/Material_TileFace.material").duplicate()
+    _face_mesh.set_surface_override_material(1, _face_material)
+    
+  _preview_highlighter.mesh = load("res://assets/extracted_mesh/area_indicator_mesh.tres")
   
   add_child(_state)
+  add_child(_preview_highlighter)
+  add_child(stat)
   add_to_group("tile")
   
-  (%Constellations as MultiMeshInstance3D).multimesh = (%Constellations as MultiMeshInstance3D).multimesh.duplicate()
-  
+  _state.register("initializing", CallableStateMachine.noop)
   _state.register("selecting", _selecting)
   _state.register("placing", _placing)
   _state.register("placed", CallableStateMachine.noop)
-  _state.register("display", _display)
+  _state.register("display", CallableStateMachine.noop)
   _state.register("destroying", CallableStateMachine.noop)
   
   _state.state_changed.connect(_on_state_changed)
-  
-  add_child(stat)
+  _state.current = default_state
   
   stat.changed.connect(_on_stat_changed)
   
   GridManager.inst.board_changed.connect(_on_board_changed)
   
-  _meshes = NodeUtils.get_nodes_with_predicate(self, func(node): return node is MeshInstance3D)
-  _face_mesh = NodeUtils.find_child_with_predicate(
-    self, 
-    func(node): return node is MeshInstance3D and node.mesh.surface_get_material(1) == preload("res://materials/extracted/Material_TileFace.material")
-  )
+  _load_def()
   
-  _face_material = preload("res://materials/extracted/Material_TileFace.material").duplicate()
-  if _face_mesh:
-    _face_mesh.set_surface_override_material(1, _face_material)
-  
+func _load_def():
+  if not def: return
+
   for effect: TileEffect in def.effects:
     _effects.push_back(effect)
 
   if def.texture:
     _face_material.albedo_texture = def.texture
-  
-  for m in _meshes:
-    m.layers = 2
     
+  if def.is_enemy:
+    add_child(load("res://scenes/fx/enemy_indicator_fx.tscn").instantiate())
+
   constellation = def.constellation
-  _preview_highlighter.mesh = load("res://assets/extracted_mesh/area_indicator_mesh.tres")
-  add_child(_preview_highlighter)
+  (%Constellations as MultiMeshInstance3D).multimesh = (%Constellations as MultiMeshInstance3D).multimesh.duplicate()
+  
+func _drain_bind(bind: TileBind):
+  while _bind_commands.get(bind, Set.new()).count() > 0:
+    var container = _bind_commands.get(bind, Set.new())
+    var next: Command = container.pop()
+    next.undo()
+    container.remove(next)
   
 func _on_board_changed():
   var before = _constellation_satisfied
@@ -343,7 +374,8 @@ func _on_state_changed(state: String):
       input_ray_pickable = true
       for m in _meshes:
         m.layers = 2
-      reparent(_original_hand_marker)
+      if _original_hand_marker:
+        reparent(_original_hand_marker)
     "placed":
       input_ray_pickable = false
       for m in _meshes:
@@ -371,9 +403,6 @@ func _get_effect_ctx() -> EffectContext:
   ctx.tile = self
   
   return ctx
-
-func _display(machine: CallableStateMachine, delta: float):
-  pass
 
 func _selecting(machine: CallableStateMachine, delta: float):
   if _mouse_entered:
@@ -443,7 +472,7 @@ func _on_select():
         var preview := TileDataPreviewer.TilePreviewData.new()
         preview.effects = get_effects()
         preview.context = EffectContext.new()
-        preview.def = def
+        preview.name = def.name
         preview.priority = 2
         _preview_command = UI.inst.tile_previewer.push_preview(preview)
     "placing":
@@ -475,14 +504,14 @@ func _unhandled_input(event: InputEvent) -> void:
     if event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
       _on_select()
 
-func _process(delta: float) -> void:
-  %Constellations.visible = constellation != null
-  if constellation:
-    %Constellations.global_position = Vector3.ZERO
-    var targets = constellation.tile_targets.get_target(_get_effect_ctx())
-    (%Constellations as MultiMeshInstance3D).multimesh.instance_count = len(targets)
-    var count := 0
-    for tile in targets:
-      var t := Transform3D().translated(Vector3(tile))
-      (%Constellations as MultiMeshInstance3D).multimesh.set_instance_transform(count, t)
-      count += 1
+#func _process(delta: float) -> void:
+  #%Constellations.visible = constellation != null
+  #if constellation:
+    #%Constellations.global_position = Vector3.ZERO
+    #var targets = constellation.tile_targets.get_target(_get_effect_ctx())
+    #(%Constellations as MultiMeshInstance3D).multimesh.instance_count = len(targets)
+    #var count := 0
+    #for tile in targets:
+      #var t := Transform3D().translated(Vector3(tile))
+      #(%Constellations as MultiMeshInstance3D).multimesh.set_instance_transform(count, t)
+      #count += 1

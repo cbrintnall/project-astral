@@ -5,7 +5,6 @@
 [ext_resource type="Resource" uid="uid://dd6l3bd1seddo" path="res://data/tiles/tile_no_effects.tres" id="2_vpg4h"]
 [ext_resource type="PackedScene" uid="uid://bi54uvkurhgh2" path="res://assets/blender/objects/objectTile.glb" id="4_xm3w6"]
 [ext_resource type="ArrayMesh" uid="uid://dufdhd4rdr3uv" path="res://assets/extracted_mesh/vfxConstellationBox.tres" id="5_w7oh7"]
-[ext_resource type="ArrayMesh" uid="uid://dnje3apsblpul" path="res://assets/vfx/vfxSelectionBox_Plane.res" id="6_abphe"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fc0e3"]
 
@@ -13,10 +12,11 @@
 transform_format = 1
 mesh = ExtResource("5_w7oh7")
 
-[node name="Tile" type="StaticBody3D" unique_id=1995656874]
+[node name="Tile" type="StaticBody3D" unique_id=1995656874 node_paths=PackedStringArray("stretcher")]
 transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.99999994, 0, 0, 0)
 script = ExtResource("1_bfaab")
 def = ExtResource("2_vpg4h")
+stretcher = NodePath("Stretcher3D")
 
 [node name="Stretcher3D" type="Node3D" parent="." unique_id=928591441]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.9604645e-08, 0)
@@ -32,9 +32,3 @@ shape = SubResource("BoxShape3D_fc0e3")
 [node name="Constellations" type="MultiMeshInstance3D" parent="." unique_id=1454948822]
 unique_name_in_owner = true
 multimesh = SubResource("MultiMesh_xm3w6")
-
-[node name="EnemyIndicator" type="Node3D" parent="." unique_id=1133225040]
-unique_name_in_owner = true
-
-[node name="SelectionBox" type="MeshInstance3D" parent="EnemyIndicator" unique_id=273233849]
-mesh = ExtResource("6_abphe")
