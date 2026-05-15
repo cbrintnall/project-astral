@@ -1,0 +1,14 @@
+[gd_resource type="QuadMesh" format=3 uid="uid://ch68drmv1sywr"]
+
+[ext_resource type="Shader" uid="uid://cxhcji8eohkna" path="res://materials/shaders/area_indicator_shader.gdshader" id="1_lqo6p"]
+[ext_resource type="Texture2D" uid="uid://egoxagnmecas" path="res://assets/ui/small-border.png" id="2_gesll"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gesll"]
+render_priority = 0
+shader = ExtResource("1_lqo6p")
+shader_parameter/tex = ExtResource("2_gesll")
+
+[resource]
+material = SubResource("ShaderMaterial_gesll")
+size = Vector2(0.5, 0.5)
+orientation = 1

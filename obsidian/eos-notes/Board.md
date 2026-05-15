@@ -23,11 +23,13 @@ kanban-plugin: board
 - [ ] Rifts need to auto-leave after 2 turns
 - [ ] Rifts need more tile-esque art
 - [ ] [[Create overview UI for round to make decisions easier post round (tiles destroyed, max points gained from tile, min points, friendly tiles active enemy tiles active)]]
+- [ ] Need better way to indicate to player to hover over cycle and turn buttons
 
 
 ## Doin
 
 - [ ] Hovering a tile needs to also show what stacks of debuffs (and buffs) it has
+- [ ] [[Test out non-parallel approach]]
 
 
 ## DONE

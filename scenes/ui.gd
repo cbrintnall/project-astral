@@ -80,6 +80,23 @@ func _unhandled_input(event: InputEvent) -> void:
     help.visible = false
 
 func _process(delta: float) -> void:
+  %CycleTurnContainerRoot.visible = false
+  if NodeUtils.is_mouse_inside(%CycleLabel):
+    %CycleTurnContainerRoot.visible = true
+    %CycleTurnContainerRoot.global_position = %CycleLabel.global_position + (Vector2.DOWN*%CycleLabel.size.y)
+    %EffectTextLabel.text = "\n".join(GameManager.inst.upcoming_cycle_tasks.map(func(task: CycleEffect): return "- " + task.get_description()))
+    %CycleTurnInfoTitle.text = "On Cycle Start:"
+    %CycleTurnContainerRoot.reset_size()
+    
+  if NodeUtils.is_mouse_inside(%TurnLabel):
+    %CycleTurnContainerRoot.visible = true
+    %CycleTurnContainerRoot.global_position = %TurnLabel.global_position + (Vector2.DOWN*%TurnLabel.size.y)
+    %EffectTextLabel.text = "\n".join(GameManager.inst.current_turn_tasks.map(func(task: CycleEffect): return "- " + task.get_description()))
+    %CycleTurnInfoTitle.text = "On Turn Start:"
+    %CycleTurnContainerRoot.reset_size()
+  
+  %CycleProgress.max_value = GameManager.inst.required_score
+  %CycleProgress.value = GameManager.inst.current_score
   score_label.text = "%d/%d" % [ GameManager.inst.current_score, GameManager.inst.required_score ]
   turn_label.text = "Turn: %d/%d" % [ GameManager.inst.turn, Constants.TURNS_PER_SCORE ]
   cycle_label.text = "Cycle: %d" % [ GameManager.inst.cycle ]

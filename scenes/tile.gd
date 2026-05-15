@@ -13,6 +13,13 @@ enum TileBind {
   POSITION = 1
 }
 
+enum Faction {
+  NEUTRAL = 0,
+  PLAYER = 1,
+  ENEMY = 2,
+  ALL = 4
+}
+
 @export var def: TileDef
 @export var stretcher: Stretcher3D
 
@@ -23,14 +30,14 @@ var stat := StatStore.new()
 var placed := false
 var constellation: ConstellationDef
 var health: int = 0
+var defense := 0
+var faction := Faction.NEUTRAL
 
 var _state := CallableStateMachine.new()
 var _mouse_entered := false
 var _selection: Selection
 var _ctx: ExecutionContext
-var _timer := BetterTimer.new(0.5)
 var _remaining_effects := []
-var _current_effect_task: Task
 var _meshes := []
 var _face_mesh: MeshInstance3D
 var _face_material = preload("res://materials/extracted/Material_TileFace.material")
@@ -41,6 +48,27 @@ var _preview_highlighter := GridHighlights.new()
 var _bind_commands := {}
 
 var _original_hand_marker: Marker3D
+
+func do_chip_damage(amt: int):
+  if defense:
+    defense -= amt
+  else:
+    health -= amt
+    stretcher.punch(5.0, 10.0)
+    Springer.data[stretcher]["rotation"]["velocity"] = Utils.random_unit_sphere() * 25.0
+    AudioManager3d.play({
+      "stream": preload("res://audio/crack-tile.ogg"),
+      "pitch_variance": 0.1,
+      "parent": self
+    })
+    if health <= 0:
+      destroy()
+
+func show_target_point_preview(ctx: EffectContext = null) -> bool:
+  if not ctx:
+    ctx = EffectContext.new()
+    ctx.tile = self
+  return get_effects().any(func(effect: TileEffect): return effect.would_give_points(ctx)) and not def.initiates
 
 ## NOTE: this will NOT call execute, just undo when the bind fires
 func register_bind_command(cmd: TileBind, command: Command):
@@ -304,10 +332,10 @@ func _ready() -> void:
     _face_material = preload("res://materials/extracted/Material_TileFace.material").duplicate()
     _face_mesh.set_surface_override_material(1, _face_material)
     
-  _preview_highlighter.mesh = load("res://assets/extracted_mesh/area_indicator_mesh.tres")
+  _preview_highlighter.mesh = load("res://assets/extracted_mesh/vfxConstellationBox.tres")
   
   add_child(_state)
-  add_child(_preview_highlighter)
+  GridManager.inst.add_child(_preview_highlighter)
   add_child(stat)
   add_to_group("tile")
   
@@ -425,6 +453,7 @@ func _selecting(machine: CallableStateMachine, delta: float):
   else:
     stretcher.rotate(rotation_axis, delta)
   position = position.lerp(Vector3.ZERO, delta*10.0)
+  _preview_highlighter.visible = false
 
 func _placing(machine: CallableStateMachine, delta: float):
   var curr_scale := stretcher.global_basis.get_scale()
@@ -439,13 +468,7 @@ func _placing(machine: CallableStateMachine, delta: float):
     state = Selection.State.ERROR
     
   _selection.state = state
-  var spots = []
-  var ctx := EffectContext.new()
-  ctx.tile = self
-  for effect: TileEffect in get_effects():
-    if effect.main_target:
-      spots.append_array(effect.main_target.get_target(ctx))
-  _preview_highlighter.spots = spots
+  _preview_highlighter.visible = true
 
 func _mouse_enter() -> void:
   GridManager.inst.hand_hovered_tile = self
@@ -473,6 +496,7 @@ func _on_select():
           AudioManager3d.play({ "stream": preload("res://audio/Light Drone Sound (button hover) 9.wav") })
           _selection = selection
       )
+      selection.on_process = _selection_process_update_area_previews
       selection.canceled.connect(unselect)
       selection.on_choose = _try_place_self.bind(selection)
 
@@ -499,6 +523,17 @@ func _on_select():
         HandManager.inst.add_tile(def)
         queue_free()
       
+func _selection_process_update_area_previews(_delta: float):
+  _preview_highlighter.spots = []
+
+  var spots = []
+  var ctx := EffectContext.from_override(GridManager.inst.grid_position_3d)
+  for effect: TileEffect in get_effects():
+    if effect.main_target:
+      spots.append_array(effect.main_target.get_target(ctx))
+
+  _preview_highlighter.spots = spots
+      
 func _try_place_self(selection: Selection):
   if GridManager.inst.try_place_tile(self, GridManager.inst.grid_position_3d):
     HandManager.inst.discard.push_back(def)
@@ -508,6 +543,7 @@ func _try_place_self(selection: Selection):
     # NOTE: not a fan of having the tile clean up its parent, but for now it'll do
     assert(_original_hand_marker != null)
     _original_hand_marker.queue_free()
+    _preview_highlighter.queue_free()
 
 func _unhandled_input(event: InputEvent) -> void:
   if not _mouse_entered: return

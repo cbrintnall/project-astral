@@ -13,7 +13,10 @@ uniform sampler2D noise: repeat_enable;
 varying vec3 world_pos;
 
 void vertex() {
+  float n = textureLod(noise, VERTEX.xz*30.0, 0).x;
 	world_pos = VERTEX;
+  
+  VERTEX += (NORMAL*sin(TIME*0.5*n))*0.3;
 }
 
 void fragment() {

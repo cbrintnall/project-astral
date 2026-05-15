@@ -10,5 +10,6 @@ func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
     var tile: Tile = GridManager.inst.get_tile_at(target)
     if tile:
       var next = target+Vector3i(Vector3(my_tile-target).normalized())
+      print("moving %s tile %s" % [tile.def.name, str(next)])
       var res: ResolutionCommand = GridManager.inst.submit_move_attempt(tile, next, exec_ctx)
       exec_ctx.register_resolution(res)

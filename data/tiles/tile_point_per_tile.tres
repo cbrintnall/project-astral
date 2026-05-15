@@ -13,6 +13,7 @@ metadata/_custom_type_script = "uid://di6fi4200kyxe"
 
 [sub_resource type="Resource" id="Resource_tq3p2"]
 script = ExtResource("2_sx2xk")
+per_tile = null
 event = 4
 main_target = SubResource("Resource_kotd8")
 metadata/_custom_type_script = "uid://vae0yba8d17t"

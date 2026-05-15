@@ -69,6 +69,7 @@ texture_margin_bottom = 8.0
 [node name="TileEffectDisplay" type="MarginContainer" unique_id=1392376793]
 custom_minimum_size = Vector2(300, 0)
 custom_maximum_size = Vector2(300, -1)
+mouse_filter = 2
 script = ExtResource("1_nut02")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=443150424]
@@ -103,23 +104,25 @@ size_flags_vertical = 3
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer2/VBoxContainer" unique_id=447447347]
 layout_mode = 2
 
-[node name="HFlowContainer" type="HFlowContainer" parent="MarginContainer2/VBoxContainer/VBoxContainer" unique_id=70248517]
+[node name="EventTextRoot" type="HFlowContainer" parent="MarginContainer2/VBoxContainer/VBoxContainer" unique_id=70248517]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer2/VBoxContainer/VBoxContainer/HFlowContainer" unique_id=754846606]
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer2/VBoxContainer/VBoxContainer/EventTextRoot" unique_id=754846606]
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="MarginContainer2/VBoxContainer/VBoxContainer/HFlowContainer/MarginContainer2" unique_id=1486278159]
+[node name="Panel" type="Panel" parent="MarginContainer2/VBoxContainer/VBoxContainer/EventTextRoot/MarginContainer2" unique_id=1486278159]
 self_modulate = Color(0.15294118, 0.15294118, 0.26666668, 1)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_ulcw6")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/VBoxContainer/VBoxContainer/HFlowContainer/MarginContainer2" unique_id=520068597]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/VBoxContainer/VBoxContainer/EventTextRoot/MarginContainer2" unique_id=520068597]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_right = 8
 
-[node name="EventText" type="RichTextLabel" parent="MarginContainer2/VBoxContainer/VBoxContainer/HFlowContainer/MarginContainer2/MarginContainer" unique_id=444445475]
+[node name="EventText" type="RichTextLabel" parent="MarginContainer2/VBoxContainer/VBoxContainer/EventTextRoot/MarginContainer2/MarginContainer" unique_id=444445475]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("1_3jea6")
@@ -130,11 +133,11 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/VBoxContainer/VBoxContainer/HFlowContainer" unique_id=2065993340]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/VBoxContainer/VBoxContainer/EventTextRoot" unique_id=2065993340]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer2/VBoxContainer/VBoxContainer/HFlowContainer/MarginContainer" unique_id=986774108]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer2/VBoxContainer/VBoxContainer/EventTextRoot/MarginContainer" unique_id=986774108]
 visible = false
 layout_mode = 2
 texture = ExtResource("2_ejhag")

@@ -16,6 +16,7 @@ var can_cancel := true
 var _is_canceled := false
 
 var on_choose: Callable
+var on_process: Callable
 
 func cancel():
   if _is_canceled: return

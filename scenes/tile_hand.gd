@@ -27,6 +27,7 @@ func add_to_hand(data: TileDef):
     var marker := Marker3D.new()
     add_child(marker)
     var tile = load("res://scenes/board/tile.tscn").instantiate()
+    tile.faction = Tile.Faction.PLAYER
     tile.def = data
     marker.add_child(tile)
   

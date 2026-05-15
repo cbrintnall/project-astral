@@ -10,6 +10,7 @@ class_name TileTargetDef
 @export var random_cardinal_direction := false
 @export var random_neighbors := 0
 @export var every_tile := false
+@export var faction := Tile.Faction.ALL
 
 func get_text():
   var text := []
@@ -52,7 +53,7 @@ func get_text():
   
   return base_text
 
-func get_target(ctx: EffectContext) -> Array:
+func get_target(ctx: EffectContext, with_tiles := false) -> Array:
   var targets := []
   var viable_options := tiles.duplicate()
   var src = ctx.override_location
@@ -86,7 +87,7 @@ func get_target(ctx: EffectContext) -> Array:
       targets.push_back(src+dir)
       
   if random_neighbors:
-    var viable = ctx.tile.get_neighbors()
+    var viable = GridManager.inst.get_neighbors_for(src)
     if viable:
       viable.shuffle()
     for i in mini(len(viable), random_neighbors):
@@ -115,5 +116,17 @@ func get_target(ctx: EffectContext) -> Array:
       next += Vector3i.BACK
       
   targets = targets.filter(func(tile: Vector3i): return GridManager.inst.is_in_bounds(tile))
+  
+  if faction != Tile.Faction.ALL:
+    with_tiles = true
+    
+  if with_tiles:
+    targets = targets.filter(GridManager.inst.has_tile)
+  
+  if faction != Tile.Faction.ALL:
+    targets = targets.filter(func(pos: Vector3i): return GridManager.inst.get_tile_at(pos).faction == faction)
+    
+  # ZERO is the center tile, erase it cause we never need to target it
+  targets.erase(Vector3i.ZERO)
       
   return targets

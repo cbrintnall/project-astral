@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://6s0lt8orjbta"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_6bjlr"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_03cny"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_07iql"]
+[ext_resource type="Script" uid="uid://coxe54w821lob" path="res://scenes/tiles/effects/tile_effect_multiply_area.gd" id="2_hcgxi"]
+[ext_resource type="Texture2D" uid="uid://d0m0d564ncdft" path="res://assets/tiles/brokenVaseTile.png" id="3_03cny"]
+[ext_resource type="Script" uid="uid://vae0yba8d17t" path="res://scenes/tiles/effects/tile_effect_point_per_tile.gd" id="4_6ebtr"]
+[ext_resource type="Resource" uid="uid://23sejm0wxvux" path="res://data/targets/tile_target_surrounding.tres" id="4_pfcbs"]
+
+[sub_resource type="Resource" id="Resource_6ebtr"]
+script = ExtResource("2_07iql")
+include_self = false
+size = Vector2i(3, 3)
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_07iql"]
+script = ExtResource("2_hcgxi")
+size = Vector2i(3, 3)
+multiplier = -10.0
+main_target = SubResource("Resource_6ebtr")
+metadata/_custom_type_script = "uid://coxe54w821lob"
+
+[sub_resource type="Resource" id="Resource_pfcbs"]
+script = ExtResource("4_6ebtr")
+per_tile = 100
+event = 4
+main_target = ExtResource("4_pfcbs")
+metadata/_custom_type_script = "uid://vae0yba8d17t"
+
+[resource]
+script = ExtResource("2_03cny")
+name = "Discouragement"
+shop_cost = 2
+effects = Array[ExtResource("1_6bjlr")]([SubResource("Resource_07iql"), SubResource("Resource_pfcbs")])
+texture = ExtResource("3_03cny")
+in_shop = true
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"
