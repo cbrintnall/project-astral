@@ -7,14 +7,12 @@ signal finished
 
 var effect_groups := []
 var resolutions := []
-var finish_delay := 1.0
 
 var event: TileEffect.Event
 var on_finish: Callable
 
 var _execution_state := CallableStateMachine.new()
 var _context := ExecutionContext.new()
-var _end_timer := BetterTimer.new(1.0)
 
 var _remaining := []
 var _remaining_resolutions := TaskGroup.new()
@@ -41,7 +39,6 @@ func register_group(ctx: EffectContext, effects: Array):
 func start():
   _execution_state.current = "start"
   _context.active_round = true
-  _end_timer.reset_to(finish_delay)
 
 func _ready() -> void:
   add_child(_execution_state)
@@ -127,8 +124,7 @@ func _resolve_tiles(machine: CallableStateMachine, delta: float):
     elif _remaining_cleanup_resolutions:
       _resolution_cleanup.run(_remaining_cleanup_resolutions.pop_front().cleanup)
     elif _resolution_cleanup.finished:
-      if _end_timer.check(delta):
-        if on_finish.is_valid():
-          on_finish.call()
-        finished.emit()
-        queue_free()
+      if on_finish.is_valid():
+        on_finish.call()
+      finished.emit()
+      queue_free()

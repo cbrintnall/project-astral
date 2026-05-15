@@ -64,11 +64,10 @@ var _current_context: ExecutionContext
 var _sound_counter := 0.0
 var _reset_sound_timer := BetterTimer.new(1.0)
 
-var _executor: TileExecutor
+var _executor_queue := TaskQueue.new()
 var _cycle_task_runner := TaskQueue.new()
 var _next_cycle_tasks := []
 var _current_turn_modifiers := []
-var _executor_queue := []
 
 func start_execution(effects: Array, event: TileEffect.Event):
   pass
@@ -100,6 +99,7 @@ func _ready() -> void:
   add_child(_state)
   add_child(cycle_tasks)
   add_child(_cycle_task_runner)
+  add_child(_executor_queue)
   
   _state.register("start_round", _start_round)
   _state.register("deal", _deal)
@@ -266,13 +266,15 @@ func _begin_execution(machine: CallableStateMachine, delta: float):
   _state.current = "execute"
   
 func _setup_executor(tiles: Array, event: TileEffect.Event, on_finish: Callable):
-  if _executor and _executor != null:
-    print("setting up new tile executor, but last one is still around (%s)" % _executor.get_path())
-  
-  _executor = TileExecutor.new()
+  var next_executor := TileExecutor.new()
+  add_child(next_executor)
   for tile: Tile in tiles:
-    _executor.register_group(tile.get_effect_context(), tile.get_effects())
-  _executor.event = event
-  _executor.on_finish = on_finish
-  add_child(_executor)
-  _executor.start()
+    next_executor.register_group(tile.get_effect_context(), tile.get_effects())
+  next_executor.event = event
+  next_executor.on_finish = on_finish
+  
+  _executor_queue.register(
+    func():
+      next_executor.start()
+      await next_executor.finished   
+  )

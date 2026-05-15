@@ -133,7 +133,6 @@ func notify_failed_move(target: Vector3i, attempt_data: Dictionary):
         var tile: Tile = GridManager.inst.get_tile_at(target)
         executor.register_group(tile.get_effect_context(), tile.get_effects())
       executor.event = TileEffect.Event.ON_COLLIDE_TILE
-      executor.finish_delay = 0.0
       executor.give_execution_collision_data(collision_ctx)
       add_child(executor)
       GameManager.inst.player_tasks.run(
@@ -188,7 +187,6 @@ func destroy():
   var executor := TileExecutor.new()
   executor.register_group(get_effect_context(), get_effects())
   executor.event = TileEffect.Event.ON_DESTROY
-  executor.finish_delay = 0.0
   add_child(executor)
   GameManager.inst.player_tasks.run(
     func():
