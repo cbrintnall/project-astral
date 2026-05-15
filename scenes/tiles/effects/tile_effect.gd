@@ -11,7 +11,8 @@ enum Event {
   ON_DESTROY = 8,
   ON_PLACE = 16,
   ON_MOVE = 32,
-  ON_COLLIDE_TILE = 64
+  ON_COLLIDE_TILE = 64,
+  CUSTOM = 128
 }
 
 @export var event := Event.ON_PLACE
@@ -47,6 +48,15 @@ func run(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
   
   for i in replays:
     await execute(effect_ctx, exec_ctx)
+
+func would_give_points(effect_ctx: EffectContext) -> bool:
+  return _get_total_points(effect_ctx, get_tile_baseline_points(effect_ctx))
+  
+"""
+The amount of points this effect will give without any other considerations
+"""
+func get_tile_baseline_points(effect_ctx: EffectContext) -> int:
+  return 0
 
 func _reward_points(effect_ctx: EffectContext, amount: int):
   var total_points = _get_total_points(effect_ctx, amount)

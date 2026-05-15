@@ -1,0 +1,1 @@
+The current approach to the game requires that all tiles execute in parallel (at least to the player's mind). This is difficult to strategize around and difficult to implement. We should try a more tactics approach where tiles have "initiative" that dictates there turn order. We will present a turn order to the player so they can plan accordingly.

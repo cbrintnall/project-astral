@@ -3,8 +3,8 @@ class_name CycleEffectSpawnUnknownTiles
 
 @export var range_given := Vector2i(1, 2)
 
-func on_cycle_end():
-  pass
+func get_description() -> String:
+  return "%d to %d unstable rifts will spawn." % [range_given.x,range_given.y]
   
 func on_cycle_start():
   var claimed := []

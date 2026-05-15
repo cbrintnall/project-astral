@@ -42,6 +42,14 @@ var money := 0
 var current_state: String:
   get:
     return _state.current
+    
+var upcoming_cycle_tasks: Array:
+  get:
+    return _next_cycle_tasks
+    
+var current_turn_tasks: Array:
+  get:
+    return _current_turn_modifiers
 
 var won := false
 
@@ -57,6 +65,9 @@ var _sound_counter := 0.0
 var _reset_sound_timer := BetterTimer.new(1.0)
 
 var _executor: TileExecutor
+var _cycle_task_runner := TaskQueue.new()
+var _next_cycle_tasks := []
+var _current_turn_modifiers := []
 
 func enter_shop():
   assert(current_state == "wait_for_accept_shop")
@@ -97,6 +108,7 @@ func _ready() -> void:
   inst = self
   add_child(_state)
   add_child(cycle_tasks)
+  add_child(_cycle_task_runner)
   
   _state.register("start_round", _start_round)
   _state.register("deal", _deal)
@@ -106,6 +118,7 @@ func _ready() -> void:
   _state.register("execute", CallableStateMachine.noop)
   _state.register("post_execute", CallableStateMachine.noop)
   _state.register("post_round", _post_round)
+  _state.register("run_end_cycle", CallableStateMachine.noop)
   _state.register("shop", CallableStateMachine.noop)
   _state.register("start_cycle_events", _start_cycle_events)
   _state.register("wait_for_accept_shop", CallableStateMachine.noop)
@@ -170,6 +183,13 @@ func _end_game(machine: CallableStateMachine, delta: float):
   
 func _start_round(machine: CallableStateMachine, delta: float):
   RenderingServer.global_shader_parameter_set("grid_root", Vector3.ZERO)
+  
+  # if start of new cycle..
+  if turn == 0:
+    # TODO: add varied tasks here as well
+    _next_cycle_tasks.append_array(default_cycle_tasks)
+    _current_turn_modifiers.append_array(default_turn_tasks)
+  
   turn += 1
   
   BoardCamera.inst.map_size = GridManager.inst.size
@@ -181,10 +201,8 @@ func _start_round(machine: CallableStateMachine, delta: float):
     func():
       if Constants.CHOOSE_TILES_EACH_ROUND:
         UI.inst.choose_tiles.setup()
-      var chosen_fx = []
-      chosen_fx.append_array(default_turn_tasks)
       # TODO: add varied tasks here as well
-      for task: CycleEffect in chosen_fx:
+      for task: CycleEffect in _current_turn_modifiers:
         cycle_tasks.register(task.on_cycle_start)
       cycle_tasks.just_finished.connect(func(): _state.current = "deal", CONNECT_ONE_SHOT)
   )
@@ -218,14 +236,12 @@ func _post_round(machine: CallableStateMachine, delta: float):
       
       UI.inst.show_system_message("Begin Cycle")
       cycle += 1
+      point_source.current = 0
       turn = 0
       _current_context = ExecutionContext.new()
       _current_context.active_round = false
-      var chosen_fx = []
-      chosen_fx.append_array(default_cycle_tasks)
-      # TODO: add varied tasks here as well
-      for task: CycleEffect in chosen_fx:
-        cycle_tasks.register(task.on_cycle_start)
+      while _next_cycle_tasks:
+        cycle_tasks.register(_next_cycle_tasks.pop_front().on_cycle_start)
       _state.current = "start_cycle_events"
       return
     else:

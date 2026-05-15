@@ -81,6 +81,12 @@ var _point_source_previewer : Path3D
 var _move_attempts := {}
 var _open_tiles := Set.new()
 
+func get_neighbors_for(pos: Vector3i) -> Array:
+  var neighbor_pos = Constants.ALL_DIRECTIONS.map(func(dir: Vector3i): return pos+dir)
+  var valid_neighbor_pos = neighbor_pos.filter(is_legal_position)
+
+  return valid_neighbor_pos.filter(has_tile).map(get_tile_at)
+
 func try_claim_random_open_tile() -> Vector3i:
   var open = _open_tiles.to_array()
   if open:
@@ -125,6 +131,12 @@ func map_to_global(tile: Vector3i) -> Vector3:
 
 func has_tile(loc: Vector3i) -> bool:
   return get_tile_at(loc) != null
+
+"""
+Is this in the grid?
+"""
+func is_legal_position(pos: Vector3i) -> bool:
+  return is_in_bounds(pos)
   
 func could_place(tile: Tile, pos: Vector3i) -> bool:
   return not _placements.has(pos) and is_in_bounds(pos)
@@ -137,6 +149,9 @@ func try_place_tile(tile: Tile, pos: Vector3i) -> bool:
   var on_board := _tiles.has(tile) 
   if on_board:
     src = _tiles[tile]
+    _placements.erase(src)
+    _tiles.erase(tile)
+    _open_tiles.add(src)
   
   _placements[pos] = tile
   _tiles[tile] = pos
@@ -236,7 +251,7 @@ func _ready() -> void:
   inst = self
   _point_source_previewer = load("res://scenes/fx/path_previewer.tscn").instantiate()
   add_child(_point_source_previewer)
-  _hovered_tile_area_highlighter.mesh = load("res://assets/extracted_mesh/area_indicator_mesh.tres")
+  _hovered_tile_area_highlighter.mesh = load("res://assets/extracted_mesh/vfxConstellationBox.tres")
   add_child(_hovered_tile_area_highlighter)
   map_bounds.scale = Vector3(size.x+2, size.x*0.25, size.y+2)
   _bounds = Rect2i(Vector2i((Vector2(-size)*Vector2(0.5, 0.5)).ceil()), size+Vector2i.ONE)
@@ -266,18 +281,20 @@ func _process(delta: float) -> void:
 
   if not grid_cast.ray_data: return
 
-  _point_source_previewer.visible = grid_hovered_tile != null
+  _point_source_previewer.visible = false
   if grid_hovered_tile:
+    if grid_hovered_tile.show_target_point_preview():
+      _point_source_previewer.visible = true
+      var src = get_mods_at_point(grid_position_3d)
+      _point_source_previewer.curve.set_point_position(0, _point_source_previewer.to_local(grid_hovered_tile.global_position))
+      _point_source_previewer.curve.set_point_position(1, _point_source_previewer.to_local(src.get_point_source().target_point))
+
     var spots = []
-    var ctx := EffectContext.new()
-    ctx.tile = grid_hovered_tile
+    var ctx := EffectContext.from_tile(grid_hovered_tile)
     for effect: TileEffect in grid_hovered_tile.get_effects():
       if effect.main_target:
         spots.append_array(effect.main_target.get_target(ctx))
     _hovered_tile_area_highlighter.spots = spots
-    var src = get_mods_at_point(grid_position_3d)
-    _point_source_previewer.curve.set_point_position(0, _point_source_previewer.to_local(grid_hovered_tile.global_position))
-    _point_source_previewer.curve.set_point_position(1, _point_source_previewer.to_local(src.get_point_source().target_point))
 
   var grid_pos: Vector3 = grid_cast.ray_data["position"]
   RenderingServer.global_shader_parameter_set("global_mouse_position", grid_pos)
@@ -293,6 +310,8 @@ func _process(delta: float) -> void:
     grid_hovered_tile = null
   
   if _current_selection:
+    if _current_selection.on_process.is_valid():
+      _current_selection.on_process.call(delta)
     var target = DEFAULT_COLOR
     match _current_selection.state:
       Selection.State.WARNING:

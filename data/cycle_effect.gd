@@ -1,6 +1,11 @@
-@abstract
 extends Resource
 class_name CycleEffect
 
-@abstract func on_cycle_start()
-@abstract func on_cycle_end()
+func on_cycle_start():
+  pass
+  
+func on_cycle_end():
+  pass
+
+func get_description() -> String:
+  return "THIS EFFECT NEEDS A DESCRIPTION!!!"
