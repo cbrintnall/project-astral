@@ -127,19 +127,12 @@ func notify_failed_move(target: Vector3i, attempt_data: Dictionary):
   
   t.tween_callback(
     func():
-      var executor := TileExecutor.new()
-      executor.register_group(get_effect_context(), get_effects())
+      var involved = [self]
       if partial:
-        var tile: Tile = GridManager.inst.get_tile_at(target)
-        executor.register_group(tile.get_effect_context(), tile.get_effects())
-      executor.event = TileEffect.Event.ON_COLLIDE_TILE
-      executor.give_execution_collision_data(collision_ctx)
-      add_child(executor)
-      GameManager.inst.player_tasks.run(
-        func():
-          executor.start()
-          await executor.finished
-      )
+        involved.push_back(GridManager.inst.get_tile_at(target))
+
+      var exec := GameManager.inst.queue_tile_execution(involved, TileEffect.Event.ON_COLLIDE_TILE)
+      exec.give_execution_collision_data(collision_ctx)
   )
 
 func get_grid_origin_position() -> Vector3:
@@ -184,14 +177,10 @@ func destroy():
   
   p.global_position = global_position
   
-  var executor := TileExecutor.new()
-  executor.register_group(get_effect_context(), get_effects())
-  executor.event = TileEffect.Event.ON_DESTROY
-  add_child(executor)
-  GameManager.inst.player_tasks.run(
+  GameManager.inst.queue_tile_execution(
+    [self], 
+    TileEffect.Event.ON_DESTROY,
     func():
-      executor.start()
-      await executor.finished
       _drain_bind(TileBind.LIFETIME)
       queue_free()
   )
@@ -266,16 +255,7 @@ func set_placed_at(_tile: Vector3i):
   })
 
   if prev_state != "placed":
-    var place_executor := TileExecutor.new()
-    add_child(place_executor)
-    place_executor.register_group(get_effect_context(), get_effects())
-    place_executor.event = TileEffect.Event.ON_PLACE
-    
-    GameManager.inst.player_tasks.run(
-      func():
-        place_executor.start()
-        await place_executor.finished
-    )
+    GameManager.inst.queue_tile_execution([self], TileEffect.Event.ON_PLACE)
       
 func register_effect(effect: TileEffect):
   _effects.push_back(effect)

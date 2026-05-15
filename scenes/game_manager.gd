@@ -69,8 +69,23 @@ var _cycle_task_runner := TaskQueue.new()
 var _next_cycle_tasks := []
 var _current_turn_modifiers := []
 
-func start_execution(effects: Array, event: TileEffect.Event):
-  pass
+func queue_execution(effects: Array, event: TileEffect.Event, ctx := EffectContext.new(), on_finish := Callable()) -> TileExecutor:
+  var next_executor := TileExecutor.new()
+  add_child(next_executor)
+  next_executor.register_group(ctx, effects)
+  next_executor.event = event
+  next_executor.on_finish = on_finish
+  
+  _executor_queue.register(
+    func():
+      next_executor.start()
+      await next_executor.finished   
+  )
+  
+  return next_executor
+  
+func queue_tile_execution(tiles: Array, event: TileEffect.Event, on_finish := Callable()) -> TileExecutor:
+  return _setup_executor(tiles, event, on_finish)
 
 func enter_shop():
   assert(current_state == "wait_for_accept_shop")
@@ -265,7 +280,7 @@ func _begin_execution(machine: CallableStateMachine, delta: float):
 
   _state.current = "execute"
   
-func _setup_executor(tiles: Array, event: TileEffect.Event, on_finish: Callable):
+func _setup_executor(tiles: Array, event: TileEffect.Event, on_finish: Callable) -> TileExecutor:
   var next_executor := TileExecutor.new()
   add_child(next_executor)
   for tile: Tile in tiles:
@@ -278,3 +293,4 @@ func _setup_executor(tiles: Array, event: TileEffect.Event, on_finish: Callable)
       next_executor.start()
       await next_executor.finished   
   )
+  return next_executor
