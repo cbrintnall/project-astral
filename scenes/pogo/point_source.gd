@@ -13,6 +13,12 @@ var current: int = 0:
     current = maxi(0, val)
   get:
     return current
+    
+var _sound_counter := 0.0
+var _last_given := 0.0
+
+func _init() -> void:
+  pass
 
 func give(amt: int) -> int:
   if amt == 0: return 0
@@ -28,4 +34,22 @@ func give(amt: int) -> int:
   return 0
 
 func notify_fx_finished():
+  _do_given_fx()
   fx_finished.emit()
+
+func _update_last_given():
+  var seconds := (Time.get_ticks_msec()*1000.0)
+  if (seconds-_last_given) > 1.0:
+    _last_given = seconds
+
+func _do_given_fx():
+  _sound_counter += 0.01
+  
+  AudioManager3d.play({
+    "stream": preload("res://audio/Light Drone Sound (button hover) 9.wav"),
+    "pitch_additional": _sound_counter,
+    "debounce": 0.05,
+    "location": target_point
+  })
+  
+  _update_last_given()

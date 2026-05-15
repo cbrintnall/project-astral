@@ -50,6 +50,9 @@ var _bind_commands := {}
 
 var _original_hand_marker: Marker3D
 
+func get_effect_context() -> EffectContext:
+  return _get_effect_ctx()
+
 func do_chip_damage(amt: int):
   if defense:
     defense -= amt
@@ -125,11 +128,11 @@ func notify_failed_move(target: Vector3i, attempt_data: Dictionary):
   t.tween_callback(
     func():
       var executor := TileExecutor.new()
-      var involved_tiles = [self]
+      executor.register_group(get_effect_context(), get_effects())
       if partial:
-        involved_tiles.push_back(GridManager.inst.get_tile_at(target))
+        var tile: Tile = GridManager.inst.get_tile_at(target)
+        executor.register_group(tile.get_effect_context(), tile.get_effects())
       executor.event = TileEffect.Event.ON_COLLIDE_TILE
-      executor.tiles = involved_tiles
       executor.finish_delay = 0.0
       executor.give_execution_collision_data(collision_ctx)
       add_child(executor)
@@ -183,8 +186,8 @@ func destroy():
   p.global_position = global_position
   
   var executor := TileExecutor.new()
+  executor.register_group(get_effect_context(), get_effects())
   executor.event = TileEffect.Event.ON_DESTROY
-  executor.tiles = [self]
   executor.finish_delay = 0.0
   add_child(executor)
   GameManager.inst.player_tasks.run(
@@ -267,7 +270,7 @@ func set_placed_at(_tile: Vector3i):
   if prev_state != "placed":
     var place_executor := TileExecutor.new()
     add_child(place_executor)
-    place_executor.tiles = [self]
+    place_executor.register_group(get_effect_context(), get_effects())
     place_executor.event = TileEffect.Event.ON_PLACE
     
     GameManager.inst.player_tasks.run(

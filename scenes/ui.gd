@@ -69,7 +69,7 @@ func _ready() -> void:
   
   await Utils.wait_until(func(): return GameManager.inst != null)
   
-  GameManager.inst.points_fx.connect(
+  GameManager.inst.point_source.received.connect(
     func():
       score_label.offset_transform_position = Utils.random_unit_circle()*5.0
       score_label.offset_transform_scale = Vector2(randf_range(1.0, 1.2), randf_range(1.0, 1.2))

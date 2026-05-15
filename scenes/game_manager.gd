@@ -68,6 +68,10 @@ var _executor: TileExecutor
 var _cycle_task_runner := TaskQueue.new()
 var _next_cycle_tasks := []
 var _current_turn_modifiers := []
+var _executor_queue := []
+
+func start_execution(effects: Array, event: TileEffect.Event):
+  pass
 
 func enter_shop():
   assert(current_state == "wait_for_accept_shop")
@@ -78,18 +82,6 @@ func leave_shop():
   assert(current_state == "shop")
   _state.current = "start_round"
   BoardCamera.inst.try_set_focus(Vector3.ZERO)
-
-func do_receive_points_fx():
-  _sound_counter += 0.01
-  
-  AudioManager3d.play({
-    "stream": preload("res://audio/Light Drone Sound (button hover) 9.wav"),
-    "pitch_additional": _sound_counter,
-    "debounce": 0.05
-  })
-  
-  _reset_sound_timer.reset()
-  points_fx.emit()
 
 func try_execute_turn():
   _state.current = "begin_execution"
@@ -103,7 +95,6 @@ func _ready() -> void:
   Console.pause_enabled = true
 
   _current_context = ExecutionContext.new()
-  point_source.fx_finished.connect(do_receive_points_fx)
   
   inst = self
   add_child(_state)
@@ -279,7 +270,8 @@ func _setup_executor(tiles: Array, event: TileEffect.Event, on_finish: Callable)
     print("setting up new tile executor, but last one is still around (%s)" % _executor.get_path())
   
   _executor = TileExecutor.new()
-  _executor.tiles = tiles
+  for tile: Tile in tiles:
+    _executor.register_group(tile.get_effect_context(), tile.get_effects())
   _executor.event = event
   _executor.on_finish = on_finish
   add_child(_executor)

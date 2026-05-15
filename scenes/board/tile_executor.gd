@@ -5,7 +5,7 @@ static var long_exec_time := 30.0
 
 signal finished
 
-var tiles := []
+var effect_groups := []
 var resolutions := []
 var finish_delay := 1.0
 
@@ -27,6 +27,17 @@ var _time := 0.0
 func give_execution_collision_data(data: TileCollisionContext):
   _context.collision_data = data
 
+func register_group(ctx: EffectContext, effects: Array):
+  if _execution_state.current != "idle":
+    push_error("Tried to register effect execution while executor already running.. (%s)" % get_path())
+    return
+    
+  var effect_exec_ctx := EffectExecutionContext.new()
+  effect_exec_ctx.effect_ctx = ctx
+  effect_exec_ctx.effects = effects
+    
+  effect_groups.push_back(effect_exec_ctx)
+
 func start():
   _execution_state.current = "start"
   _context.active_round = true
@@ -43,7 +54,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
   DebugDraw2D.begin_text_group("%s execution" % get_path())
   DebugDraw2D.set_text("time", _time)
-  DebugDraw2D.set_text("executing", len(tiles))
+  DebugDraw2D.set_text("executing", len(effect_groups))
   DebugDraw2D.set_text("resolving", len(_context.resolutions))
   DebugDraw2D.end_text_group()
   
@@ -56,20 +67,14 @@ func _start(machine: CallableStateMachine, _delta: float):
   
 func _process_tiles(machine: CallableStateMachine, delta: float):
   _time += delta
-  if tiles:
-    if not is_instance_valid(tiles.front()): 
-      tiles.pop_front()
-      return
-    
-    var next: Tile = tiles.pop_front()
-    var fx = next.get_effects().filter(func(effect: TileEffect): return effect.event == event)
+  if effect_groups:
+    var next: EffectExecutionContext = effect_groups.pop_front()
+    var fx = next.effects.filter(func(effect: TileEffect): return effect.event == event)
     
     if not fx: return
     
     _context.tile_execution_count += 1
-    var ctx: EffectContext = EffectContext.new()
-    ctx.tile = next
-    next.do_execute_fx(_context)
+    var ctx: EffectContext = next.effect_ctx
     var queue := TaskQueue.new()
     add_child(queue)
     for effect: TileEffect in fx:
@@ -85,7 +90,7 @@ func _process_tiles(machine: CallableStateMachine, delta: float):
     payload["queue"].queue_free()
     payload.erase("queue")
     
-  if not tiles and not _remaining:
+  if not effect_groups and not _remaining:
     machine.current = "resolve"
 
 func _resolve_tiles(machine: CallableStateMachine, delta: float):
