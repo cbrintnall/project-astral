@@ -94,6 +94,9 @@ func try_claim_random_open_tile() -> Vector3i:
     _open_tiles.remove(chosen)
     return chosen
   return Vector3i.MIN
+  
+func get_all_open_spaces() -> Array:
+  return _open_tiles.to_array()
 
 func is_in_bounds(pos: Vector3i) -> bool:
   return _bounds.has_point(Vector2i(pos.x, pos.z))

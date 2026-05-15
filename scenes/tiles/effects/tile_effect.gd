@@ -12,7 +12,8 @@ enum Event {
   ON_PLACE = 16,
   ON_MOVE = 32,
   ON_COLLIDE_TILE = 64,
-  CUSTOM = 128
+  CUSTOM = 128,
+  ON_CYCLE_START = 256
 }
 
 @export var event := Event.ON_PLACE
@@ -34,6 +35,8 @@ func get_event_text() -> String:
       return "[color=%s]On Move[/color]" % Constants.EFFECT_COLOR_STRING
     Event.ON_COLLIDE_TILE:
       return "[color=%s]On Collide Tile[/color]" % Constants.EFFECT_COLOR_STRING
+    Event.ON_CYCLE_START:
+      return "[color=%s]On Cycle Start[/color]" % Constants.EFFECT_COLOR_STRING
 
   return "ERROR, NO EVENT"
 
@@ -44,7 +47,10 @@ func resolve(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
   pass
 
 func run(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
-  var replays = roundi(effect_ctx.tile.stat.get_value(preload("res://data/stats/stat_replay.tres")))+1
+  var replays = 1
+
+  if effect_ctx.tile:
+    replays = roundi(effect_ctx.tile.stat.get_value(preload("res://data/stats/stat_replay.tres")))+1
   
   for i in replays:
     await execute(effect_ctx, exec_ctx)

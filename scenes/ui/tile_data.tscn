@@ -21,6 +21,7 @@ anchor_right = 0.01
 anchor_bottom = 0.736
 grow_vertical = 2
 mouse_filter = 2
+mouse_behavior_recursive = 1
 script = ExtResource("1_o5hx1")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=398059320]
@@ -66,12 +67,9 @@ mouse_filter = 2
 
 [node name="TileEffectDisplay" parent="MarginContainer/VBoxContainer/EffectsDisplayRoot" unique_id=1392376793 instance=ExtResource("4_c0fqf")]
 layout_mode = 2
-mouse_filter = 2
 
 [node name="TileEffectDisplay2" parent="MarginContainer/VBoxContainer/EffectsDisplayRoot" unique_id=1783876841 instance=ExtResource("4_c0fqf")]
 layout_mode = 2
-mouse_filter = 2
 
 [node name="TileEffectDisplay3" parent="MarginContainer/VBoxContainer/EffectsDisplayRoot" unique_id=1462265657 instance=ExtResource("4_c0fqf")]
 layout_mode = 2
-mouse_filter = 2

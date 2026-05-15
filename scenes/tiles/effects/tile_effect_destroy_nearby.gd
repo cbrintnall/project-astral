@@ -2,9 +2,6 @@ extends TileEffect
 class_name TileEffectDestroyNearby
 
 @export var directions : Array[Vector3i] = []
-
-func _ready() -> void:
-  event = TileEffect.Event.ON_ROUND_START
   
 func _get_directional_text(dir: Vector3i) -> String:
   match dir:

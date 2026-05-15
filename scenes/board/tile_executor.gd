@@ -11,6 +11,10 @@ var resolutions := []
 var event: TileEffect.Event
 var on_finish: Callable
 
+var execution: ExecutionContext:
+  get:
+    return _context
+
 var _execution_state := CallableStateMachine.new()
 var _context := ExecutionContext.new()
 
@@ -45,7 +49,7 @@ func _ready() -> void:
 
   _execution_state.register("idle", CallableStateMachine.noop)
   _execution_state.register("start", _start)
-  _execution_state.register("execute", _process_tiles)
+  _execution_state.register("execute", _process_effects)
   _execution_state.register("resolve", _resolve_tiles)
   
 func _process(_delta: float) -> void:
@@ -62,7 +66,7 @@ func _start(machine: CallableStateMachine, _delta: float):
   machine.current = "execute"
   _context.start_execution()
   
-func _process_tiles(machine: CallableStateMachine, delta: float):
+func _process_effects(machine: CallableStateMachine, delta: float):
   _time += delta
   if effect_groups:
     var next: EffectExecutionContext = effect_groups.pop_front()

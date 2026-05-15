@@ -10,6 +10,8 @@ class_name TileTargetDef
 @export var random_cardinal_direction := false
 @export var random_neighbors := 0
 @export var every_tile := false
+@export var empty_space := false
+@export var pull_random_amount := Vector2i.ZERO
 @export var faction := Tile.Faction.ALL
 
 func get_text():
@@ -60,6 +62,9 @@ func get_target(ctx: EffectContext, with_tiles := false) -> Array:
 
   if not src and ctx.tile:
     src = GridManager.inst.get_tile_loc(ctx.tile)
+
+  if empty_space:
+    targets.append_array(GridManager.inst.get_all_open_spaces())
 
   if random_cardinal_direction:
     targets.push_back(src+Constants.CARDINAL_DIRECTIONS.pick_random())
@@ -125,6 +130,14 @@ func get_target(ctx: EffectContext, with_tiles := false) -> Array:
   
   if faction != Tile.Faction.ALL:
     targets = targets.filter(func(pos: Vector3i): return GridManager.inst.get_tile_at(pos).faction == faction)
+    
+  if pull_random_amount:
+    var amount = mini(randi_range(pull_random_amount.x, pull_random_amount.y), len(targets))
+    var culled = []
+    targets.shuffle()
+    for i in amount:
+      culled.push_back(targets.pop_front())
+    targets = culled
     
   # ZERO is the center tile, erase it cause we never need to target it
   targets.erase(Vector3i.ZERO)

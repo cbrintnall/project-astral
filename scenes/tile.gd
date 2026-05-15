@@ -192,13 +192,7 @@ func select():
 
 func get_effects() -> Array:
   return _effects
-
-func has_pre_round_effects() -> bool:
-  return get_effects().any(func(effect: TileEffect): return effect.event == TileEffect.Event.ON_ROUND_START)
-
-func has_post_round_effects() -> bool:
-  return get_effects().any(func(effect: TileEffect): return effect.event == TileEffect.Event.ON_ROUND_END)
-
+  
 ## NOTE: do we want tiles to define directions? or should they just always be all four?
 func get_directions() -> Array:
   #return DIRECTION_EXECUTION_ORDER.filter(func(dir: Vector2i): return def.execute_directions.has(dir))
@@ -255,7 +249,8 @@ func set_placed_at(_tile: Vector3i):
   })
 
   if prev_state != "placed":
-    GameManager.inst.queue_tile_execution([self], TileEffect.Event.ON_PLACE)
+    var executor := GameManager.inst.queue_tile_execution([self], TileEffect.Event.ON_PLACE)
+    executor.execution.set_initiator(self)
       
 func register_effect(effect: TileEffect):
   _effects.push_back(effect)

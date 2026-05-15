@@ -6,6 +6,7 @@ static var debug := false
 static var game_closing := false
 
 signal points_fx
+signal executor_queued(exec: TileExecutor)
 
 @export var camera: Camera3D
 @export var selection_svp: SubViewport
@@ -13,11 +14,8 @@ signal points_fx
 
 @export var light: DirectionalLight3D
 
-@export var default_cycle_tasks: Array[CycleEffect] = []
-@export var varied_cycle_tasks: Array[CycleEffect] = []
-
-@export var default_turn_tasks: Array[CycleEffect] = []
-@export var varied_turn_tasks: Array[CycleEffect] = []
+@export var default_cycle_tasks: Array[TileEffect] = []
+@export var varied_cycle_tasks: Array[TileEffect] = []
 
 var current_score: int:
   get:
@@ -68,6 +66,7 @@ var _executor_queue := TaskQueue.new()
 var _cycle_task_runner := TaskQueue.new()
 var _next_cycle_tasks := []
 var _current_turn_modifiers := []
+var _task_binds := {}
 
 func queue_execution(effects: Array, event: TileEffect.Event, ctx := EffectContext.new(), on_finish := Callable()) -> TileExecutor:
   var next_executor := TileExecutor.new()
@@ -82,10 +81,14 @@ func queue_execution(effects: Array, event: TileEffect.Event, ctx := EffectConte
       await next_executor.finished   
   )
   
+  executor_queued.emit(next_executor)
+  _check_for_events(next_executor, _next_cycle_tasks)
+  
   return next_executor
   
 func queue_tile_execution(tiles: Array, event: TileEffect.Event, on_finish := Callable()) -> TileExecutor:
-  return _setup_executor(tiles, event, on_finish)
+  var next_executor := _setup_executor(tiles, event, on_finish)
+  return next_executor
 
 func enter_shop():
   assert(current_state == "wait_for_accept_shop")
@@ -126,7 +129,6 @@ func _ready() -> void:
   _state.register("post_round", _post_round)
   _state.register("run_end_cycle", CallableStateMachine.noop)
   _state.register("shop", CallableStateMachine.noop)
-  _state.register("start_cycle_events", _start_cycle_events)
   _state.register("wait_for_accept_shop", CallableStateMachine.noop)
   _state.register("end_game", _end_game)
   
@@ -187,14 +189,26 @@ func _end_game(machine: CallableStateMachine, delta: float):
     _background_color = _background_color.lerp(Color.from_string("#c69fa5", Color.WHITE), 0.01)
     RenderingServer.global_shader_parameter_set("world_background", _background_color)
   
+func _handle_effect(exec: TileExecutor, effect: TileEffect):
+  if not effect.event == exec.event: return
+  
+  exec.register_group(EffectContext.new(), [effect])
+  
 func _start_round(machine: CallableStateMachine, delta: float):
   RenderingServer.global_shader_parameter_set("grid_root", Vector3.ZERO)
+  
+  print("starting round")
   
   # if start of new cycle..
   if turn == 0:
     # TODO: add varied tasks here as well
+    _next_cycle_tasks = []
     _next_cycle_tasks.append_array(default_cycle_tasks)
-    _current_turn_modifiers.append_array(default_turn_tasks)
+    var varied = mini(randi_range(Constants.CYCLE_EVENTS_PER_CYCLE.x, Constants.CYCLE_EVENTS_PER_CYCLE.y), len(varied_cycle_tasks))
+    var possible = varied_cycle_tasks.duplicate()
+    possible.shuffle()
+    for i in varied:
+      _next_cycle_tasks.push_back(possible.pop_front())
   
   turn += 1
   
@@ -207,10 +221,8 @@ func _start_round(machine: CallableStateMachine, delta: float):
     func():
       if Constants.CHOOSE_TILES_EACH_ROUND:
         UI.inst.choose_tiles.setup()
-      # TODO: add varied tasks here as well
-      for task: CycleEffect in _current_turn_modifiers:
-        cycle_tasks.register(task.on_cycle_start)
-      cycle_tasks.just_finished.connect(func(): _state.current = "deal", CONNECT_ONE_SHOT)
+      
+      _state.current = "deal"
   )
   
   _state.current = "pre_execute"
@@ -223,10 +235,6 @@ func _deal(machine: CallableStateMachine, delta: float):
   if _deal_timer.check(delta):
     var next = HandManager.inst.get_next_from_hand()
     TileHand.inst.add_to_hand(next)
-
-func _start_cycle_events(machine: CallableStateMachine, _delta: float):
-  if cycle_tasks.finished:
-    machine.current = "wait_for_accept_shop"
 
 func _post_round(machine: CallableStateMachine, delta: float):
   if current_score >= required_score:
@@ -246,9 +254,12 @@ func _post_round(machine: CallableStateMachine, delta: float):
       turn = 0
       _current_context = ExecutionContext.new()
       _current_context.active_round = false
-      while _next_cycle_tasks:
-        cycle_tasks.register(_next_cycle_tasks.pop_front().on_cycle_start)
-      _state.current = "start_cycle_events"
+      queue_execution(
+        _next_cycle_tasks,
+        TileEffect.Event.ON_CYCLE_START,
+        EffectContext.new(),
+        func(): _state.current = "wait_for_accept_shop"
+      )
       return
     else:
       _state.current = "end_game"
@@ -280,6 +291,13 @@ func _begin_execution(machine: CallableStateMachine, delta: float):
 
   _state.current = "execute"
   
+func _check_for_events(executor: TileExecutor, effects: Array):
+  var ctx := EffectContext.new()
+  executor.register_group(
+    ctx,
+    effects.filter(func(fx: TileEffect): return fx.event == executor.event) 
+  )
+  
 func _setup_executor(tiles: Array, event: TileEffect.Event, on_finish: Callable) -> TileExecutor:
   var next_executor := TileExecutor.new()
   add_child(next_executor)
@@ -287,6 +305,10 @@ func _setup_executor(tiles: Array, event: TileEffect.Event, on_finish: Callable)
     next_executor.register_group(tile.get_effect_context(), tile.get_effects())
   next_executor.event = event
   next_executor.on_finish = on_finish
+  
+  # emit before register, in-case we want to register more
+  executor_queued.emit(next_executor)
+  _check_for_events(next_executor, _next_cycle_tasks)
   
   _executor_queue.register(
     func():

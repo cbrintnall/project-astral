@@ -1,14 +1,14 @@
-extends CycleEffect
+extends TileEffect
 class_name CycleEffectWind
 
 var direction := Vector3i.FORWARD
 
 var _all_tile_target: TileTargetDef = load("res://data/targets/tile_target_all_tiles.tres")
-
-func on_cycle_end():
-  pass
   
-func on_cycle_start():
+func get_description(effect_ctx: EffectContext, exec_ctx: ExecutionContext) -> String:
+  return "NEEDS DESCRIPTION"
+  
+func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
   var opts = [-1, 0, 1]
   opts.shuffle()
   direction = Vector3i(opts.pop_front(), 0, opts.pop_front())

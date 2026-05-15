@@ -7,15 +7,13 @@
 [ext_resource type="Script" uid="uid://chs7hvvvqn863" path="res://scenes/gridcast.gd" id="3_j5wjh"]
 [ext_resource type="Script" uid="uid://blphjbp21vxu2" path="res://scenes/music_manager.gd" id="3_ryrav"]
 [ext_resource type="Material" uid="uid://08ngit6xcjnn" path="res://materials/material_grid_selection_box.tres" id="4_vef74"]
-[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="4_vyqle"]
 [ext_resource type="Script" uid="uid://c5oat8xid2os6" path="res://scenes/board/grid_highlighter.gd" id="5_7sc4i"]
 [ext_resource type="PackedScene" uid="uid://dx8nii23jt42c" path="res://scenes/shop/shop_option.tscn" id="5_e36ub"]
 [ext_resource type="Script" uid="uid://yqxfojxum3as" path="res://scenes/board/cycle_effects/cycle_effect_spawn_enemies.gd" id="5_jo4nb"]
-[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="5_xoeau"]
+[ext_resource type="Script" uid="uid://bec8empvn2ldo" path="res://scenes/board/cycle_effects/cycle_effect_do_damage.gd" id="5_xoeau"]
 [ext_resource type="Script" uid="uid://c6365ba3jmivv" path="res://scenes/board/cycle_effects/cycle_effect_spawn_unknown_tiles.gd" id="6_avmo2"]
 [ext_resource type="Texture2D" uid="uid://ctpk2jeg5pts8" path="res://assets/ui/small-nine-patch.png" id="8_hve3p"]
 [ext_resource type="Script" uid="uid://bb86qx2048csu" path="res://scenes/ui.gd" id="8_iotsf"]
-[ext_resource type="Script" uid="uid://bec8empvn2ldo" path="res://scenes/board/cycle_effects/cycle_effect_do_damage.gd" id="8_wj41c"]
 [ext_resource type="Texture2D" uid="uid://b7l6burxk7544" path="res://assets/ui/nine-patch-bottom.png" id="9_215e1"]
 [ext_resource type="Script" uid="uid://cbsof0i8gmrfi" path="res://scenes/tile_hand.gd" id="9_vef74"]
 [ext_resource type="Shader" uid="uid://dlr12wnc408j" path="res://materials/shaders/position_indicator_shader.gdshader" id="11_7knny"]
@@ -29,7 +27,7 @@
 [ext_resource type="Resource" uid="uid://4vjb6mhcmyxk" path="res://data/tiles/tile_squall.tres" id="15_vaj68"]
 [ext_resource type="Resource" uid="uid://cuiw4o7dkyh60" path="res://data/tiles/tile_points_on_destroy.tres" id="16_i2p71"]
 [ext_resource type="Resource" uid="uid://cs8h5k12pyhwc" path="res://data/tiles/tile_basic_points.tres" id="16_xa8c5"]
-[ext_resource type="Resource" uid="uid://iyogiblm2cv3" path="res://data/tiles/tile_lone_signal.tres" id="17_5b14r"]
+[ext_resource type="Resource" uid="uid://iyogiblm2cv3" path="res://data/tiles/tile_basic_points_no_neighbors.tres" id="17_5b14r"]
 [ext_resource type="PackedScene" uid="uid://bch84pl6vclm5" path="res://assets/vfx/vfxConstellationBox.glb" id="18_boyg6"]
 [ext_resource type="Resource" uid="uid://dxqrjemap6vx6" path="res://data/tiles/tile_change.tres" id="19_4v2jo"]
 [ext_resource type="Resource" uid="uid://7164xr2gbmkb" path="res://data/tiles/tile_encourage.tres" id="19_xex6t"]
@@ -68,9 +66,7 @@
 [ext_resource type="Texture2D" uid="uid://c3mk3f4rf4v27" path="res://assets/ui/blocked-nine-patch.png" id="50_avmo2"]
 [ext_resource type="Script" uid="uid://gfxdn28hng4v" path="res://scenes/vfx_manager.gd" id="51_vyqle"]
 [ext_resource type="PackedScene" uid="uid://b0sf5l21nejxn" path="res://scenes/ui/tile_data.tscn" id="55_jo4nb"]
-[ext_resource type="Texture2D" uid="uid://b247k7wj3paye" path="res://assets/icons/hearts.png" id="56_baljx"]
 [ext_resource type="PackedScene" uid="uid://b0thg0yeu365q" path="res://scenes/ui/tile_display.tscn" id="57_jo4nb"]
-[ext_resource type="Texture2D" uid="uid://cu25qi8emx63x" path="res://assets/icons/shield-reflect.png" id="57_t2ssd"]
 [ext_resource type="Script" uid="uid://dqesb21oc6arv" path="res://scenes/ui/choose_tiles.gd" id="60_56gn1"]
 [ext_resource type="Shader" uid="uid://dvsio8wuv6cg5" path="res://materials/shaders/basic_fog_shader.gdshader" id="69_6qn5j"]
 
@@ -104,41 +100,22 @@ albedo_color = Color(1, 0.12156863, 1, 1)
 [sub_resource type="SphereMesh" id="SphereMesh_0de7l"]
 material = SubResource("StandardMaterial3D_0de7l")
 
+[sub_resource type="GDScript" id="GDScript_xoeau"]
+script/source = "extends TileEffect
+class_name CycleEffect
+"
+
 [sub_resource type="Resource" id="Resource_6qn5j"]
 script = ExtResource("5_xoeau")
-include_self = false
-every_tile = true
-faction = 1
-metadata/_custom_type_script = "uid://di6fi4200kyxe"
+metadata/_custom_type_script = "uid://bec8empvn2ldo"
 
-[sub_resource type="Resource" id="Resource_xoeau"]
+[sub_resource type="Resource" id="Resource_jo4nb"]
 script = ExtResource("5_jo4nb")
-event = 2
-main_target = SubResource("Resource_6qn5j")
 metadata/_custom_type_script = "uid://yqxfojxum3as"
 
-[sub_resource type="Resource" id="Resource_wj41c"]
-script = ExtResource("5_xoeau")
-empty_space = true
-metadata/_custom_type_script = "uid://di6fi4200kyxe"
-
-[sub_resource type="Resource" id="Resource_baljx"]
+[sub_resource type="Resource" id="Resource_56gn1"]
 script = ExtResource("6_avmo2")
-event = 2
-main_target = SubResource("Resource_wj41c")
 metadata/_custom_type_script = "uid://c6365ba3jmivv"
-
-[sub_resource type="Resource" id="Resource_t2ssd"]
-script = ExtResource("5_xoeau")
-include_self = false
-every_tile = true
-pull_random_amount = Vector2i(1, 1)
-metadata/_custom_type_script = "uid://di6fi4200kyxe"
-
-[sub_resource type="Resource" id="Resource_7noa1"]
-script = ExtResource("8_wj41c")
-main_target = SubResource("Resource_t2ssd")
-metadata/_custom_type_script = "uid://bec8empvn2ldo"
 
 [sub_resource type="MultiMesh" id="MultiMesh_dhpj7"]
 transform_format = 1
@@ -197,13 +174,6 @@ texture_margin_top = 8.0
 texture_margin_right = 24.0
 texture_margin_bottom = 8.0
 region_rect = Rect2(0, 0, 32, 16)
-
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_baljx"]
-color = Color(0.1728327, 0.17283267, 0.17283267, 1)
-grow_begin = 4.0
-grow_end = 4.0
-thickness = 2
-vertical = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6qn5j"]
 bg_color = Color(0.096971996, 0.09691989, 0.18061039, 1)
@@ -432,8 +402,8 @@ camera = NodePath("../CameraArm/Camera3D")
 selection_svp = NodePath("../TileDisplayViewport/MarginContainer/SubViewportContainer/SubViewport")
 enemy_tile_container = NodePath("../EnemyTileContainer")
 light = NodePath("../DirectionalLight3D")
-default_cycle_tasks = Array[ExtResource("4_vyqle")]([SubResource("Resource_xoeau")])
-varied_cycle_tasks = Array[ExtResource("4_vyqle")]([SubResource("Resource_baljx"), SubResource("Resource_7noa1")])
+default_cycle_tasks = Array[SubResource("GDScript_xoeau")]([SubResource("Resource_6qn5j")])
+default_turn_tasks = Array[SubResource("GDScript_xoeau")]([SubResource("Resource_jo4nb"), SubResource("Resource_56gn1")])
 
 [node name="ShopManager" type="Node" parent="." unique_id=1207696944]
 script = ExtResource("3_boyg6")
@@ -522,7 +492,7 @@ script = ExtResource("13_hb5m1")
 
 [node name="ShopTileContainer" type="Node" parent="." unique_id=1521082501]
 script = ExtResource("14_x5p1p")
-resources = Array[Resource]([ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("19_4v2jo"), ExtResource("45_avmo2"), ExtResource("19_xex6t"), ExtResource("21_l1i01"), ExtResource("17_5b14r"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("22_aa0lp"), ExtResource("15_vaj68")])
+resources = Array[Resource]([ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("19_4v2jo"), ExtResource("45_avmo2"), ExtResource("19_xex6t"), ExtResource("21_l1i01"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("22_aa0lp"), ExtResource("15_vaj68")])
 
 [node name="EnemyTileContainer" type="Node" parent="." unique_id=1200513788]
 script = ExtResource("20_5b14r")
@@ -530,7 +500,7 @@ resources = Array[Resource]([ExtResource("23_082n1"), ExtResource("24_082n1"), E
 
 [node name="AllTileContainer" type="Node" parent="." unique_id=439354896]
 script = ExtResource("32_87ddb")
-resources = Array[Resource]([ExtResource("35_56gn1"), ExtResource("23_082n1"), ExtResource("24_082n1"), ExtResource("22_xfvwf"), ExtResource("35_jo4nb"), ExtResource("33_mc3al"), ExtResource("33_3gvs5"), ExtResource("33_vuohh"), ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("39_jo4nb"), ExtResource("33_ib7ph"), ExtResource("19_4v2jo"), ExtResource("38_ra4rb"), ExtResource("34_vuohh"), ExtResource("35_3gvs5"), ExtResource("45_avmo2"), ExtResource("19_xex6t"), ExtResource("36_mc3al"), ExtResource("21_l1i01"), ExtResource("17_5b14r"), ExtResource("37_bqa6y"), ExtResource("38_du4n2"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("39_ra4rb"), ExtResource("22_aa0lp"), ExtResource("40_ple6s"), ExtResource("15_vaj68")])
+resources = Array[Resource]([ExtResource("35_56gn1"), ExtResource("23_082n1"), ExtResource("24_082n1"), ExtResource("22_xfvwf"), ExtResource("35_jo4nb"), ExtResource("33_mc3al"), ExtResource("33_3gvs5"), ExtResource("33_vuohh"), ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("39_jo4nb"), ExtResource("33_ib7ph"), ExtResource("19_4v2jo"), ExtResource("38_ra4rb"), ExtResource("34_vuohh"), ExtResource("35_3gvs5"), ExtResource("45_avmo2"), ExtResource("19_xex6t"), ExtResource("36_mc3al"), ExtResource("21_l1i01"), ExtResource("37_bqa6y"), ExtResource("38_du4n2"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("39_ra4rb"), ExtResource("22_aa0lp"), ExtResource("40_ple6s"), ExtResource("15_vaj68")])
 
 [node name="VfxManager" type="Node" parent="." unique_id=1149999827]
 script = ExtResource("51_vyqle")
@@ -600,67 +570,6 @@ theme_override_constants/margin_left = 12
 theme_override_constants/margin_right = 12
 
 [node name="OverrideAmount" type="Label" parent="UI/OverrideData/MarginContainer/MarginContainer" unique_id=1196561662]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Hi"
-horizontal_alignment = 1
-
-[node name="HoveredTileData" type="MarginContainer" parent="UI" unique_id=1279090011]
-unique_name_in_owner = true
-offset_left = 551.0
-offset_top = 638.0
-offset_right = 607.0
-offset_bottom = 741.0
-pivot_offset_ratio = Vector2(0.5, 1)
-size_flags_horizontal = 4
-size_flags_vertical = 4
-mouse_filter = 2
-mouse_behavior_recursive = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="UI/HoveredTileData" unique_id=2004689463]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Panel" type="Panel" parent="UI/HoveredTileData/MarginContainer" unique_id=970459772]
-self_modulate = Color(0.15294118, 0.15294118, 0.26666668, 0.8862745)
-layout_mode = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_vyqle")
-
-[node name="MarginContainer" type="MarginContainer" parent="UI/HoveredTileData/MarginContainer" unique_id=986975053]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_right = 12
-
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/HoveredTileData/MarginContainer/MarginContainer" unique_id=1282784766]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="UI/HoveredTileData/MarginContainer/MarginContainer/HBoxContainer" unique_id=1930782048]
-layout_mode = 2
-texture = ExtResource("56_baljx")
-expand_mode = 3
-stretch_mode = 5
-
-[node name="HoveredTileLabelHealth" type="Label" parent="UI/HoveredTileData/MarginContainer/MarginContainer/HBoxContainer" unique_id=859730905]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Hi"
-horizontal_alignment = 1
-
-[node name="VSeparator" type="VSeparator" parent="UI/HoveredTileData/MarginContainer/MarginContainer/HBoxContainer" unique_id=861434983]
-layout_mode = 2
-theme_override_styles/separator = SubResource("StyleBoxLine_baljx")
-
-[node name="TextureRect2" type="TextureRect" parent="UI/HoveredTileData/MarginContainer/MarginContainer/HBoxContainer" unique_id=358395553]
-layout_mode = 2
-texture = ExtResource("57_t2ssd")
-expand_mode = 3
-stretch_mode = 5
-
-[node name="HoveredTileLabelDefense" type="Label" parent="UI/HoveredTileData/MarginContainer/MarginContainer/HBoxContainer" unique_id=793904677]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 32

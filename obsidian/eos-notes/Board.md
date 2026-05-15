@@ -19,17 +19,16 @@ kanban-plugin: board
 - [ ] Add chipped build
 - [ ] Add effect forging
 - [ ] Remove purchasing individual tiles from shop, add forging to shop
-- [ ] [[Add deadlock check in tile moves]]
 - [ ] Rifts need to auto-leave after 2 turns
 - [ ] Rifts need more tile-esque art
 - [ ] [[Create overview UI for round to make decisions easier post round (tiles destroyed, max points gained from tile, min points, friendly tiles active enemy tiles active)]]
 - [ ] Need better way to indicate to player to hover over cycle and turn buttons
+- [ ] Need UI on left to show all active cycle effects
 
 
 ## Doin
 
 - [ ] Hovering a tile needs to also show what stacks of debuffs (and buffs) it has
-- [ ] [[Test out non-parallel approach]]
 
 
 ## DONE
@@ -42,6 +41,8 @@ kanban-plugin: board
 - [ ] Add tile lifetime binding commands
 - [ ] Area multiply effect doesn't move areas when the tile itself is moved
 - [ ] Add tile movement binding commands
+- [ ] [[Test out non-parallel approach]]
+- [ ] [[Add deadlock check in tile moves]]
 
 
 

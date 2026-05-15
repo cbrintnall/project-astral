@@ -1,17 +1,16 @@
-extends CycleEffect
+extends TileEffect
 class_name CycleEffectGiveChip
 
-var _all_tiles = preload("res://data/targets/tile_target_all_tiles.tres")
-var _damage := 5
+@export var amount := 1
 
-func get_description() -> String:
-  return "Nyx will fire arrows at all tiles, dealing %d damage." % _damage
+func get_description(effect_ctx: EffectContext, exec_ctx: ExecutionContext) -> String:
+  return "Nyx will fire arrows at the marked tiles, dealing %d damage." % amount
 
-func on_cycle_start():
-  var targets = _all_tiles.get_target(EffectContext.new(), true)
+func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
+  var targets = main_target.get_target(effect_ctx, true)
   var context := VfxContext.new()
   
-  context.on_step.connect(func(idx: int): GridManager.inst.get_tile_at(targets[idx]).do_chip_damage(_damage))
+  context.on_step.connect(func(idx: int): GridManager.inst.get_tile_at(targets[idx]).do_chip_damage(amount))
   context.delay_range = Vector2(0.1, 1.0)
   context.duration_range = Vector2(1.0, 2.0)
   context.transition = Tween.TransitionType.TRANS_QUAD
@@ -22,3 +21,5 @@ func on_cycle_start():
     30.0,
     context,
   )
+  
+  await context.on_finish

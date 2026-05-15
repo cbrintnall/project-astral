@@ -1,13 +1,13 @@
-extends CycleEffect
+extends TileEffect
 class_name CycleEffectSpawnEnemies
 
 @export var range := Vector2i(1,2)
 
-func get_description() -> String:
+func get_description(effect_ctx: EffectContext, exec_ctx: ExecutionContext) -> String:
   return "Nyx will summon between %d to %d enemy tiles adjacent to your tiles." % [range.x,range.y]
   
-func on_cycle_start():
-  var played = GridManager.inst.get_played_tiles().filter(func(tile: Tile): return not (tile.def.initiates and not tile.def.is_enemy))
+func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
+  var played = main_target.get_target(effect_ctx).map(func(pos: Vector3i): return GridManager.inst.get_tile_at(pos))
   var enemy_tiles = AllTileContainer.inst.resources.filter(func(def: TileDef): return def.is_enemy)
   
   played.shuffle()

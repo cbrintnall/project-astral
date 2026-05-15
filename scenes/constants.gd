@@ -18,6 +18,8 @@ const TILE_OPTIONS_PER_TURN = 8
 const TILE_OPTIONS_ALLOWED_SELECTIONS = 4
 const CHOOSE_TILES_EACH_ROUND = false
 
+const CYCLE_EVENTS_PER_CYCLE = Vector2i(1,3)
+
 static var START_DECK = [
   load("res://data/tiles/tile_basic_points.tres"),
   load("res://data/tiles/tile_basic_points.tres"),
@@ -25,9 +27,9 @@ static var START_DECK = [
   load("res://data/tiles/tile_basic_points.tres"),
   load("res://data/tiles/tile_basic_points.tres"),
   load("res://data/tiles/tile_basic_multiply_area.tres"),
-  load("res://data/tiles/tile_basic_points_no_neighbors.tres"),
-  load("res://data/tiles/tile_basic_points_no_neighbors.tres"),
-  load("res://data/tiles/tile_basic_points_no_neighbors.tres"),
+  load("res://data/tiles/tile_lone_signal.tres"),
+  load("res://data/tiles/tile_lone_signal.tres"),
+  load("res://data/tiles/tile_lone_signal.tres"),
 ]
 
 const CARDINAL_DIRECTIONS = [
