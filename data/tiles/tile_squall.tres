@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://4vjb6mhcmyxk"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_0yp0j"]
+[ext_resource type="Script" uid="uid://b8w5q1k7is7sg" path="res://scenes/tiles/effects/tile_effect_give_points.gd" id="2_us2rj"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="3_gwh4g"]
+[ext_resource type="Script" uid="uid://d382tt1tvmdrt" path="res://scenes/tiles/effects/tile_effect_chip.gd" id="4_fvvp3"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="5_mxp7d"]
+[ext_resource type="Texture2D" uid="uid://d2xib00bg1jt7" path="res://assets/particles/cloud2.png" id="6_lkoqu"]
+
+[sub_resource type="Resource" id="Resource_xclym"]
+script = ExtResource("2_us2rj")
+points_given = 50
+event = 4
+metadata/_custom_type_script = "uid://b8w5q1k7is7sg"
+
+[sub_resource type="Resource" id="Resource_tmkyn"]
+script = ExtResource("3_gwh4g")
+include_self = false
+random_neighbors = 1
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_megwa"]
+script = ExtResource("4_fvvp3")
+event = 4
+main_target = SubResource("Resource_tmkyn")
+metadata/_custom_type_script = "uid://d382tt1tvmdrt"
+
+[resource]
+script = ExtResource("5_mxp7d")
+name = "Squall"
+effects = Array[ExtResource("1_0yp0j")]([SubResource("Resource_xclym"), SubResource("Resource_megwa")])
+texture = ExtResource("6_lkoqu")
+in_shop = true
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"

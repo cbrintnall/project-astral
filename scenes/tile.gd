@@ -22,6 +22,7 @@ enum Faction {
 
 @export var def: TileDef
 @export var stretcher: Stretcher3D
+@export var place_sound := preload("res://audio/place-tile.ogg")
 
 @onready var rotation_axis := Vector3(randf(), randf(), randf()).normalized()
 
@@ -257,7 +258,7 @@ func set_placed_at(_tile: Vector3i):
   placed = true
   
   AudioManager3d.play({
-    "stream": preload("res://audio/place-tile.ogg"),
+    "stream": place_sound,
     "pitch_variance": 0.1,
     "parent": self,
     "volume": 0.5

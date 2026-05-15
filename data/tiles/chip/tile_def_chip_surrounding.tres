@@ -9,7 +9,6 @@
 
 [sub_resource type="Resource" id="Resource_0d5cr"]
 script = ExtResource("2_h40wb")
-amount = null
 main_target = ExtResource("2_0d5cr")
 metadata/_custom_type_script = "uid://d382tt1tvmdrt"
 

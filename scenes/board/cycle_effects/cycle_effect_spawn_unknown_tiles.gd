@@ -18,9 +18,16 @@ func on_cycle_start():
   print("spawning %d / %d caches" % [len(claimed), amount])
     
   for spot: Vector3i in claimed:
-    var cache = load("res://scenes/tiles/tile_cache.tscn").instantiate()
-    cache.default_state = "display"
-    if GridManager.inst.try_place_tile(cache, spot):
-      cache.global_position = Vector3(spot)
-    else:
-      push_error("Cache failed to place, there is likely an issue in the grid tile claim")
+    var ctx := VfxContext.new()
+    ctx.duration_range = Vector2(0.5, 1.0)
+    ctx.on_finish.connect(
+      func():
+        BoardCamera.inst.shake(0.2, 0.5)
+        var cache = load("res://scenes/tiles/tile_cache.tscn").instantiate()
+        cache.default_state = "display"
+        if GridManager.inst.try_place_tile(cache, spot):
+          cache.global_position = Vector3(spot)
+        else:
+          push_error("Cache failed to place, there is likely an issue in the grid tile claim")
+    )
+    VfxManager.inst.do_light_beam(Vector3(spot), ctx)

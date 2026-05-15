@@ -1,6 +1,8 @@
 extends Node
 class_name TileExecutor
 
+static var long_exec_time := 30.0
+
 signal finished
 
 var tiles := []
@@ -20,6 +22,8 @@ var _remaining_resolutions := TaskGroup.new()
 var _remaining_cleanup_resolutions := []
 var _resolution_cleanup := TaskGroup.new()
 
+var _time := 0.0
+
 func give_execution_collision_data(data: TileCollisionContext):
   _context.collision_data = data
 
@@ -35,12 +39,23 @@ func _ready() -> void:
   _execution_state.register("start", _start)
   _execution_state.register("execute", _process_tiles)
   _execution_state.register("resolve", _resolve_tiles)
+  
+func _process(_delta: float) -> void:
+  DebugDraw2D.begin_text_group("%s execution" % get_path())
+  DebugDraw2D.set_text("time", _time)
+  DebugDraw2D.set_text("executing", len(tiles))
+  DebugDraw2D.set_text("resolving", len(_context.resolutions))
+  DebugDraw2D.end_text_group()
+  
+  if GameManager.debug and _time > long_exec_time:
+    breakpoint
 
 func _start(machine: CallableStateMachine, _delta: float):
   machine.current = "execute"
   _context.start_execution()
   
 func _process_tiles(machine: CallableStateMachine, delta: float):
+  _time += delta
   if tiles:
     if not is_instance_valid(tiles.front()): 
       tiles.pop_front()
@@ -74,6 +89,7 @@ func _process_tiles(machine: CallableStateMachine, delta: float):
     machine.current = "resolve"
 
 func _resolve_tiles(machine: CallableStateMachine, delta: float):
+  _time += delta
   if _remaining_resolutions.finished:
     if _context.resolutions:
       # restart execution in case resolution itself pushes more resolutions

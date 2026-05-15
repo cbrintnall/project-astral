@@ -25,7 +25,7 @@
 [ext_resource type="Script" uid="uid://iq0mu5bomd0v" path="res://scenes/hand_manager.gd" id="13_hb5m1"]
 [ext_resource type="Script" uid="uid://curfronmsvgaq" path="res://scenes/shop_tile_container.gd" id="14_x5p1p"]
 [ext_resource type="Resource" uid="uid://car8lvcpofuyc" path="res://data/tiles/tile_basic_multiply_area.tres" id="15_i2p71"]
-[ext_resource type="Resource" uid="uid://4vjb6mhcmyxk" path="res://data/tiles/tile_high_point_tick.tres" id="15_vaj68"]
+[ext_resource type="Resource" uid="uid://4vjb6mhcmyxk" path="res://data/tiles/tile_squall.tres" id="15_vaj68"]
 [ext_resource type="Resource" uid="uid://cuiw4o7dkyh60" path="res://data/tiles/tile_points_on_destroy.tres" id="16_i2p71"]
 [ext_resource type="Resource" uid="uid://cs8h5k12pyhwc" path="res://data/tiles/tile_basic_points.tres" id="16_xa8c5"]
 [ext_resource type="Resource" uid="uid://iyogiblm2cv3" path="res://data/tiles/tile_basic_points_no_neighbors.tres" id="17_5b14r"]
@@ -488,7 +488,7 @@ script = ExtResource("13_hb5m1")
 
 [node name="ShopTileContainer" type="Node" parent="." unique_id=1521082501]
 script = ExtResource("14_x5p1p")
-resources = Array[Resource]([ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("19_4v2jo"), ExtResource("45_avmo2"), ExtResource("19_xex6t"), ExtResource("21_l1i01"), ExtResource("15_vaj68"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("22_aa0lp")])
+resources = Array[Resource]([ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("19_4v2jo"), ExtResource("45_avmo2"), ExtResource("19_xex6t"), ExtResource("21_l1i01"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("22_aa0lp"), ExtResource("15_vaj68")])
 
 [node name="EnemyTileContainer" type="Node" parent="." unique_id=1200513788]
 script = ExtResource("20_5b14r")
@@ -496,7 +496,7 @@ resources = Array[Resource]([ExtResource("23_082n1"), ExtResource("24_082n1"), E
 
 [node name="AllTileContainer" type="Node" parent="." unique_id=439354896]
 script = ExtResource("32_87ddb")
-resources = Array[Resource]([ExtResource("35_56gn1"), ExtResource("23_082n1"), ExtResource("24_082n1"), ExtResource("22_xfvwf"), ExtResource("35_jo4nb"), ExtResource("33_mc3al"), ExtResource("33_3gvs5"), ExtResource("33_vuohh"), ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("39_jo4nb"), ExtResource("33_ib7ph"), ExtResource("19_4v2jo"), ExtResource("38_ra4rb"), ExtResource("34_vuohh"), ExtResource("35_3gvs5"), ExtResource("45_avmo2"), ExtResource("19_xex6t"), ExtResource("36_mc3al"), ExtResource("21_l1i01"), ExtResource("15_vaj68"), ExtResource("37_bqa6y"), ExtResource("38_du4n2"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("39_ra4rb"), ExtResource("22_aa0lp"), ExtResource("40_ple6s")])
+resources = Array[Resource]([ExtResource("35_56gn1"), ExtResource("23_082n1"), ExtResource("24_082n1"), ExtResource("22_xfvwf"), ExtResource("35_jo4nb"), ExtResource("33_mc3al"), ExtResource("33_3gvs5"), ExtResource("33_vuohh"), ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("17_5b14r"), ExtResource("39_jo4nb"), ExtResource("33_ib7ph"), ExtResource("19_4v2jo"), ExtResource("38_ra4rb"), ExtResource("34_vuohh"), ExtResource("35_3gvs5"), ExtResource("45_avmo2"), ExtResource("19_xex6t"), ExtResource("36_mc3al"), ExtResource("21_l1i01"), ExtResource("37_bqa6y"), ExtResource("38_du4n2"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("39_ra4rb"), ExtResource("22_aa0lp"), ExtResource("40_ple6s"), ExtResource("15_vaj68")])
 
 [node name="VfxManager" type="Node" parent="." unique_id=1149999827]
 script = ExtResource("51_vyqle")
@@ -1082,7 +1082,7 @@ transform = Transform3D(1, 0, 0, 0, 1, -1.5893256e-08, 0, 1.5893256e-08, 1, 0, 3
 mesh = SubResource("QuadMesh_80nbo")
 
 [node name="BorderMesh" type="MeshInstance3D" parent="GridVisual" unique_id=718208658]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.007913351, -0.007813948, 0.29999954)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.011483431, 0.0014250099, 0.29999954)
 mesh = SubResource("PlaneMesh_edr7y")
 
 [node name="LowerFog" type="MeshInstance3D" parent="GridVisual" unique_id=948632561]

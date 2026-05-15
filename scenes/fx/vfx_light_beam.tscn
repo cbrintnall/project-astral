@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://6w7gjl028u52"]
+
+[ext_resource type="Script" uid="uid://ce3rsvy1ki3ys" path="res://scenes/fx/path_line.gd" id="1_qhdms"]
+[ext_resource type="Shader" uid="uid://blvbmentmkdpu" path="res://materials/shaders/light_beam_shader.gdshader" id="2_5ql1n"]
+[ext_resource type="ArrayMesh" uid="uid://dfsyqcxqf4xk0" path="res://assets/vfx/vfxShiningEdge_Circle.res" id="3_3o4s0"]
+[ext_resource type="Shader" uid="uid://kwpeye2otwwi" path="res://materials/constellation_shader.gdshader" id="4_5ql1n"]
+
+[sub_resource type="Curve3D" id="Curve3D_6qn5j"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_baljx"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_baljx"]
+frequency = 0.0161
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_t2ssd"]
+noise = SubResource("FastNoiseLite_baljx")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t2ssd"]
+render_priority = 0
+shader = ExtResource("2_5ql1n")
+shader_parameter/noise = SubResource("NoiseTexture2D_t2ssd")
+shader_parameter/clr = Color(0.9490196, 0.827451, 0.67058825, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5ql1n"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3o4s0"]
+noise = SubResource("FastNoiseLite_5ql1n")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3o4s0"]
+render_priority = 0
+shader = ExtResource("4_5ql1n")
+shader_parameter/noise = SubResource("NoiseTexture2D_3o4s0")
+shader_parameter/clr = Color(0.9490196, 0.827451, 0.67058825, 1)
+
+[node name="VfxLightBeam" type="Path3D" unique_id=641377648]
+curve = SubResource("Curve3D_6qn5j")
+script = ExtResource("1_qhdms")
+mesh = SubResource("ImmediateMesh_baljx")
+width = 0.315
+sample_distance = 5.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1858960243]
+mesh = SubResource("ImmediateMesh_baljx")
+surface_material_override/0 = SubResource("ShaderMaterial_t2ssd")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=197070723]
+transform = Transform3D(0.58, 0, 0, 0, 2.84, 0, 0, 0, 0.58, 0, 0, 0)
+mesh = ExtResource("3_3o4s0")
+surface_material_override/0 = SubResource("ShaderMaterial_3o4s0")

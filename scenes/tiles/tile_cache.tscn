@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cgo46vph0m5di" path="res://scenes/tiles/tile_cache.gd" id="1_c38ld"]
 [ext_resource type="Script" uid="uid://b140lw26qadyg" path="res://otterlib/stretcher3d.gd" id="2_565ns"]
+[ext_resource type="AudioStream" uid="uid://b7o2oec8qpy6i" path="res://audio/rift-opening.ogg" id="2_mit6b"]
 [ext_resource type="PackedScene" uid="uid://dkrn1r2bf7dgf" path="res://scenes/fx/rift_fx.tscn" id="3_nsb6o"]
 [ext_resource type="ArrayMesh" uid="uid://ba4glr30b4w0v" path="res://assets/vfx/vfxPointVortex.tres" id="4_1pkqf"]
 
@@ -10,6 +11,7 @@
 [node name="TileCache" type="StaticBody3D" unique_id=83971767 node_paths=PackedStringArray("stretcher")]
 script = ExtResource("1_c38ld")
 stretcher = NodePath("Stretcher3D")
+place_sound = ExtResource("2_mit6b")
 metadata/_custom_type_script = "uid://cvepy4rsfup2v"
 
 [node name="Stretcher3D" type="Node3D" parent="." unique_id=1409993391]
