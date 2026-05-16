@@ -14,6 +14,47 @@ class_name TileTargetDef
 @export var pull_random_amount := Vector2i.ZERO
 @export var faction := Tile.Faction.ALL
 
+func should_preview_spots() -> bool:
+  if random_cardinal_direction:
+    return false
+    
+  return true
+
+func get_text_tags() -> PackedStringArray:
+  var text := PackedStringArray()
+
+  if random_cardinal_direction:
+    text.push_back("random direction")
+    
+  if size:
+    text.push_back("[color=#c69fa5]%d[/color]x[color=#c69fa5]%d[/color]" % [size.x,size.y])
+  
+  if include_self:
+    text.push_back("self")
+    
+  if row:
+    text.push_back("row")
+    
+  if column:
+    text.push_back("column")
+    
+  if random_neighbors:
+    text.push_back("[color=#c69fa5]%d[/color] neighbors" % random_neighbors)
+    
+  match faction:
+    Tile.Faction.ENEMY:
+      text.push_back("targets \"enemies\"")
+    Tile.Faction.PLAYER:
+      text.push_back("targets \"player\"")
+      
+  if every_tile:
+    text.push_back("all tiles")
+    
+  if empty_space:
+    text.push_back("empty spaces")
+  
+  return text
+
 func get_text():
   var text := []
   var amount := mini(len(tiles), random_amount_from_tiles)

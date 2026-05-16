@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://cpsvmss4lt3yb"]
+
+[ext_resource type="FontFile" uid="uid://dw17dptw7rmyt" path="res://assets/static/MuseoModerno-Regular.ttf" id="1_7cia5"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3xib3"]
+load_path = "res://.godot/imported/blocked-nine-patch.png-b79e777f66d4b749ea5ced9915476202.s3tc.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_goh74"]
+texture = SubResource("CompressedTexture2D_3xib3")
+texture_margin_left = 24.0
+texture_margin_top = 8.0
+texture_margin_right = 24.0
+texture_margin_bottom = 8.0
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+region_rect = Rect2(0, 0, 32, 16)
+
+[sub_resource type="Gradient" id="Gradient_gg1k6"]
+interpolation_mode = 2
+interpolation_color_space = 2
+colors = PackedColorArray(0.9843137, 0.9607843, 0.9372549, 1, 0.9843137, 0.9607843, 0.9372549, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gxvww"]
+gradient = SubResource("Gradient_gg1k6")
+width = 128
+height = 128
+fill_from = Vector2(0, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_km72m"]
+texture = SubResource("GradientTexture2D_gxvww")
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[node name="AreaTag" type="MarginContainer" unique_id=137165237]
+
+[node name="Panel2" type="Panel" parent="." unique_id=321744744]
+self_modulate = Color(0.15294118, 0.15294118, 0.26666668, 1)
+clip_children = 1
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_goh74")
+
+[node name="Panel3" type="Panel" parent="Panel2" unique_id=2917884]
+modulate = Color(0.15294118, 0.15294118, 0.26666668, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_km72m")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1428191984]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_fonts/normal_font = ExtResource("1_7cia5")
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+text = "5x5"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1

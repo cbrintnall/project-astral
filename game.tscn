@@ -68,11 +68,16 @@
 [ext_resource type="Texture2D" uid="uid://c3mk3f4rf4v27" path="res://assets/ui/blocked-nine-patch.png" id="50_avmo2"]
 [ext_resource type="Script" uid="uid://gfxdn28hng4v" path="res://scenes/vfx_manager.gd" id="51_vyqle"]
 [ext_resource type="PackedScene" uid="uid://b0sf5l21nejxn" path="res://scenes/ui/tile_data.tscn" id="55_jo4nb"]
+[ext_resource type="Texture2D" uid="uid://02euhmyf5ukn" path="res://assets/star.png" id="56_7noa1"]
 [ext_resource type="Texture2D" uid="uid://b247k7wj3paye" path="res://assets/icons/hearts.png" id="56_baljx"]
 [ext_resource type="PackedScene" uid="uid://b0thg0yeu365q" path="res://scenes/ui/tile_display.tscn" id="57_jo4nb"]
 [ext_resource type="Texture2D" uid="uid://cu25qi8emx63x" path="res://assets/icons/shield-reflect.png" id="57_t2ssd"]
 [ext_resource type="Script" uid="uid://dqesb21oc6arv" path="res://scenes/ui/choose_tiles.gd" id="60_56gn1"]
+[ext_resource type="PackedScene" uid="uid://c54wrus6tf5mh" path="res://scenes/ui/imbuement_icon.tscn" id="62_3xib3"]
 [ext_resource type="Shader" uid="uid://dvsio8wuv6cg5" path="res://materials/shaders/basic_fog_shader.gdshader" id="69_6qn5j"]
+[ext_resource type="Script" uid="uid://ce3rsvy1ki3ys" path="res://scenes/fx/path_line.gd" id="71_wj41c"]
+[ext_resource type="ArrayMesh" uid="uid://dakjw3wucu53r" path="res://assets/vfx/vfxArrow_Circle_001.res" id="76_5628o"]
+[ext_resource type="Shader" uid="uid://cb0aqg2fneq8d" path="res://materials/shaders/pointer_indicator_line.gdshader" id="78_cwgap"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0de7l"]
 texture = ExtResource("39_t46w6")
@@ -190,6 +195,25 @@ shader_parameter/feather = 0.5
 [sub_resource type="QuadMesh" id="QuadMesh_xex6t"]
 material = SubResource("ShaderMaterial_082n1")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5628o"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.43137255)
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+
+[sub_resource type="Curve3D" id="Curve3D_5628o"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -5, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_fuuk6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_svdf4"]
+render_priority = 0
+shader = ExtResource("78_cwgap")
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vyqle"]
 texture = ExtResource("50_avmo2")
 texture_margin_left = 24.0
@@ -217,6 +241,17 @@ texture_margin_left = 64.0
 texture_margin_right = 64.0
 texture_margin_bottom = 64.0
 region_rect = Rect2(0, 0, 1024, 1024)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3xib3"]
+load_path = "res://.godot/imported/blocked-nine-patch.png-b79e777f66d4b749ea5ced9915476202.s3tc.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5628o"]
+texture = SubResource("CompressedTexture2D_3xib3")
+texture_margin_left = 24.0
+texture_margin_top = 8.0
+texture_margin_right = 24.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(0, 0, 32, 16)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hve3p"]
 texture = ExtResource("8_hve3p")
@@ -311,7 +346,7 @@ cellular_jitter = 0.2
 noise = SubResource("FastNoiseLite_xoeau")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6qn5j"]
-render_priority = 0
+render_priority = -6
 shader = ExtResource("12_lc2xo")
 shader_parameter/clr_a = Color(0.9490196, 0.827451, 0.67058825, 1)
 shader_parameter/clr_b = Color(0.15294118, 0.15294118, 0.26666668, 1)
@@ -330,7 +365,7 @@ noise = SubResource("FastNoiseLite_wj41c")
 seamless = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_baljx"]
-render_priority = 0
+render_priority = -5
 shader = ExtResource("43_kq12w")
 shader_parameter/border_margin = 0.0
 shader_parameter/mist_margin = 3.0
@@ -346,7 +381,7 @@ subdivide_depth = 300
 orientation = 2
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wj41c"]
-render_priority = 0
+render_priority = -5
 shader = ExtResource("69_6qn5j")
 shader_parameter/noise = SubResource("NoiseTexture2D_t46w6")
 shader_parameter/clr_a = Color(0.15294118, 0.15294118, 0.26666668, 1)
@@ -463,9 +498,40 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.00
 [node name="ShopOption5" parent="ShopManager/Root/DisplayOptions" unique_id=57255742 instance=ExtResource("5_e36ub")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4, 0, -3.496911e-07)
 
-[node name="GridManager" type="Node" parent="." unique_id=735757972]
+[node name="ShopOption6" parent="ShopManager/Root/DisplayOptions" unique_id=929214513 instance=ExtResource("5_e36ub")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -3.9999998, 0, 2)
+
+[node name="ShopOption7" parent="ShopManager/Root/DisplayOptions" unique_id=125282745 instance=ExtResource("5_e36ub")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.9999998, 0, 2)
+
+[node name="ShopOption8" parent="ShopManager/Root/DisplayOptions" unique_id=197293767 instance=ExtResource("5_e36ub")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.3841858e-07, 0, 2)
+
+[node name="ShopOption9" parent="ShopManager/Root/DisplayOptions" unique_id=1160077466 instance=ExtResource("5_e36ub")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.0000002, 0, 2)
+
+[node name="ShopOption10" parent="ShopManager/Root/DisplayOptions" unique_id=1937555141 instance=ExtResource("5_e36ub")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4, 0, 2)
+
+[node name="ShopOption11" parent="ShopManager/Root/DisplayOptions" unique_id=344131335 instance=ExtResource("5_e36ub")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -3.9999998, 0, 4)
+
+[node name="ShopOption12" parent="ShopManager/Root/DisplayOptions" unique_id=2130095833 instance=ExtResource("5_e36ub")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.9999998, 0, 4)
+
+[node name="ShopOption13" parent="ShopManager/Root/DisplayOptions" unique_id=992445415 instance=ExtResource("5_e36ub")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.3841858e-07, 0, 4)
+
+[node name="ShopOption14" parent="ShopManager/Root/DisplayOptions" unique_id=1434017956 instance=ExtResource("5_e36ub")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.0000002, 0, 4)
+
+[node name="ShopOption15" parent="ShopManager/Root/DisplayOptions" unique_id=287330803 instance=ExtResource("5_e36ub")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4, 0, 4)
+
+[node name="GridManager" type="Node" parent="." unique_id=735757972 node_paths=PackedStringArray("ui_hover_point")]
 script = ExtResource("2_feb5d")
 size = Vector2i(14, 14)
+ui_hover_point = NodePath("PlayerHoverIndicator/PlayerHoverMesh/PlayerHoverPath/UIHoverPoint")
 
 [node name="Gridcast" type="Node3D" parent="GridManager" unique_id=1771723510]
 script = ExtResource("3_j5wjh")
@@ -507,6 +573,31 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2, 0)
 visible = false
 mesh = SubResource("QuadMesh_xex6t")
+
+[node name="PlayerHoverIndicator" type="Node3D" parent="GridManager" unique_id=2129386277]
+unique_name_in_owner = true
+
+[node name="PlayerHoverMesh" type="MeshInstance3D" parent="GridManager/PlayerHoverIndicator" unique_id=1465094200]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+mesh = ExtResource("76_5628o")
+surface_material_override/0 = SubResource("StandardMaterial3D_5628o")
+
+[node name="PlayerHoverPath" type="Path3D" parent="GridManager/PlayerHoverIndicator/PlayerHoverMesh" unique_id=1848749872 node_paths=PackedStringArray("instance")]
+unique_name_in_owner = true
+curve = SubResource("Curve3D_5628o")
+script = ExtResource("71_wj41c")
+mesh = SubResource("ImmediateMesh_fuuk6")
+instance = NodePath("../MeshInstance3D")
+width = 0.135
+sample_distance = 1.0
+
+[node name="UIHoverPoint" type="Node3D" parent="GridManager/PlayerHoverIndicator/PlayerHoverMesh/PlayerHoverPath" unique_id=1447871873]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.009357929, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GridManager/PlayerHoverIndicator/PlayerHoverMesh" unique_id=487220716]
+mesh = SubResource("ImmediateMesh_fuuk6")
+surface_material_override/0 = SubResource("ShaderMaterial_svdf4")
 
 [node name="MusicManager" type="Node" parent="." unique_id=1434635219 node_paths=PackedStringArray("player")]
 script = ExtResource("3_ryrav")
@@ -599,7 +690,16 @@ mouse_filter = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_right = 12
 
-[node name="OverrideAmount" type="Label" parent="UI/OverrideData/MarginContainer/MarginContainer" unique_id=1196561662]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/OverrideData/MarginContainer/MarginContainer" unique_id=1967000469]
+layout_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="UI/OverrideData/MarginContainer/MarginContainer/HBoxContainer" unique_id=897924166]
+layout_mode = 2
+texture = ExtResource("56_7noa1")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="OverrideAmount" type="Label" parent="UI/OverrideData/MarginContainer/MarginContainer/HBoxContainer" unique_id=1196561662]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
@@ -738,7 +838,6 @@ text = "Money: 500"
 [node name="ScoreLabel" type="Label" parent="UI/UpperBar/VBoxContainer/MarginContainer2/MarginContainer/HBoxContainer" unique_id=362333001]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
 offset_transform_enabled = true
 theme_override_font_sizes/font_size = 32
 text = "100/100"
@@ -792,35 +891,93 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 flat = true
 
-[node name="MarginContainer3" type="MarginContainer" parent="UI/UpperBar" unique_id=105548196]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/UpperBar" unique_id=1156937124]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/UpperBar/HBoxContainer" unique_id=782100169]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -8)
+offset_transform_visual_only = false
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 32
+
+[node name="MarginContainer3" type="MarginContainer" parent="UI/UpperBar/HBoxContainer/MarginContainer" unique_id=996053551]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_right = 32
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/UpperBar/HBoxContainer/MarginContainer/MarginContainer3" unique_id=1837830126]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Panel2" type="Panel" parent="UI/UpperBar/HBoxContainer/MarginContainer/MarginContainer3/MarginContainer" unique_id=773554918]
+self_modulate = Color(0.15294118, 0.15294118, 0.26666668, 1)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_5628o")
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/UpperBar/HBoxContainer/MarginContainer/MarginContainer3/MarginContainer" unique_id=617623697]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 32
+
+[node name="GridContainer" type="GridContainer" parent="UI/UpperBar/HBoxContainer/MarginContainer/MarginContainer3/MarginContainer/MarginContainer" unique_id=883984177]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 24
+columns = 5
+
+[node name="ImbuementIcon" parent="UI/UpperBar/HBoxContainer/MarginContainer/MarginContainer3/MarginContainer/MarginContainer/GridContainer" unique_id=741092778 instance=ExtResource("62_3xib3")]
+layout_mode = 2
+
+[node name="ImbuementIcon2" parent="UI/UpperBar/HBoxContainer/MarginContainer/MarginContainer3/MarginContainer/MarginContainer/GridContainer" unique_id=202092401 instance=ExtResource("62_3xib3")]
+layout_mode = 2
+
+[node name="ImbuementIcon3" parent="UI/UpperBar/HBoxContainer/MarginContainer/MarginContainer3/MarginContainer/MarginContainer/GridContainer" unique_id=1094879335 instance=ExtResource("62_3xib3")]
+layout_mode = 2
+
+[node name="ImbuementIcon4" parent="UI/UpperBar/HBoxContainer/MarginContainer/MarginContainer3/MarginContainer/MarginContainer/GridContainer" unique_id=1663134891 instance=ExtResource("62_3xib3")]
+layout_mode = 2
+
+[node name="ImbuementIcon5" parent="UI/UpperBar/HBoxContainer/MarginContainer/MarginContainer3/MarginContainer/MarginContainer/GridContainer" unique_id=1980402031 instance=ExtResource("62_3xib3")]
+layout_mode = 2
+
+[node name="MarginContainer3" type="MarginContainer" parent="UI/UpperBar/HBoxContainer" unique_id=105548196]
 z_index = -1
 layout_mode = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="UI/UpperBar/MarginContainer3" unique_id=996971321]
+[node name="MarginContainer2" type="MarginContainer" parent="UI/UpperBar/HBoxContainer/MarginContainer3" unique_id=996971321]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 
-[node name="Panel" type="Panel" parent="UI/UpperBar/MarginContainer3/MarginContainer2" unique_id=856053680]
+[node name="Panel" type="Panel" parent="UI/UpperBar/HBoxContainer/MarginContainer3/MarginContainer2" unique_id=856053680]
 modulate = Color(0.15294118, 0.15294118, 0.26666668, 1)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_hve3p")
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/UpperBar/MarginContainer3/MarginContainer2" unique_id=1035190512]
+[node name="MarginContainer" type="MarginContainer" parent="UI/UpperBar/HBoxContainer/MarginContainer3/MarginContainer2" unique_id=1035190512]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="PlayText" type="Label" parent="UI/UpperBar/MarginContainer3/MarginContainer2/MarginContainer" unique_id=1530798185]
+[node name="PlayText" type="Label" parent="UI/UpperBar/HBoxContainer/MarginContainer3/MarginContainer2/MarginContainer" unique_id=1530798185]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9843137, 0.9607843, 0.9372549, 1)
 theme_override_font_sizes/font_size = 48
 text = "Play"
 
-[node name="PlayButton" type="Button" parent="UI/UpperBar/MarginContainer3/MarginContainer2" unique_id=679220892]
+[node name="PlayButton" type="Button" parent="UI/UpperBar/HBoxContainer/MarginContainer3/MarginContainer2" unique_id=679220892]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
@@ -829,6 +986,10 @@ theme_override_colors/font_color = Color(0.15127584, 0.1512762, 0.1512759, 1)
 theme_override_font_sizes/font_size = 64
 theme_override_styles/normal = SubResource("StyleBoxTexture_mfdv2")
 flat = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="UI/UpperBar/HBoxContainer" unique_id=389742860]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="TileData" parent="UI" unique_id=1217769138 instance=ExtResource("55_jo4nb")]
 unique_name_in_owner = true
@@ -982,19 +1143,19 @@ flat = true
 
 [node name="HandTileDisplay" parent="UI" unique_id=1072643956 instance=ExtResource("57_jo4nb")]
 unique_name_in_owner = true
-offset_left = 101.0
-offset_top = 4.0
-offset_right = 281.0
-offset_bottom = 4.0
-category = "Hand"
+offset_left = -1587.0
+offset_top = 607.0
+offset_right = -1319.0
+offset_bottom = -1.0
+title = "Deck"
 
 [node name="DiscardTileDisplay" parent="UI" unique_id=2033615560 instance=ExtResource("57_jo4nb")]
 unique_name_in_owner = true
-offset_left = -103.0
-offset_top = 4.0
-offset_right = 77.0
-offset_bottom = 4.0
-category = "Discard"
+offset_left = -20.0
+offset_top = 607.0
+offset_right = 248.0
+offset_bottom = -1.0
+title = "Discard"
 deck = 1
 
 [node name="ChooseTiles" type="MarginContainer" parent="UI" unique_id=1540384907]
@@ -1147,6 +1308,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+metadata/_edit_lock_ = true
 
 [node name="BackBufferCopy" type="BackBufferCopy" parent="CanvasLayer" unique_id=1213374118]
 position = Vector2(651, 538)
@@ -1160,6 +1322,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+metadata/_edit_lock_ = true
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1757800547]
 transform = Transform3D(1, 0, 0, 0, 0.23705596, 0.971496, 0, -0.971496, 0.23705596, 0, 18.659317, 0)

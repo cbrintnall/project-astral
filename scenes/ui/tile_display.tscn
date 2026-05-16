@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dlmyj8km2qoyo" path="res://assets/ui/small-nine-patch-no-bottom.png" id="2_ft8pg"]
 [ext_resource type="Texture2D" uid="uid://wtygyygsy5b3" path="res://assets/ui/test2.png" id="3_jc7va"]
 [ext_resource type="PackedScene" uid="uid://vxv80vfrjv71" path="res://scenes/ui/tile_preview.tscn" id="4_ghwmj"]
+[ext_resource type="Texture2D" uid="uid://dyo4ao2bdf0iv" path="res://assets/ring.png" id="5_ft8pg"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_m28ev"]
 texture = ExtResource("2_ft8pg")
@@ -19,7 +20,16 @@ texture_margin_top = 16.0
 texture_margin_right = 16.0
 region_rect = Rect2(0, 0, 32, 40)
 
+[sub_resource type="Gradient" id="Gradient_0de7l"]
+colors = PackedColorArray(1, 1, 1, 1, 0.15294118, 0.15294118, 0.26666668, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_jc7va"]
+gradient = SubResource("Gradient_0de7l")
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(0.52136755, 0.44444445)
+
 [node name="TileDisplay" type="MarginContainer" unique_id=1072643956]
+custom_minimum_size = Vector2(0, 256)
 anchors_preset = -1
 anchor_left = 0.85
 anchor_top = 0.2
@@ -27,9 +37,17 @@ anchor_right = 0.85
 anchor_bottom = 1.0
 offset_left = -1632.0
 offset_top = -216.0
-offset_right = -1452.0
-offset_bottom = -216.0
+offset_right = -1372.0
+offset_bottom = -1048.0
+offset_transform_enabled = true
+offset_transform_visual_only = false
 script = ExtResource("1_62wtr")
+
+[node name="ToggleAnchor" type="Control" parent="." unique_id=232041364]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
 
 [node name="Panel" type="Panel" parent="." unique_id=730980865]
 visible = false
@@ -56,7 +74,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-columns = 2
+columns = 3
 
 [node name="TilePreview" parent="MarginContainer/ScrollContainer/TilePreviewRoot" unique_id=1920415334 instance=ExtResource("4_ghwmj")]
 layout_mode = 2
@@ -89,12 +107,56 @@ layout_mode = 2
 layout_mode = 2
 mouse_filter = 2
 
-[node name="ToggleTileDisplay" type="Button" parent="Control" unique_id=246033196]
+[node name="OpenToggle" type="MarginContainer" parent="Control" unique_id=7661465]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 50.0
-offset_top = -46.0
-offset_right = 110.0
-offset_bottom = -11.0
+offset_right = 18.0
+offset_bottom = 52.0
+pivot_offset_ratio = Vector2(0.5, 1)
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -32)
+offset_transform_visual_only = false
+
+[node name="BorderMask" type="TextureRect" parent="Control/OpenToggle" unique_id=1481441618]
+clip_children = 1
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("5_ft8pg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BorderGradient" type="TextureRect" parent="Control/OpenToggle/BorderMask" unique_id=1943983053]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_jc7va")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="QuantityText" type="Label" parent="Control/OpenToggle" unique_id=320188751]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ToggleTileDisplay" type="Button" parent="Control/OpenToggle" unique_id=246033196]
+unique_name_in_owner = true
+layout_mode = 2
 focus_mode = 0
-text = "Toggle"
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="HandTitle" type="Label" parent="Control" unique_id=514441395]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 27.0
+pivot_offset_ratio = Vector2(0.5, 1)
+theme_override_font_sizes/font_size = 32
+text = "Discard"

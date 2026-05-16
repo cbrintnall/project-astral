@@ -5,7 +5,7 @@ class_name TileEffectChip
 @export var amount := 1
   
 func get_description(effect_ctx: EffectContext, exec_ctx: ExecutionContext) -> String:
-  return "Chip the marked tiles by %d. Chip damages tiles if their chip is higher than defense." % [ amount ]
+  return "Does %d damage." % [ amount ]
   
 func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
   var targets = main_target.get_target(effect_ctx)

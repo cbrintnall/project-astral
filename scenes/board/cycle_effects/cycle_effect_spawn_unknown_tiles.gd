@@ -1,7 +1,7 @@
 extends TileEffect
 class_name CycleEffectSpawnUnknownTiles
 
-const SLOW_TIME = 3.0
+const SLOW_TIME = 2.0
 
 @export var range_given := Vector2i(1, 2)
 
@@ -41,4 +41,3 @@ func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
     VfxManager.inst.do_light_beam(Vector3(spot), ctx)
     await ctx.on_finish
     await GameManager.inst.get_tree().create_timer(SLOW_TIME, true, false, true).timeout
-    await GameManager.inst.get_tree().create_timer(0.3).timeout

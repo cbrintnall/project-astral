@@ -11,8 +11,8 @@ func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
   var context := VfxContext.new()
   
   context.on_step.connect(func(idx: int): GridManager.inst.get_tile_at(targets[idx]).do_chip_damage(amount))
-  context.delay_range = Vector2(0.1, 1.0)
-  context.duration_range = Vector2(1.0, 2.0)
+  context.delay_range = Vector2(0.1, 0.7)
+  context.duration_range = Vector2(0.5, 1.0)
   context.transition = Tween.TransitionType.TRANS_QUAD
   
   VfxManager.inst.do_ranged_effect(

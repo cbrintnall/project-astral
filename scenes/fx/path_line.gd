@@ -3,6 +3,7 @@ extends Path3D
 class_name PathLine
 
 @export var mesh: ImmediateMesh
+@export var instance: MeshInstance3D
 @export var width = 2.0:
   set(val):
     width = val
@@ -12,13 +13,12 @@ class_name PathLine
     sample_distance = maxf(val, 0.1)
     _generate_mesh()
 
-@onready var instance: MeshInstance3D = $MeshInstance3D
-
 func _ready() -> void:
   curve_changed.connect(_generate_mesh)
 
-func _process(delta: float) -> void:
-  instance.mesh = mesh
+func _process(_delta: float) -> void:
+  if instance:
+    instance.mesh = mesh
 
 func _generate_mesh() -> void:
   if not mesh: return

@@ -7,6 +7,7 @@ signal finished
 
 var effect_groups := []
 var resolutions := []
+var ignore_event := false
 
 var event: TileEffect.Event
 var on_finish: Callable
@@ -70,7 +71,7 @@ func _process_effects(machine: CallableStateMachine, delta: float):
   _time += delta
   if effect_groups:
     var next: EffectExecutionContext = effect_groups.pop_front()
-    var fx = next.effects.filter(func(effect: TileEffect): return effect.event == event)
+    var fx = next.effects.filter(func(effect: TileEffect): return effect.event == event or ignore_event)
     
     if not fx: return
     

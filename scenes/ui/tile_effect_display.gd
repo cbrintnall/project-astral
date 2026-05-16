@@ -12,6 +12,7 @@ var effect: TileEffect:
       return
       
     effect = val
+    _sync_tags()
   get:
     return effect
     
@@ -23,6 +24,16 @@ func _ready() -> void:
     set_process(false)
     
   get_tree().process_frame.connect(func(): visible = true, CONNECT_ONE_SHOT)
+
+func _sync_tags():
+  NodeUtils.clear_children(%AreaTagsRoot)
+  if effect.main_target:
+    var tags := effect.main_target.get_text_tags()
+    for tag: String in tags:
+      var area_tag = load("res://scenes/ui/area_tag.tscn").instantiate()
+      var rich_text: RichTextLabel = NodeUtils.collect_children(area_tag, "RichTextLabel")["RichTextLabel"]
+      rich_text.text = tag
+      %AreaTagsRoot.add_child(area_tag)
 
 func _process(_delta: float) -> void:
   %EventTextRoot.visible = effect.event != TileEffect.Event.CUSTOM

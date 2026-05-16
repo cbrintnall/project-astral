@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://c54wrus6tf5mh"]
+
+[ext_resource type="Script" uid="uid://dc0bowyumilqr" path="res://scenes/ui/imbuement_icon.gd" id="1_ayli7"]
+
+[node name="ImbuementIcon" type="MarginContainer" unique_id=741092778]
+script = ExtResource("1_ayli7")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1222958929]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+offset_transform_enabled = true
+
+[node name="Button" type="Button" parent="." unique_id=1222738208]
+layout_mode = 2
+offset_transform_enabled = true
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true

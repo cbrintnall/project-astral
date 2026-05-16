@@ -253,6 +253,10 @@ func set_placed_at(_tile: Vector3i):
     executor.execution.set_initiator(self)
       
 func register_effect(effect: TileEffect):
+  if _effects.has(effect):
+    print("%s tried registering a duplicate effect" % [ def.name ])
+    return
+  
   _effects.push_back(effect)
 
 func no_neighbors() -> bool:

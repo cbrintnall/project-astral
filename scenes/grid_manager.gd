@@ -11,6 +11,7 @@ signal board_changed
 signal mods_changed
 
 @export var size := Vector2i.ONE
+@export var ui_hover_point: Node3D
 
 @onready var grid_map: GridMap = $GridMap
 @onready var grid_cast: Gridcast = $Gridcast
@@ -211,6 +212,11 @@ func _unhandled_input(event: InputEvent) -> void:
   if event.is_action_pressed("ui_cancel"):
     _cancel_current_selection()
     
+  if event is InputEventMouseButton:
+    if event.is_pressed():
+      if event.button_index == MOUSE_BUTTON_LEFT:
+        Springer.data[%PlayerHoverMesh]["position"]["velocity"] = Vector3.DOWN*10.0
+    
   if GameManager.debug:
     match Utils.get_key_pressed(event):
       KEY_Z:
@@ -273,7 +279,14 @@ func _ready() -> void:
     2.0
   ).set_trans(Tween.TRANS_QUART)
   
+  Springer.register("position", %PlayerHoverMesh, Vector3(0.0, 5.0, 0.0), Vector3.ZERO, 200.0, 20.0)
+  
 func _process(delta: float) -> void:
+  %PlayerHoverIndicator.visible = get_viewport().gui_get_hovered_control() == null and _current_selection == null and is_in_bounds(grid_position_3d)
+  %PlayerHoverIndicator.global_position = Vector3(grid_position_3d)
+  
+  (%PlayerHoverPath.curve as Curve3D).set_point_position(1, Vector3(0.0, -%PlayerHoverMesh.position.y, 0.0))
+  
   _choose_cd.check(delta, false)
 
   if _tiles_dirty:

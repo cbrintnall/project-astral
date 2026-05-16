@@ -3,9 +3,10 @@ class_name TileDataPreviewer
 
 class TilePreviewData:
   var effects: Array
-  var context: EffectContext
+  var context := EffectContext.new()
   var priority := 0
   var name: String
+  var sub_text := ""
 
 @onready var effects_root: Control = %EffectsDisplayRoot
 
@@ -48,6 +49,8 @@ func _sync_displayed():
   if current_preview:
     var used = current_preview
     %TileTitle.text = used.name
+    %TileTitleSubText.text = used.sub_text
+    %TileTitleSubText.visible = len(used.sub_text) > 0
     for effect in used.effects:
       var display: EffectsDisplayRoot = load("res://scenes/ui/tile_effect_display.tscn").instantiate()
       display.effect_ctx = used.context

@@ -31,6 +31,7 @@ var active_execution: ExecutionContext:
 
 var cycle := 0
 var turn := 0
+var total_turns := 0
 
 var point_source := PointSource.new()
 var player_tasks := TaskGroup.new()
@@ -67,6 +68,29 @@ var _cycle_task_runner := TaskQueue.new()
 var _next_cycle_tasks := []
 var _current_turn_modifiers := []
 var _task_binds := {}
+var _imbuement_cooldowns = {}
+
+func get_remaining_cooldown_for_imbuement(imbuement: ImbuementDef) -> int:
+  if _imbuement_cooldowns.has(imbuement):
+    return ((total_turns-_imbuement_cooldowns.get(imbuement))-imbuement.turn_cooldown)
+  return 0
+
+func try_use_imbuement(imbuement: ImbuementDef, pos: Vector3i) -> bool:
+  if get_remaining_cooldown_for_imbuement(imbuement) < 0:
+    return false
+    
+  var ctx := EffectContext.from_override(pos)
+  
+  var exec := GameManager.inst.queue_execution(
+    imbuement.effects,
+    TileEffect.Event.CUSTOM,
+    ctx
+  )
+  
+  exec.ignore_event = true
+  _imbuement_cooldowns[imbuement] = total_turns
+    
+  return true
 
 func queue_execution(effects: Array, event: TileEffect.Event, ctx := EffectContext.new(), on_finish := Callable()) -> TileExecutor:
   var next_executor := TileExecutor.new()
@@ -211,6 +235,7 @@ func _start_round(machine: CallableStateMachine, delta: float):
       _next_cycle_tasks.push_back(possible.pop_front())
   
   turn += 1
+  total_turns += 1
   
   BoardCamera.inst.map_size = GridManager.inst.size
   BoardCamera.inst.map_root = Vector3.ZERO

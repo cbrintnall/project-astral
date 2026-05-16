@@ -79,6 +79,60 @@ func _unhandled_input(event: InputEvent) -> void:
   if event.is_action_pressed("ui_cancel"):
     help.visible = false
 
+func _process_in_world_uis(delta: float):
+  var hovered := GridManager.inst.grid_position_3d
+  var ctx: GridContext = GridManager.inst.get_mods_at_point(GridManager.inst.grid_position_3d)
+  var tile: Tile = GridManager.inst.get_tile_at(hovered)
+  
+  if tile and tile.def.initiates:
+    return
+    
+  var tile_hovered_uis = []
+  if ctx.has_information():
+    if ctx.point_source_override.target:
+      %OverrideAmount.text = "%d/%d" % [ctx.point_source_override.current, ctx.point_source_override.target]
+    else:
+      %OverrideAmount.text = "%d" % [ctx.point_source_override.current]
+    %OverrideData.visible = true
+    %OverrideData.reset_size()
+    var target_position = GridManager.inst.get_viewport().get_camera_3d().unproject_position(ctx.point_source_override.target_point+(Vector3.UP))
+    if GridManager.inst.ui_hover_point.is_visible_in_tree():
+      target_position = GridManager.inst.get_viewport().get_camera_3d().unproject_position(GridManager.inst.ui_hover_point.global_position)
+    %OverrideData.global_position = %OverrideData.global_position.lerp(target_position, 0.3)
+    tile_hovered_uis.push_back(%OverrideData)
+
+  if ctx.has_mult():
+    %MultLabel.text = "%+00.0f%%" % [ ctx.points_multipliers*100.0 ]
+    %MultData.visible = true
+    var target_position = GridManager.inst.get_viewport().get_camera_3d().unproject_position(Vector3(hovered))
+    if GridManager.inst.ui_hover_point.is_visible_in_tree():
+      target_position = GridManager.inst.get_viewport().get_camera_3d().unproject_position(GridManager.inst.ui_hover_point.global_position)
+    %MultData.reset_size()
+    
+    if tile_hovered_uis:
+      var last: Control = tile_hovered_uis.back()
+      target_position = last.global_position + (Vector2.UP*(last.size.y+10.0))
+      target_position += Vector2.UP*50.0
+
+    %MultData.global_position = %MultData.global_position.lerp(target_position, 0.1)
+    tile_hovered_uis.push_back(%MultData)
+
+  if tile:
+    %HoveredTileData.visible = true
+    %HoveredTileLabelDefense.text = str(tile.defense)
+    %HoveredTileLabelHealth.text = "%d/%d" % [ tile.health, roundi(tile.stat.get_value(preload("res://data/stats/stat_starter_health.tres"))) ]
+    var target_position = GridManager.inst.get_viewport().get_camera_3d().unproject_position(Vector3(hovered))
+    if GridManager.inst.ui_hover_point.is_visible_in_tree():
+      target_position = GridManager.inst.get_viewport().get_camera_3d().unproject_position(GridManager.inst.ui_hover_point.global_position)
+    %HoveredTileData.reset_size()
+    
+    if tile_hovered_uis:
+      var last: Control = tile_hovered_uis.back()
+      target_position = last.global_position + (Vector2.UP*(last.size.y+10.0)) 
+    
+    %HoveredTileData.global_position = %HoveredTileData.global_position.lerp(target_position, 0.3)
+    tile_hovered_uis.push_back(%HoveredTileData)
+
 func _process(delta: float) -> void:
   %CycleTurnContainerRoot.visible = false
   if NodeUtils.is_mouse_inside(%CycleLabel):
@@ -108,54 +162,7 @@ func _process(delta: float) -> void:
   %OverrideData.visible = false
   %HoveredTileData.visible = false
 
-  var hovered := GridManager.inst.grid_position_3d
-  var ctx: GridContext = GridManager.inst.get_mods_at_point(GridManager.inst.grid_position_3d)
-    
-  var tile_hovered_uis = []
-  if ctx.has_information():
-    if ctx.point_source_override.target:
-      %OverrideAmount.text = "%d/%d" % [ctx.point_source_override.current, ctx.point_source_override.target]
-    else:
-      %OverrideAmount.text = "%d" % [ctx.point_source_override.current]
-    %OverrideData.visible = true
-    %OverrideData.reset_size()
-    var target_position = GridManager.inst.get_viewport().get_camera_3d().unproject_position(ctx.point_source_override.target_point+(Vector3.UP))
-    target_position -= %OverrideData.get_combined_pivot_offset()
-    %OverrideData.global_position = %OverrideData.global_position.lerp(target_position, 0.3)
-    tile_hovered_uis.push_back(%OverrideData)
-
-  if ctx.has_mult():
-    %MultLabel.text = "%+00.0f%%" % [ ctx.points_multipliers*100.0 ]
-    %MultData.visible = true
-    var target_position = GridManager.inst.get_viewport().get_camera_3d().unproject_position(Vector3(hovered))
-    %MultData.reset_size()
-    
-    if tile_hovered_uis:
-      var last: Control = tile_hovered_uis.back()
-      target_position = last.global_position + (Vector2.UP*(last.size.y+10.0)) 
-    else:
-      target_position -= %MultData.get_combined_pivot_offset()
-    
-    target_position += Vector2.UP*50.0
-    %MultData.global_position = %MultData.global_position.lerp(target_position, 0.1)
-    tile_hovered_uis.push_back(%MultData)
-
-  if GridManager.inst.grid_hovered_tile:
-    var tile: Tile = GridManager.inst.grid_hovered_tile
-    %HoveredTileData.visible = true
-    %HoveredTileLabelDefense.text = str(tile.defense)
-    %HoveredTileLabelHealth.text = "%d/%d" % [ tile.health, roundi(tile.stat.get_value(preload("res://data/stats/stat_starter_health.tres"))) ]
-    var target_position = GridManager.inst.get_viewport().get_camera_3d().unproject_position(Vector3(hovered))
-    %HoveredTileData.reset_size()
-    
-    if tile_hovered_uis:
-      var last: Control = tile_hovered_uis.back()
-      target_position = last.global_position + (Vector2.UP*(last.size.y+10.0)) 
-    else:
-      target_position -= %HoveredTileData.get_combined_pivot_offset()
-    
-    %HoveredTileData.global_position = %HoveredTileData.global_position.lerp(target_position, 0.3)
-    tile_hovered_uis.push_back(%HoveredTileData)
+  _process_in_world_uis(delta)
 
   var play_text := "Play"
   
