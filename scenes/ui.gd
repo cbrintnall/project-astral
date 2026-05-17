@@ -13,6 +13,24 @@ static var inst: UI
 @onready var tile_previewer: TileDataPreviewer = %TileData
 @onready var choose_tiles: ChooseTilesUI = $ChooseTiles
 
+var _fx := {}
+
+func show_tooltip(tooltip: String) -> Command:
+  var cmd := BasicCommand.from(
+    func(): 
+      %Tooltip.visible = true
+      %TooltipText.text = tooltip
+      %Tooltip.reset_size()
+      ,
+    func(): 
+      %Tooltip.visible = false
+      %TooltipText.text = ""
+  )
+  
+  cmd.execute()
+  
+  return cmd
+
 func show_system_message(text: String, audio: AudioStream = null):
   system_label.text = text
 
@@ -34,9 +52,19 @@ func show_system_message(text: String, audio: AudioStream = null):
 func _ready() -> void:
   inst = self
 
+  %Tooltip.visible = false
   system_label.self_modulate = Color.TRANSPARENT
 
   %TryAgainRoot.modulate.a = 0.0
+  
+  %ToggleMusic.pressed.connect(
+    func():
+      var music_idx = AudioServer.get_bus_index("Music")
+      var current = AudioServer.get_bus_volume_linear(music_idx)
+      var next = 1.0 if current < 1.0 else 0.0
+      
+      AudioServer.set_bus_volume_linear(music_idx, next)
+  )
   
   %Bluesky.pressed.connect(
     func():
@@ -51,7 +79,7 @@ func _ready() -> void:
         "wait_for_player":
           GameManager.inst.try_execute_turn()
         "wait_for_accept_shop":
-          GameManager.inst.enter_shop()
+          GameManager.inst.enter_shop("deal")
   )
   
   %RetryButton.pressed.connect(
@@ -134,29 +162,30 @@ func _process_in_world_uis(delta: float):
     tile_hovered_uis.push_back(%HoveredTileData)
 
 func _process(delta: float) -> void:
-  %CycleTurnContainerRoot.visible = false
-  if NodeUtils.is_mouse_inside(%CycleLabel):
-    var txt = GameManager.inst.upcoming_cycle_tasks.map(func(task: TileEffect): return "- " + task.get_description(EffectContext.new(), ExecutionContext.new()))
-    %CycleTurnContainerRoot.visible = true
-    %CycleTurnContainerRoot.global_position = %CycleLabel.global_position + (Vector2.DOWN*%CycleLabel.size.y)
-    %EffectTextLabel.text = "\n".join(txt)
-    %CycleTurnInfoTitle.text = "On Cycle Start:"
-    %CycleTurnContainerRoot.reset_size()
-    
-  if NodeUtils.is_mouse_inside(%TurnLabel):
-    %CycleTurnContainerRoot.visible = true
-    %CycleTurnContainerRoot.global_position = %TurnLabel.global_position + (Vector2.DOWN*%TurnLabel.size.y)
-    %EffectTextLabel.text = "\n".join(GameManager.inst.current_turn_tasks.map(func(task: TileEffect): return "- " + task.get_description(EffectContext.new(), ExecutionContext.new())))
-    %CycleTurnInfoTitle.text = "On Turn Start:"
-    %CycleTurnContainerRoot.reset_size()
+  for effect in GameManager.inst._next_cycle_tasks:
+    if not _fx.has(effect):
+      var container = load("res://scenes/cycle_effect_container.tscn").instantiate()
+      %CycleEffectsRoot.add_child(container)
+      _fx[effect]=container
+      container.effect = effect
+  for effect: TileEffect in _fx.keys():
+    if not GameManager.inst._next_cycle_tasks.has(effect):
+      _fx[effect].queue_free()
+      _fx.erase(effect)
+  
+  var rect := get_viewport().get_visible_rect()
+  %Tooltip.global_position = get_viewport().get_mouse_position()
+  %Tooltip.global_position.x = clampf(%Tooltip.global_position.x, 0.0, rect.size.x-%Tooltip.size.x)
+  %Tooltip.global_position.y = clampf(%Tooltip.global_position.y, 0.0, rect.size.y-%Tooltip.size.y)
+  %Tooltip.reset_size()
   
   %CycleProgress.max_value = GameManager.inst.required_score
   %CycleProgress.value = GameManager.inst.current_score
   score_label.text = "%d/%d" % [ GameManager.inst.current_score, GameManager.inst.required_score ]
   turn_label.text = "Turn: %d/%d" % [ GameManager.inst.turn, Constants.TURNS_PER_SCORE ]
-  cycle_label.text = "Cycle: %d" % [ GameManager.inst.cycle ]
+  cycle_label.text = "Cycle: %d/%d" % [ GameManager.inst.cycle, len(Constants.REQUIRED_SCORES) ]
   %MoneyLabel.text = "Money: %d" % [ GameManager.inst.money ]
-  %PlayButton.disabled = GameManager.inst.active_execution and GameManager.inst.active_execution.active_round
+  %PlayButton.disabled = (GameManager.inst.active_execution and GameManager.inst.active_execution.active_round) or TutorialManager.inst.is_active()
   
   %MultData.visible = false
   %OverrideData.visible = false
@@ -165,6 +194,14 @@ func _process(delta: float) -> void:
   _process_in_world_uis(delta)
 
   var play_text := "Play"
+
+  var points := PackedVector2Array()
+  %CycleEffectLine.global_position = %CycleLabel.global_position
+  points.push_back(Vector2.ZERO)
+  for i in %CycleEffectsRoot.get_child_count():
+    var child = %CycleEffectsRoot.get_child(i)
+    points.push_back(%CycleEffectLine.to_local(child.global_position+child.get_combined_pivot_offset()+child.offset_transform_position))
+  %CycleEffectLine.points = points
   
   match GameManager.inst.current_state:
     "shop":

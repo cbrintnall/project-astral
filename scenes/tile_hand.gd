@@ -22,6 +22,11 @@ func discard_hand():
     
   _markers = []
   
+func remove_tile(tile: TileDef):
+  for marker in _markers:
+    if marker.get_child(0).def == tile:
+      marker.queue_free()
+  
 func add_to_hand(data: TileDef):
   if len(_markers) < Constants.MAX_HAND_SIZE:
     var marker := Marker3D.new()

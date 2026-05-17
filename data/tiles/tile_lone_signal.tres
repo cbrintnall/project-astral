@@ -1,41 +1,42 @@
 [gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://iyogiblm2cv3"]
 
 [ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_7kwxa"]
+[ext_resource type="Script" uid="uid://vae0yba8d17t" path="res://scenes/tiles/effects/tile_effect_point_per_tile.gd" id="2_g58dw"]
 [ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_gh4ax"]
-[ext_resource type="Script" uid="uid://bpsona2fdproi" path="res://scenes/tiles/effects/tile_effect_no_neighbors.gd" id="3_8bek4"]
 [ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="4_ojwyg"]
 [ext_resource type="Texture2D" uid="uid://bybopntjp6tvw" path="res://assets/tiles/satelliteTile.png" id="5_4pek2"]
 
-[sub_resource type="Resource" id="Resource_f0kbx"]
+[sub_resource type="Resource" id="Resource_gh4ax"]
 script = ExtResource("2_gh4ax")
 include_self = false
 size = Vector2i(3, 3)
+only_empty = true
 metadata/_custom_type_script = "uid://di6fi4200kyxe"
 
-[sub_resource type="Resource" id="Resource_eiw1x"]
-script = ExtResource("3_8bek4")
-points_per_empty = 0.5
-event = 4
-main_target = SubResource("Resource_f0kbx")
-metadata/_custom_type_script = "uid://bpsona2fdproi"
-
 [sub_resource type="Resource" id="Resource_7kwxa"]
+script = ExtResource("2_g58dw")
+event = 4
+main_target = SubResource("Resource_gh4ax")
+metadata/_custom_type_script = "uid://vae0yba8d17t"
+
+[sub_resource type="Resource" id="Resource_ojwyg"]
 script = ExtResource("2_gh4ax")
 include_self = false
 size = Vector2i(5, 5)
+only_taken = true
 metadata/_custom_type_script = "uid://di6fi4200kyxe"
 
-[sub_resource type="Resource" id="Resource_gh4ax"]
-script = ExtResource("3_8bek4")
-points_per_empty = 1.5
+[sub_resource type="Resource" id="Resource_8bek4"]
+script = ExtResource("2_g58dw")
+per_tile = -2.0
 event = 4
-main_target = SubResource("Resource_7kwxa")
-metadata/_custom_type_script = "uid://bpsona2fdproi"
+main_target = SubResource("Resource_ojwyg")
+metadata/_custom_type_script = "uid://vae0yba8d17t"
 
 [resource]
 script = ExtResource("4_ojwyg")
 name = "Lone Signal"
-effects = Array[ExtResource("1_7kwxa")]([SubResource("Resource_eiw1x"), SubResource("Resource_gh4ax")])
+effects = Array[ExtResource("1_7kwxa")]([SubResource("Resource_7kwxa"), SubResource("Resource_8bek4")])
 texture = ExtResource("5_4pek2")
 in_shop = true
 metadata/_custom_type_script = "uid://cssx7lcdl5o45"

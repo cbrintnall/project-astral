@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://dlak162wb2scy"]
+
+[ext_resource type="Script" uid="uid://bnmyb0rnxkoac" path="res://scenes/board/world_selectable.gd" id="1_ds7q2"]
+[ext_resource type="Script" uid="uid://b140lw26qadyg" path="res://otterlib/stretcher3d.gd" id="2_0fspc"]
+[ext_resource type="ArrayMesh" uid="uid://d4b12wmc4orba" path="res://assets/vfx/vfxBurlapSack_Cylinder.res" id="3_le37c"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o46vb"]
+height = 1.4794922
+
+[node name="TilePack" type="StaticBody3D" unique_id=1487427987 node_paths=PackedStringArray("stretcher")]
+script = ExtResource("1_ds7q2")
+stretcher = NodePath("Stretcher3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1732682573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55875087, 0)
+shape = SubResource("CapsuleShape3D_o46vb")
+
+[node name="Stretcher3D" type="Node3D" parent="." unique_id=1597517031]
+script = ExtResource("2_0fspc")
+damping = 30.0
+metadata/_custom_type_script = "uid://b140lw26qadyg"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Stretcher3D" unique_id=924481443]
+mesh = ExtResource("3_le37c")

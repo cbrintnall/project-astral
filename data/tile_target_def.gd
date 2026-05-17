@@ -12,16 +12,27 @@ class_name TileTargetDef
 @export var every_tile := false
 @export var empty_space := false
 @export var pull_random_amount := Vector2i.ZERO
+@export var only_empty := false
+@export var only_taken := false
 @export var faction := Tile.Faction.ALL
 
 func should_preview_spots() -> bool:
   if random_cardinal_direction:
+    return false
+  
+  if random_neighbors:
     return false
     
   return true
 
 func get_text_tags() -> PackedStringArray:
   var text := PackedStringArray()
+  
+  if only_taken:
+    text.push_back("non-empty")
+  
+  if only_empty:
+    text.push_back("empty")
 
   if random_cardinal_direction:
     text.push_back("random direction")
@@ -47,11 +58,20 @@ func get_text_tags() -> PackedStringArray:
     Tile.Faction.PLAYER:
       text.push_back("targets \"player\"")
       
-  if every_tile:
-    text.push_back("all tiles")
+  if every_tile and not only_taken:
+    text.push_back("placed tiles")
     
-  if empty_space:
+  if empty_space and not only_empty:
     text.push_back("empty spaces")
+    
+  if pull_random_amount:
+    if pull_random_amount.x == pull_random_amount.y:
+      var txt = "[color=#c69fa5]%d[/color] random tile" % [pull_random_amount.x]
+      if pull_random_amount.x > 1:
+        txt += "s"
+      text.push_back(txt)
+    else:
+      text.push_back("between [color=#c69fa5]%d[/color]-[color=#c69fa5]%d[/color] random tiles" % [pull_random_amount.x,pull_random_amount.y])
   
   return text
 
@@ -96,7 +116,7 @@ func get_text():
   
   return base_text
 
-func get_target(ctx: EffectContext, with_tiles := false) -> Array:
+func get_target(ctx: EffectContext, with_tiles := false, ignore_filters := false) -> Array:
   var targets := []
   var viable_options := tiles.duplicate()
   var src = ctx.override_location
@@ -163,22 +183,29 @@ func get_target(ctx: EffectContext, with_tiles := false) -> Array:
       
   targets = targets.filter(func(tile: Vector3i): return GridManager.inst.is_in_bounds(tile))
   
-  if faction != Tile.Faction.ALL:
-    with_tiles = true
+  if not ignore_filters:
+    if faction != Tile.Faction.ALL:
+      with_tiles = true
+      
+    if with_tiles:
+      targets = targets.filter(GridManager.inst.has_tile)
     
-  if with_tiles:
-    targets = targets.filter(GridManager.inst.has_tile)
-  
-  if faction != Tile.Faction.ALL:
-    targets = targets.filter(func(pos: Vector3i): return GridManager.inst.get_tile_at(pos).faction == faction)
-    
-  if pull_random_amount:
-    var amount = mini(randi_range(pull_random_amount.x, pull_random_amount.y), len(targets))
-    var culled = []
-    targets.shuffle()
-    for i in amount:
-      culled.push_back(targets.pop_front())
-    targets = culled
+    if faction != Tile.Faction.ALL:
+      targets = targets.filter(func(pos: Vector3i): return GridManager.inst.get_tile_at(pos).faction == faction)
+      
+    if only_empty:
+      targets = targets.filter(func(pos: Vector3i): return not GridManager.inst.has_tile(pos))
+      
+    if only_taken:
+      targets = targets.filter(GridManager.inst.has_tile)
+      
+    if pull_random_amount:
+      var amount = mini(randi_range(pull_random_amount.x, pull_random_amount.y), len(targets))
+      var culled = []
+      targets.shuffle()
+      for i in amount:
+        culled.push_back(targets.pop_front())
+      targets = culled
     
   # ZERO is the center tile, erase it cause we never need to target it
   targets.erase(Vector3i.ZERO)

@@ -173,3 +173,7 @@ grid_root={
 "type": "vec3",
 "value": Vector3(0, 0, 0)
 }
+select_color={
+"type": "color",
+"value": Color(0, 0, 0, 1)
+}

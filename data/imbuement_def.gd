@@ -7,4 +7,4 @@ class_name ImbuementDef
 
 @export_category("meta")
 @export var name: String = "Needs Name"
-@export var preview_mesh: Mesh
+@export var icon: Texture

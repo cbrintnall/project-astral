@@ -7,7 +7,7 @@ func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
   _reward_points(effect_ctx, get_tile_baseline_points(effect_ctx))
   
 func get_description(effect_ctx: EffectContext, exec_ctx: ExecutionContext) -> String:
-  return "For each empty tile %s, gain %+.2f points ([color=#c69fa5]%s[/color])" % [ main_target.get_text(), points_per_empty, _get_total_points(effect_ctx, get_tile_baseline_points(effect_ctx)) ]
+  return "For each empty tile, gain %+.2f points ([color=#c69fa5]%s[/color])" % [ points_per_empty, _get_total_points(effect_ctx, get_tile_baseline_points(effect_ctx)) ]
 
 func get_tile_baseline_points(effect_ctx: EffectContext) -> int:
   var targets = main_target.get_target(effect_ctx)

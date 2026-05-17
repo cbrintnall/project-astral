@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ImbuementDef" format=3 uid="uid://fxp1o0yrkog8"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_ta1gd"]
+[ext_resource type="Script" uid="uid://btk3sufrv2aay" path="res://data/imbuement_def.gd" id="2_64uhn"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_baev8"]
+[ext_resource type="Script" uid="uid://pwmqfsstdbaa" path="res://scenes/tiles/effects/health/tile_effect_heal.gd" id="3_uh777"]
+[ext_resource type="Texture2D" uid="uid://b1e1nmcoq8uh7" path="res://assets/tiles/heartTile.png" id="4_uh777"]
+
+[sub_resource type="Resource" id="Resource_0jm8o"]
+script = ExtResource("2_baev8")
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_fq55x"]
+script = ExtResource("3_uh777")
+amount = 5
+main_target = SubResource("Resource_0jm8o")
+metadata/_custom_type_script = "uid://pwmqfsstdbaa"
+
+[resource]
+script = ExtResource("2_64uhn")
+effects = Array[ExtResource("1_ta1gd")]([SubResource("Resource_fq55x")])
+turn_cooldown = 3
+name = "Love"
+icon = ExtResource("4_uh777")
+metadata/_custom_type_script = "uid://btk3sufrv2aay"

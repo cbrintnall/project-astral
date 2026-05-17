@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://bi6gvlsh6uw76"]
+
+[node name="ShopKeeper" type="Node3D" unique_id=286168172]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1146437897]

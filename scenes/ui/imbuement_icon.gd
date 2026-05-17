@@ -1,28 +1,29 @@
 extends MarginContainer
 class_name ImbuementIcon
 
-@export var imbuement: ImbuementDef = load("res://data/imbuements/imbuement_test.tres")
+var imbuement: ImbuementDef:
+  get:
+    return HandManager.inst.get_imbuement_at_idx(get_index())
 
 var _preview_cmd: Command
 var _imbuement_selection: Selection
-# We use the imbuement as a blueprint, but dupe on ready..
-# this is because we want each instance of an imbuement to act individually
-var _duped_imbuement: ImbuementDef
 
 func _ready() -> void:
   var btn: Button = $Button
-  var color: ColorRect = $ColorRect
-  Springer.register("offset_transform_scale", color, Vector2.ONE, Vector2.ZERO, 200.0, 20.0)
-  _duped_imbuement = imbuement.duplicate()
-  
+  var icon: TextureRect = %Icon
+  Springer.register("offset_transform_scale", icon, Vector2.ONE*2.0, Vector2.ZERO, 200.0, 20.0)
+
   btn.mouse_entered.connect(
     func(): 
-      Springer.data[color]["offset_transform_scale"]["velocity"] = Vector2.ONE*10.0
-      var cooldown := GameManager.inst.get_remaining_cooldown_for_imbuement(_duped_imbuement)
+      if not imbuement: return
+      
+      Springer.data[icon]["offset_transform_scale"]["velocity"] = Vector2.ONE*10.0
+      var cooldown := GameManager.inst.get_remaining_cooldown_for_imbuement(imbuement)
       var prev := TileDataPreviewer.TilePreviewData.new()
-      prev.name = _duped_imbuement.name
-      prev.effects = _duped_imbuement.effects
+      prev.name = imbuement.name
+      prev.effects = imbuement.effects
       prev.priority = 0
+      prev.hide_events = true
       if cooldown >= 0:
         prev.sub_text = "Ready To Use"
       else:
@@ -42,9 +43,24 @@ func _ready() -> void:
   )
   
   btn.pressed.connect(_on_press)
+  
+func _process(_delta: float) -> void:
+  %Icon.visible = imbuement != null
+  %CooldownRemaining.visible = imbuement != null 
+  
+  if not imbuement:
+    return
+
+  var remaining_cd = abs(GameManager.inst.get_remaining_cooldown_for_imbuement(imbuement))
+  %Icon.texture = imbuement.icon
+  %CooldownRemaining.visible = remaining_cd > 0
+  %CooldownRemaining.text = str(remaining_cd)
+  %Icon.set_instance_shader_parameter("progress", 1.0-(float(remaining_cd)/float(imbuement.turn_cooldown)))
 
 func _on_press():
-  if GameManager.inst.get_remaining_cooldown_for_imbuement(_duped_imbuement) < 0:
+  if not imbuement: return
+  
+  if GameManager.inst.get_remaining_cooldown_for_imbuement(imbuement) < 0:
     AudioManager3d.play({"stream": preload("res://audio/reject.ogg")})
     return
   
@@ -64,7 +80,7 @@ func on_choose_selection():
     AudioManager3d.play({"stream": preload("res://audio/reject.ogg")})
     return
   
-  if GameManager.inst.try_use_imbuement(_duped_imbuement, spot):
+  if GameManager.inst.try_use_imbuement(imbuement, spot):
     _imbuement_selection.cancel()
 
 func _on_process_selection(_delta: float):

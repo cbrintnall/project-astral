@@ -4,6 +4,7 @@ class_name GameManager
 static var inst: GameManager
 static var debug := false
 static var game_closing := false
+static var played_tutorial := false
 
 signal points_fx
 signal executor_queued(exec: TileExecutor)
@@ -36,7 +37,7 @@ var total_turns := 0
 var point_source := PointSource.new()
 var player_tasks := TaskGroup.new()
 var cycle_tasks := TaskQueue.new()
-var money := 0
+var money := Constants.START_MONEY
 
 var current_state: String:
   get:
@@ -69,6 +70,11 @@ var _next_cycle_tasks := []
 var _current_turn_modifiers := []
 var _task_binds := {}
 var _imbuement_cooldowns = {}
+var _return_from_shop_state := ""
+
+func on_tutorial_finished():
+  played_tutorial = true
+  _state.current = "start_round"
 
 func get_remaining_cooldown_for_imbuement(imbuement: ImbuementDef) -> int:
   if _imbuement_cooldowns.has(imbuement):
@@ -114,15 +120,18 @@ func queue_tile_execution(tiles: Array, event: TileEffect.Event, on_finish := Ca
   var next_executor := _setup_executor(tiles, event, on_finish)
   return next_executor
 
-func enter_shop():
-  assert(current_state == "wait_for_accept_shop")
+func enter_shop(next_state: String):
+  _return_from_shop_state = next_state
   _state.current = "shop"
   ShopManager.inst.enter()
 
 func leave_shop():
   assert(current_state == "shop")
-  _state.current = "start_round"
+  _state.current = _return_from_shop_state
+  BoardCamera.inst.map_size = GridManager.inst.size
+  BoardCamera.inst.map_root = Vector3.ZERO
   BoardCamera.inst.try_set_focus(Vector3.ZERO)
+  RenderingServer.global_shader_parameter_set("grid_root", Vector3.ZERO)
 
 func try_execute_turn():
   _state.current = "begin_execution"
@@ -143,11 +152,13 @@ func _ready() -> void:
   add_child(_cycle_task_runner)
   add_child(_executor_queue)
   
+  _state.register("initializing", CallableStateMachine.noop)
+  _state.register("tutorial", CallableStateMachine.noop)
+  _state.register("waiting_for_execution", CallableStateMachine.noop)
   _state.register("start_round", _start_round)
   _state.register("deal", _deal)
   _state.register("wait_for_player", CallableStateMachine.noop)
   _state.register("begin_execution", _begin_execution)
-  _state.register("pre_execute", CallableStateMachine.noop)
   _state.register("execute", CallableStateMachine.noop)
   _state.register("post_execute", CallableStateMachine.noop)
   _state.register("post_round", _post_round)
@@ -193,6 +204,42 @@ func _ready() -> void:
       GameManager.debug = not GameManager.debug
   )
   
+  Console.add_command(
+    "shop",
+    func():
+      enter_shop(_state.current)
+  )
+  
+  Console.add_command(
+    "money",
+    func(amt: String):
+      money += int(amt),
+    ["amt"]
+  )
+  
+  Console.add_command(
+    "defense",
+    func():
+      GridManager.inst.get_played_tiles().pick_random().defense += 5
+  )
+  
+  Console.add_command(
+    "damage",
+    func():
+      var tile: Tile = GridManager.inst.get_played_tiles().pick_random()
+      tile.do_chip_damage(6)
+  )
+  
+  await Utils.wait_until(func(): return HandManager.inst.is_node_ready())
+
+  BoardCamera.inst.map_size = GridManager.inst.size
+  BoardCamera.inst.map_root = Vector3.ZERO
+
+  if not played_tutorial:
+    _state.current = "tutorial"
+  else:
+    _state.current = "start_round"
+  
 func _process(delta: float) -> void:
   DebugDraw2D.debug_enabled = GameManager.debug
   var hovered_ui = get_viewport().gui_get_hovered_control().get_path() if get_viewport().gui_get_hovered_control() else "none"
@@ -221,14 +268,12 @@ func _handle_effect(exec: TileExecutor, effect: TileEffect):
 func _start_round(machine: CallableStateMachine, delta: float):
   RenderingServer.global_shader_parameter_set("grid_root", Vector3.ZERO)
   
-  print("starting round")
-  
   # if start of new cycle..
   if turn == 0:
     # TODO: add varied tasks here as well
     _next_cycle_tasks = []
     _next_cycle_tasks.append_array(default_cycle_tasks)
-    var varied = mini(randi_range(Constants.CYCLE_EVENTS_PER_CYCLE.x, Constants.CYCLE_EVENTS_PER_CYCLE.y), len(varied_cycle_tasks))
+    var varied = mini(Constants.EVENTS_PER_CYCLE[mini(cycle, len(Constants.EVENTS_PER_CYCLE)-1)], len(varied_cycle_tasks))
     var possible = varied_cycle_tasks.duplicate()
     possible.shuffle()
     for i in varied:
@@ -247,19 +292,23 @@ func _start_round(machine: CallableStateMachine, delta: float):
       if Constants.CHOOSE_TILES_EACH_ROUND:
         UI.inst.choose_tiles.setup()
       
-      _state.current = "deal"
+      if turn == 1:
+        _state.current = "wait_for_accept_shop"
+      else:
+        _state.current = "deal"
   )
   
-  _state.current = "pre_execute"
+  _state.current = "waiting_for_execution"
   
 func _deal(machine: CallableStateMachine, delta: float):
-  if TileHand.inst.get_tile_count() >= Constants.DEFAULT_HAND_SIZE:
+  if TileHand.inst.get_tile_count() >= mini(Constants.DEFAULT_HAND_SIZE, len(HandManager.inst.all_tiles)):
     _state.current = "wait_for_player"
     return
   
   if _deal_timer.check(delta):
     var next = HandManager.inst.get_next_from_hand()
-    TileHand.inst.add_to_hand(next)
+    if next:
+      TileHand.inst.add_to_hand(next)
 
 func _post_round(machine: CallableStateMachine, delta: float):
   if current_score >= required_score:
@@ -270,7 +319,7 @@ func _post_round(machine: CallableStateMachine, delta: float):
       if cycle >= len(Constants.REQUIRED_SCORES)-1:
         won = true
         _state.current = "end_game"
-        UI.inst.show_system_message("You've won, defeating the eternal night.")
+        UI.inst.show_system_message("You've won, pushing back Nyx's power.")
         return
       
       UI.inst.show_system_message("Begin Cycle")
@@ -282,13 +331,12 @@ func _post_round(machine: CallableStateMachine, delta: float):
       queue_execution(
         _next_cycle_tasks,
         TileEffect.Event.ON_CYCLE_START,
-        EffectContext.new(),
-        func(): _state.current = "wait_for_accept_shop"
+        EffectContext.new()
       )
       return
     else:
       _state.current = "end_game"
-      UI.inst.show_system_message("You've lost, plunging the world into eternal night.")
+      UI.inst.show_system_message("Nyx has overcome your light.")
       return
 
   _state.current = "start_round"
@@ -318,6 +366,14 @@ func _begin_execution(machine: CallableStateMachine, delta: float):
   
 func _check_for_events(executor: TileExecutor, effects: Array):
   var ctx := EffectContext.new()
+  
+  # NOTE: Trigger only off player placed tiles, otherwise this gets chaotic,
+  # this isn't long term but is just a design patch for now
+  if executor.event == TileEffect.Event.ON_PLACE:
+    if executor.execution.initiator.faction == Tile.Faction.ENEMY:
+      print("executor place event was enemy, skipping")
+      return
+  
   executor.register_group(
     ctx,
     effects.filter(func(fx: TileEffect): return fx.event == executor.event) 
@@ -330,6 +386,10 @@ func _setup_executor(tiles: Array, event: TileEffect.Event, on_finish: Callable)
     next_executor.register_group(tile.get_effect_context(), tile.get_effects())
   next_executor.event = event
   next_executor.on_finish = on_finish
+  
+  # NOTE: temp workaround, this should be set outside this but w/e
+  if len(tiles) == 1 and event == TileEffect.Event.ON_PLACE:
+    next_executor.execution.set_initiator(tiles.front())
   
   # emit before register, in-case we want to register more
   executor_queued.emit(next_executor)

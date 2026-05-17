@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/minijam_loop.ogg-25d87a1817fb0247d2d219922b60
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0.0
 bpm=0.0
 beat_count=0

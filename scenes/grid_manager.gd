@@ -282,7 +282,7 @@ func _ready() -> void:
   Springer.register("position", %PlayerHoverMesh, Vector3(0.0, 5.0, 0.0), Vector3.ZERO, 200.0, 20.0)
   
 func _process(delta: float) -> void:
-  %PlayerHoverIndicator.visible = get_viewport().gui_get_hovered_control() == null and _current_selection == null and is_in_bounds(grid_position_3d)
+  %PlayerHoverIndicator.visible = get_viewport().gui_get_hovered_control() == null and is_in_bounds(grid_position_3d)
   %PlayerHoverIndicator.global_position = Vector3(grid_position_3d)
   
   (%PlayerHoverPath.curve as Curve3D).set_point_position(1, Vector3(0.0, -%PlayerHoverMesh.position.y, 0.0))
@@ -308,7 +308,7 @@ func _process(delta: float) -> void:
     var spots = []
     var ctx := EffectContext.from_tile(grid_hovered_tile)
     for effect: TileEffect in grid_hovered_tile.get_effects():
-      if effect.main_target:
+      if effect.main_target and effect.main_target.should_preview_spots():
         spots.append_array(effect.main_target.get_target(ctx))
     _hovered_tile_area_highlighter.spots = spots
 
@@ -336,6 +336,10 @@ func _process(delta: float) -> void:
         target = ERROR_COLOR
         
     _indicator_color = _indicator_color.lerp(target, 0.1)
+  else:
+    _indicator_color = DEFAULT_COLOR
+  
+  RenderingServer.global_shader_parameter_set("select_color", _indicator_color)
   
   if selection.visible:
     _grid_material.set_shader_parameter("clr", _indicator_color)

@@ -3,6 +3,7 @@ class_name TileDataPreviewer
 
 class TilePreviewData:
   var effects: Array
+  var hide_events := false
   var context := EffectContext.new()
   var priority := 0
   var name: String
@@ -24,6 +25,9 @@ func get_preview_for(effect: TileEffect):
   return _effect_displays.get(effect)
 
 func push_preview(preview: TilePreviewData) -> Command:
+  # dumb hack for tutorial
+  if TutorialManager.inst.is_active() and preview.priority != -1: return
+  
   var cmd := BasicCommand.from(
     func():
       _previews.push_back(preview)
@@ -55,6 +59,7 @@ func _sync_displayed():
       var display: EffectsDisplayRoot = load("res://scenes/ui/tile_effect_display.tscn").instantiate()
       display.effect_ctx = used.context
       display.effect = effect
+      display.hide_trigger = current_preview.hide_events
       _effect_displays[effect] = display
       %EffectsDisplayRoot.add_child(display)
       if effect is TileEffectGiveTile:

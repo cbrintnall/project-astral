@@ -3,8 +3,10 @@ class_name EffectsDisplayRoot
 
 @onready var event_text: RichTextLabel = %EventText
 @onready var event_description: RichTextLabel = %Description
+@onready var area_tags: Control = %AreaTagsRoot
 
 var effect_ctx: EffectContext
+var hide_trigger := false
 
 var effect: TileEffect:
   set(val):
@@ -36,7 +38,7 @@ func _sync_tags():
       %AreaTagsRoot.add_child(area_tag)
 
 func _process(_delta: float) -> void:
-  %EventTextRoot.visible = effect.event != TileEffect.Event.CUSTOM
+  %EventTextRoot.visible = effect.event != TileEffect.Event.CUSTOM and not hide_trigger
   
   if effect:
     event_text.text = effect.get_event_text()

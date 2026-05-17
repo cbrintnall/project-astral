@@ -30,7 +30,11 @@ var default_state := "selecting"
 var stat := StatStore.new()
 var placed := false
 var constellation: ConstellationDef
-var health: int = 0
+var health: int = 0:
+  set(val):
+    health = clampi(val, 0, roundi(stat.get_value(preload("res://data/stats/stat_starter_health.tres"))))
+  get:
+    return health
 var defense := 0
 var faction := Faction.NEUTRAL
 
@@ -54,10 +58,23 @@ func get_effect_context() -> EffectContext:
   return _get_effect_ctx()
 
 func do_chip_damage(amt: int):
-  if defense:
-    defense -= amt
-  else:
-    health -= amt
+  var taken_from_defense = mini(defense, amt)
+  var remaining_damage = amt-taken_from_defense
+  
+  if defense > 0:
+    defense -= taken_from_defense
+    if defense <= 0:
+      AudioManager3d.play({
+        "stream": preload("res://audio/Shield Bash 3.wav"),
+        "pitch_variance": 0.1,
+        "parent": self,
+        "debounce": 0.5,
+        "volume": 0.5
+      })
+      BoardCamera.inst.shake(0.2, 0.1)
+      
+  if remaining_damage > 0:
+    health -= remaining_damage
     stretcher.punch(5.0, 10.0)
     Springer.data[stretcher]["rotation"]["velocity"] = Utils.random_unit_sphere() * 25.0
     AudioManager3d.play({
@@ -65,8 +82,9 @@ func do_chip_damage(amt: int):
       "pitch_variance": 0.1,
       "parent": self
     })
-    if health <= 0:
-      destroy()
+
+  if health <= 0:
+    destroy()
 
 func show_target_point_preview(ctx: EffectContext = null) -> bool:
   if not ctx:
@@ -250,14 +268,13 @@ func set_placed_at(_tile: Vector3i):
 
   if prev_state != "placed":
     var executor := GameManager.inst.queue_tile_execution([self], TileEffect.Event.ON_PLACE)
-    executor.execution.set_initiator(self)
       
 func register_effect(effect: TileEffect):
   if _effects.has(effect):
     print("%s tried registering a duplicate effect" % [ def.name ])
     return
   
-  _effects.push_back(effect)
+  _effects.push_back(effect.clone())
 
 func no_neighbors() -> bool:
   return len(get_open_neighbors()) == len(get_valid_neighbor_tiles())
@@ -340,7 +357,7 @@ func _load_def():
   if not def: return
 
   for effect: TileEffect in def.effects:
-    _effects.push_back(effect)
+    register_effect(effect)
 
   if def.texture:
     _face_material.albedo_texture = def.texture
@@ -511,7 +528,7 @@ func _selection_process_update_area_previews(_delta: float):
   var ctx := EffectContext.from_override(GridManager.inst.grid_position_3d)
   for effect: TileEffect in get_effects():
     if effect.main_target:
-      spots.append_array(effect.main_target.get_target(ctx))
+      spots.append_array(effect.main_target.get_target(ctx, false, true))
 
   _preview_highlighter.spots = spots
       
@@ -525,6 +542,10 @@ func _try_place_self(selection: Selection):
     assert(_original_hand_marker != null)
     _original_hand_marker.queue_free()
     _preview_highlighter.queue_free()
+  else:
+    BoardCamera.inst.shake(0.05, 0.05)
+    stretcher.punch(2.0,5.0)
+    AudioManager3d.play({"stream": preload("res://audio/reject.ogg"), "pitch_variance": 0.1})
 
 func _unhandled_input(event: InputEvent) -> void:
   if not _mouse_entered: return

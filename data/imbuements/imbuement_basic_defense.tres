@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ImbuementDef" format=3 uid="uid://ci6boq0wjd2sk"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_ikqtw"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_5rc4p"]
+[ext_resource type="Script" uid="uid://dlgb7noehjano" path="res://scenes/tiles/effects/defense/tile_effect_give_defense.gd" id="2_d2knb"]
+[ext_resource type="Script" uid="uid://btk3sufrv2aay" path="res://data/imbuement_def.gd" id="2_v1r75"]
+[ext_resource type="Texture2D" uid="uid://br0m4uvmxuuw0" path="res://assets/tiles/shieldTile.png" id="2_wiv6u"]
+
+[sub_resource type="Resource" id="Resource_ix03a"]
+script = ExtResource("2_5rc4p")
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_5rc4p"]
+script = ExtResource("2_d2knb")
+amount = 2
+main_target = SubResource("Resource_ix03a")
+metadata/_custom_type_script = "uid://dlgb7noehjano"
+
+[resource]
+script = ExtResource("2_v1r75")
+effects = Array[ExtResource("1_ikqtw")]([SubResource("Resource_5rc4p")])
+name = "Sheer Will"
+icon = ExtResource("2_wiv6u")
+metadata/_custom_type_script = "uid://btk3sufrv2aay"

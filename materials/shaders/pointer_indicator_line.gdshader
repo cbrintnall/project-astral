@@ -1,6 +1,8 @@
 shader_type spatial;
 render_mode cull_disabled;
 
+global uniform vec4 select_color;
+
 void vertex() {
   vec3 object_pos = MODEL_MATRIX[3].xyz;
   vec3 camera_pos = INV_VIEW_MATRIX[3].xyz;
@@ -24,7 +26,8 @@ void fragment() {
   vec2 uv = step(vec2(.5), UV);
   vec2 bounded_uv = mod(UV+vec2(0.0, TIME), vec2(1.0));
 
-  ALBEDO = vec3(1.0);
-  EMISSION = vec3(5.0);
+  vec3 revised_clr = pow(select_color.rgb,vec3(2.2));
+  ALBEDO = revised_clr;
+  EMISSION = revised_clr*5.0;
   ALPHA = step(bounded_uv.y, 0.7);
 }

@@ -47,9 +47,18 @@ func _ready() -> void:
   var give_tile_effect := TileEffectGiveTile.new()
   give_tile_effect.def = AllTileContainer.inst.resources.filter(func(target_def: TileDef): return target_def.in_shop).pick_random()
   give_tile_effect.event = TileEffect.Event.ON_DESTROY
+  
+  var damage_nearby_effect := TileEffectChip.new()
+  var surrounding = TileTargetDef.new()
+  surrounding.size = Vector2i(3, 3)
+  surrounding.include_self = false
+  damage_nearby_effect.main_target = surrounding
+  damage_nearby_effect.amount = 4
+  damage_nearby_effect.event = TileEffect.Event.ON_DESTROY
     
-  _effects.push_back(src_effect)
-  _effects.push_back(give_tile_effect)
+  register_effect(damage_nearby_effect)
+  register_effect(src_effect)
+  register_effect(give_tile_effect)
   
 func _setup_move_bind(ctx: EffectContext):
   var points = _cache_targets.get_target(ctx)

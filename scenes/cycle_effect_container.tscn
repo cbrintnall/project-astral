@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://dy31rsf56sho0"]
+
+[ext_resource type="Script" uid="uid://bqq2jtk0wqotd" path="res://scenes/ui/cycle_effect_container.gd" id="1_1ul1g"]
+[ext_resource type="Shader" uid="uid://cdxehjmyq0505" path="res://materials/shaders/ui_flame_shader.gdshader" id="1_mudsw"]
+[ext_resource type="Texture2D" uid="uid://bwey7wevp1mxt" path="res://assets/ui/ellipse-mask.png" id="2_1ul1g"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_i3uta"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hl454"]
+shader = ExtResource("1_mudsw")
+shader_parameter/inner_color = Color(0.9490196, 0.827451, 0.67058825, 1)
+shader_parameter/outer_color = Color(0.7764706, 0.62352943, 0.64705884, 1)
+shader_parameter/inner_threshold = 0.36
+shader_parameter/outer_threshold = 0.1
+shader_parameter/soft_edge = 0.0
+shader_parameter/fire_radius = 0.4
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_i3uta")
+shader_parameter/multiplier = 1.0
+shader_parameter/stretch = Vector2(1, 1)
+shader_parameter/center = Vector2(0.5, 0.8)
+
+[node name="CycleEffectContainer" type="MarginContainer" unique_id=1966297637]
+pivot_offset_ratio = Vector2(0.5, 0.5)
+size_flags_vertical = 4
+offset_transform_enabled = true
+script = ExtResource("1_1ul1g")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1352360356]
+material = SubResource("ShaderMaterial_hl454")
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -30.425)
+offset_transform_scale = Vector2(2.19, 3.22)
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=951032561]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("2_1ul1g")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Button" type="Button" parent="." unique_id=565772260]
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true

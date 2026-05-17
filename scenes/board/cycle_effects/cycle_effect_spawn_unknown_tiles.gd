@@ -27,11 +27,14 @@ func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
     ctx.on_finish.connect(
       func():
         BoardCamera.inst.shake(0.2, 0.5)
-        var cache = load("res://scenes/tiles/tile_cache.tscn").instantiate()
+        var cache: Tile = load("res://scenes/tiles/tile_cache.tscn").instantiate()
+        cache.faction = Tile.Faction.NEUTRAL
         Engine.time_scale = 0.05
         var t = GameManager.inst.create_tween()
         t.set_ignore_time_scale(true)
-        t.tween_property(Engine, "time_scale", 1.0, SLOW_TIME).set_trans(Tween.TRANS_CUBIC)
+        t.parallel().tween_method(func(energy: float): GameManager.inst.light.light_energy = energy, 3.0, 1.0, SLOW_TIME).set_trans(Tween.TRANS_QUAD)
+        t.parallel().tween_property(Engine, "time_scale", 1.0, SLOW_TIME).set_trans(Tween.TRANS_CUBIC)
+        
         cache.default_state = "display"
         if GridManager.inst.try_place_tile(cache, spot):
           cache.global_position = Vector3(spot)
