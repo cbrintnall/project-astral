@@ -2,12 +2,18 @@
 
 [ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_vqi07"]
 [ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_2lwyh"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_ofixk"]
 [ext_resource type="Script" uid="uid://ckybtukn7ta2e" path="res://scenes/tiles/effects/tile_effect_give_money.gd" id="2_pi1aa"]
 [ext_resource type="Texture2D" uid="uid://ckkhiss0n1uko" path="res://assets/tiles/star1Tile.png" id="4_pi1aa"]
 
+[sub_resource type="Resource" id="Resource_t55so"]
+script = ExtResource("2_ofixk")
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
 [sub_resource type="Resource" id="Resource_ofixk"]
 script = ExtResource("2_pi1aa")
-amount = 2
+amount = 5.0
+main_target = SubResource("Resource_t55so")
 metadata/_custom_type_script = "uid://ckybtukn7ta2e"
 
 [resource]

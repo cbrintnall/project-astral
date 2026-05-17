@@ -22,7 +22,8 @@ func _mouse_enter() -> void:
   _hover_cmd=UI.inst.show_tooltip("Purchase a pack of 3 random tiles.")
 
 func _mouse_exit() -> void:
-  _hover_cmd.undo()
+  if _hover_cmd:
+    _hover_cmd.undo()
   
 func _exit_tree() -> void:
   if _hover_cmd:

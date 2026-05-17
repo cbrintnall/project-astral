@@ -1,20 +1,28 @@
 [gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://b8pfayg4c0t67"]
 
 [ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_0vsus"]
-[ext_resource type="Script" uid="uid://b8w5q1k7is7sg" path="res://scenes/tiles/effects/tile_effect_give_points.gd" id="2_4hrw3"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_fahx3"]
 [ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="3_hxvpt"]
+[ext_resource type="Script" uid="uid://vae0yba8d17t" path="res://scenes/tiles/effects/tile_effect_point_per_tile.gd" id="3_xfsj4"]
 [ext_resource type="Texture2D" uid="uid://bfkromjuoo3rj" path="res://assets/tiles/lyreTile.png" id="4_lkd61"]
 
-[sub_resource type="Resource" id="Resource_fahx3"]
-script = ExtResource("2_4hrw3")
-points_given = -10
+[sub_resource type="Resource" id="Resource_pyutw"]
+script = ExtResource("2_fahx3")
+every_tile = true
+matching_tile = "Petty"
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_4gg75"]
+script = ExtResource("3_xfsj4")
+per_tile = -5.0
 event = 4
-metadata/_custom_type_script = "uid://b8w5q1k7is7sg"
+main_target = SubResource("Resource_pyutw")
+metadata/_custom_type_script = "uid://vae0yba8d17t"
 
 [resource]
 script = ExtResource("3_hxvpt")
 name = "Petty"
-effects = Array[ExtResource("1_0vsus")]([SubResource("Resource_fahx3")])
+effects = Array[ExtResource("1_0vsus")]([SubResource("Resource_4gg75")])
 texture = ExtResource("4_lkd61")
 is_enemy = true
 metadata/_custom_type_script = "uid://cssx7lcdl5o45"

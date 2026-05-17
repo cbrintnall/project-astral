@@ -13,7 +13,8 @@ enum Event {
   ON_MOVE = 32,
   ON_COLLIDE_TILE = 64,
   CUSTOM = 128,
-  ON_CYCLE_START = 256
+  ON_CYCLE_START = 256,
+  ON_DAMAGED = 512
 }
 
 @export var event := Event.ON_PLACE
@@ -37,6 +38,8 @@ func get_event_text() -> String:
       return "[color=%s]On Collide Tile[/color]" % Constants.EFFECT_COLOR_STRING
     Event.ON_CYCLE_START:
       return "[color=%s]On Cycle Start[/color]" % Constants.EFFECT_COLOR_STRING
+    Event.ON_DAMAGED:
+      return "[color=%s]On Take Damage[/color]" % Constants.EFFECT_COLOR_STRING
 
   return "ERROR, NO EVENT"
 
@@ -66,6 +69,9 @@ The amount of points this effect will give without any other considerations
 """
 func get_tile_baseline_points(effect_ctx: EffectContext) -> int:
   return 0
+  
+func get_current_dawn_amount(effect_ctx: EffectContext) -> int:
+  return _get_total_points(effect_ctx, get_tile_baseline_points(effect_ctx))
 
 func _reward_points(effect_ctx: EffectContext, amount: int):
   var total_points = _get_total_points(effect_ctx, amount)
@@ -74,7 +80,8 @@ func _reward_points(effect_ctx: EffectContext, amount: int):
   var second_source = GridManager.inst.get_mods_at_point(effect_ctx.get_location()).get_point_source()
   var final_remaining = second_source.give(remaining)
   assert(final_remaining <= 0, "Not sure why this would happen but it probably can")
-  NotificationLabel.from("%+d" % total_points, effect_ctx.tile)
+  if is_instance_valid(effect_ctx.tile):
+    NotificationLabel.from("%+d" % total_points, effect_ctx.tile)
 
   var first_animation = total_points-remaining
   if first_animation > 0:

@@ -10,7 +10,7 @@ func _get_targets(ctx: EffectContext):
   return main_target.get_target(ctx)
 
 func get_description(effect_ctx: EffectContext, exec_ctx: ExecutionContext) -> String:
-  return "%s %s by %s %s." % [ description_verbiage, stat.name, StatProviderDef.get_value_as_format(provider.amount), main_target.get_text() ]
+  return "%s %s by %s on marked tiles." % [ description_verbiage, stat.name, StatProviderDef.get_value_as_format(provider.amount) ]
 
 func execute(effect_ctx: EffectContext, exec_ctx: ExecutionContext):
   for tile in _get_targets(effect_ctx):

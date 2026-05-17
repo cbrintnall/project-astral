@@ -25,7 +25,7 @@ static var START_DECK = [
   load("res://data/tiles/tile_basic_points.tres"),
   load("res://data/tiles/tile_basic_multiply_area.tres"),
   load("res://data/tiles/tile_lone_signal.tres"),
-  load("res://data/tiles/tile_lone_signal.tres"),
+  load("res://data/tiles/destroy/tile_the_bomb.tres"),
   load("res://data/tiles/defense/tile_row_defense.tres"),
 ]
 

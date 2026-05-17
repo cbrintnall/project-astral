@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode world_vertex_coords, cull_back;
+render_mode world_vertex_coords, cull_front;
 
 uniform sampler2D noise: repeat_enable;
 uniform sampler2D vnoise: repeat_enable;

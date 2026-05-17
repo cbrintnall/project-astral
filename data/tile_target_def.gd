@@ -15,6 +15,7 @@ class_name TileTargetDef
 @export var only_empty := false
 @export var only_taken := false
 @export var faction := Tile.Faction.ALL
+@export var matching_tile := ""
 
 func should_preview_spots() -> bool:
   if random_cardinal_direction:
@@ -23,10 +24,16 @@ func should_preview_spots() -> bool:
   if random_neighbors:
     return false
     
+  if pull_random_amount:
+    return false
+    
   return true
 
 func get_text_tags() -> PackedStringArray:
   var text := PackedStringArray()
+  
+  if matching_tile:
+    text.push_back("tile \"[color=#c69fa5]%s[/color]\"" % matching_tile)
   
   if only_taken:
     text.push_back("non-empty")
@@ -186,6 +193,15 @@ func get_target(ctx: EffectContext, with_tiles := false, ignore_filters := false
   if not ignore_filters:
     if faction != Tile.Faction.ALL:
       with_tiles = true
+      
+    if matching_tile:
+      targets = targets.filter(
+        func(pos: Vector3i):
+          var tile: Tile = GridManager.inst.get_tile_at(pos)
+          if tile and ctx.tile:
+            return tile.def.name.to_lower() == ctx.tile.def.name.to_lower()
+          return false
+      )
       
     if with_tiles:
       targets = targets.filter(GridManager.inst.has_tile)

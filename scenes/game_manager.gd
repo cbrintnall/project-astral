@@ -220,14 +220,23 @@ func _ready() -> void:
   Console.add_command(
     "defense",
     func():
-      GridManager.inst.get_played_tiles().pick_random().defense += 5
+      var selection := Selection.new()
+      selection.on_choose = func():
+        if GridManager.inst.grid_hovered_tile:
+          GridManager.inst.grid_hovered_tile.defense += 5
+          selection.cancel()
+      GridManager.inst.try_start_selection(selection)
   )
   
   Console.add_command(
     "damage",
     func():
-      var tile: Tile = GridManager.inst.get_played_tiles().pick_random()
-      tile.do_chip_damage(6)
+      var selection := Selection.new()
+      selection.on_choose = func():
+        if GridManager.inst.grid_hovered_tile:
+          GridManager.inst.grid_hovered_tile.do_chip_damage(6)
+          selection.cancel()
+      GridManager.inst.try_start_selection(selection)
   )
   
   await Utils.wait_until(func(): return HandManager.inst.is_node_ready())
@@ -235,9 +244,10 @@ func _ready() -> void:
   BoardCamera.inst.map_size = GridManager.inst.size
   BoardCamera.inst.map_root = Vector3.ZERO
 
-  if not played_tutorial:
+  if not played_tutorial and not OS.is_debug_build():
     _state.current = "tutorial"
   else:
+    TutorialManager.inst.skip()
     _state.current = "start_round"
   
 func _process(delta: float) -> void:
@@ -331,7 +341,12 @@ func _post_round(machine: CallableStateMachine, delta: float):
       queue_execution(
         _next_cycle_tasks,
         TileEffect.Event.ON_CYCLE_START,
-        EffectContext.new()
+        EffectContext.new(),
+        func():
+          queue_tile_execution(
+            GridManager.inst.get_played_tiles(),
+            TileEffect.Event.ON_CYCLE_START
+          )
       )
       return
     else:
@@ -388,7 +403,7 @@ func _setup_executor(tiles: Array, event: TileEffect.Event, on_finish: Callable)
   next_executor.on_finish = on_finish
   
   # NOTE: temp workaround, this should be set outside this but w/e
-  if len(tiles) == 1 and event == TileEffect.Event.ON_PLACE:
+  if len(tiles) == 1:
     next_executor.execution.set_initiator(tiles.front())
   
   # emit before register, in-case we want to register more

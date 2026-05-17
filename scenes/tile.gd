@@ -82,6 +82,8 @@ func do_chip_damage(amt: int):
       "pitch_variance": 0.1,
       "parent": self
     })
+    
+    GameManager.inst.queue_tile_execution([self], TileEffect.Event.ON_DAMAGED)
 
   if health <= 0:
     destroy()
@@ -194,6 +196,7 @@ func destroy():
   )
   
   p.global_position = global_position
+  stretcher.visible = false
   
   GameManager.inst.queue_tile_execution(
     [self], 
@@ -363,7 +366,8 @@ func _load_def():
     _face_material.albedo_texture = def.texture
     
   if def.is_enemy:
-    add_child(load("res://scenes/fx/enemy_indicator_fx.tscn").instantiate())
+    stretcher.add_child(load("res://scenes/fx/enemy_indicator_fx.tscn").instantiate())
+    $Stretcher3D/objectTile.visible = false
 
   constellation = def.constellation
   (%Constellations as MultiMeshInstance3D).multimesh = (%Constellations as MultiMeshInstance3D).multimesh.duplicate()

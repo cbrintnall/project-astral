@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="TileEffectModifyStat" format=3 uid="uid://c5e6q04e8388p"]
+
+[ext_resource type="Script" uid="uid://cpwdsdmetvsul" path="res://scenes/tiles/effects/tile_effect_modify_stat.gd" id="1_6vtgs"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="1_a412l"]
+[ext_resource type="Script" uid="uid://cdselfcrv6cg4" path="res://otterlib/resources/stat_provider_def.gd" id="2_7r0es"]
+[ext_resource type="Resource" uid="uid://euskaqtukkwq" path="res://data/stats/stat_starter_health.tres" id="3_ltfs5"]
+
+[sub_resource type="Resource" id="Resource_ltfs5"]
+script = ExtResource("1_a412l")
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_jax8q"]
+script = ExtResource("2_7r0es")
+metadata/_custom_type_script = "uid://cdselfcrv6cg4"
+
+[resource]
+script = ExtResource("1_6vtgs")
+stat = ExtResource("3_ltfs5")
+provider = SubResource("Resource_jax8q")
+description_verbiage = "Increase"
+event = 2
+main_target = SubResource("Resource_ltfs5")
+metadata/_custom_type_script = "uid://cpwdsdmetvsul"

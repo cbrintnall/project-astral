@@ -38,7 +38,8 @@ func _mouse_enter() -> void:
   
 func _mouse_exit() -> void:
   _entered = false
-  _hover_cmd.undo()
+  if _hover_cmd:
+    _hover_cmd.undo()
   
 func _process(_delta: float) -> void:
   label.text = str(current_cost)
@@ -74,8 +75,12 @@ func _input_event(camera: Camera3D, event: InputEvent, event_position: Vector3, 
     var selection := Selection.new()
     selection.canceled.connect(
       func():
-        _tile_selection = null
         UI.inst.choose_tiles.open = false
+        for conn in UI.inst.choose_tiles.tile_selected.get_connections():
+          UI.inst.choose_tiles.tile_selected.disconnect(conn["callable"])
+        if UI.inst.choose_tiles.canceled.is_connected(_tile_selection.cancel):
+           UI.inst.choose_tiles.canceled.disconnect(_tile_selection.cancel)
+        _tile_selection = null
     )
 
     if GridManager.inst.try_start_selection(selection):

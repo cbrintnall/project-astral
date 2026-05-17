@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://umkgb1sle8om"]
 
-[ext_resource type="ArrayMesh" uid="uid://dnje3apsblpul" path="res://assets/vfx/vfxSelectionBox_Plane.res" id="1_xg6ko"]
+[ext_resource type="ArrayMesh" uid="uid://bbomke5se8gdk" path="res://assets/blender/objects/tilesEnemyTile_Cylinder_002.res" id="4_saqlf"]
 
 [node name="EnemyIndicator" type="Node3D" unique_id=1899608712]
 
-[node name="SelectionBox" type="MeshInstance3D" parent="." unique_id=1864537744]
-mesh = ExtResource("1_xg6ko")
+[node name="TilesEnemyTileCylinder002" type="MeshInstance3D" parent="." unique_id=723376258]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.026101515, 0)
+mesh = ExtResource("4_saqlf")

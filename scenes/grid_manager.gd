@@ -141,9 +141,6 @@ Is this in the grid?
 """
 func is_legal_position(pos: Vector3i) -> bool:
   return is_in_bounds(pos)
-  
-func could_place(tile: Tile, pos: Vector3i) -> bool:
-  return not _placements.has(pos) and is_in_bounds(pos)
 
 func try_place_tile(tile: Tile, pos: Vector3i) -> bool:
   if _placements.has(pos): return false

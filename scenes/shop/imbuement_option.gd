@@ -13,7 +13,7 @@ var _entered := false
 
 func _ready() -> void:
   cost = roundi(lerp(1.0, 10.0, randfn(0.2, 0.1)))
-  effect = RealImbuementContainer.inst.resources.pick_random()
+  effect = RealImbuementContainer.inst.resources.pick_random().clone()
 
 func _mouse_enter() -> void:
   if get_viewport().gui_get_hovered_control() != null: return

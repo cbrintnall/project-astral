@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="TileEffectGiveMoney" format=3 uid="uid://bsqvqkfrwnjgd"]
+
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="1_a627t"]
+[ext_resource type="Script" uid="uid://ckybtukn7ta2e" path="res://scenes/tiles/effects/tile_effect_give_money.gd" id="1_m778q"]
+
+[sub_resource type="Resource" id="Resource_ut65x"]
+script = ExtResource("1_a627t")
+every_tile = true
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[resource]
+script = ExtResource("1_m778q")
+amount = 0.25
+main_target = SubResource("Resource_ut65x")
+metadata/_custom_type_script = "uid://ckybtukn7ta2e"

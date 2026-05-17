@@ -1,0 +1,71 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://bp617pjr8esyy"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_rmlho"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_64vbn"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_rd4qm"]
+[ext_resource type="Script" uid="uid://coxe54w821lob" path="res://scenes/tiles/effects/tile_effect_multiply_area.gd" id="2_ufskh"]
+[ext_resource type="Script" uid="uid://d382tt1tvmdrt" path="res://scenes/tiles/effects/tile_effect_chip.gd" id="4_64vbn"]
+[ext_resource type="Script" uid="uid://dlgb7noehjano" path="res://scenes/tiles/effects/defense/tile_effect_give_defense.gd" id="5_cqibk"]
+[ext_resource type="Script" uid="uid://vae0yba8d17t" path="res://scenes/tiles/effects/tile_effect_point_per_tile.gd" id="6_kcls6"]
+[ext_resource type="Texture2D" uid="uid://c5qvp7ac2uklq" path="res://assets/tiles/handTile.png" id="8_sy5uf"]
+
+[sub_resource type="Resource" id="Resource_cqibk"]
+script = ExtResource("2_64vbn")
+size = Vector2i(3, 3)
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_64vbn"]
+script = ExtResource("2_ufskh")
+size = Vector2i(3, 3)
+multiplier = 4.0
+main_target = SubResource("Resource_cqibk")
+metadata/_custom_type_script = "uid://coxe54w821lob"
+
+[sub_resource type="Resource" id="Resource_kcls6"]
+script = ExtResource("2_64vbn")
+include_self = false
+size = Vector2i(5, 5)
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_sy5uf"]
+script = ExtResource("4_64vbn")
+event = 4
+main_target = SubResource("Resource_kcls6")
+metadata/_custom_type_script = "uid://d382tt1tvmdrt"
+
+[sub_resource type="Resource" id="Resource_1crpw"]
+script = ExtResource("2_64vbn")
+include_self = false
+size = Vector2i(5, 5)
+faction = 1
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_pumvd"]
+script = ExtResource("5_cqibk")
+amount = 2
+event = 512
+main_target = SubResource("Resource_1crpw")
+metadata/_custom_type_script = "uid://dlgb7noehjano"
+
+[sub_resource type="Resource" id="Resource_qm5yv"]
+script = ExtResource("2_64vbn")
+include_self = false
+size = Vector2i(9, 9)
+matching_tile = "Bully"
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_f0uf0"]
+script = ExtResource("6_kcls6")
+per_tile = 20.0
+event = 4
+main_target = SubResource("Resource_qm5yv")
+metadata/_custom_type_script = "uid://vae0yba8d17t"
+
+[resource]
+script = ExtResource("2_rd4qm")
+name = "Bully"
+shop_cost = 2
+effects = Array[ExtResource("1_rmlho")]([SubResource("Resource_64vbn"), SubResource("Resource_sy5uf"), SubResource("Resource_pumvd"), SubResource("Resource_f0uf0")])
+texture = ExtResource("8_sy5uf")
+in_shop = true
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"

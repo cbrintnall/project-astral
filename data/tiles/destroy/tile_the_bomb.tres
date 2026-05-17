@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://ctv03g05l7i0s"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_axu8e"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_7b87w"]
+[ext_resource type="Script" uid="uid://b8w5q1k7is7sg" path="res://scenes/tiles/effects/tile_effect_give_points.gd" id="2_i5ftt"]
+[ext_resource type="Texture2D" uid="uid://dmk2rs5y735u1" path="res://assets/tiles/boltTile.png" id="3_7b87w"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="3_0478l"]
+[ext_resource type="Script" uid="uid://dlil8lhl4obst" path="res://scenes/tiles/effects/destroy/tile_effect_destroy_marked.gd" id="4_xlywt"]
+
+[sub_resource type="Resource" id="Resource_ye0gq"]
+script = ExtResource("2_i5ftt")
+points_given = 15
+metadata/_custom_type_script = "uid://b8w5q1k7is7sg"
+
+[sub_resource type="Resource" id="Resource_jscap"]
+script = ExtResource("3_0478l")
+size = Vector2i(3, 3)
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_6g8fe"]
+script = ExtResource("4_xlywt")
+event = 4
+main_target = SubResource("Resource_jscap")
+metadata/_custom_type_script = "uid://dlil8lhl4obst"
+
+[sub_resource type="Resource" id="Resource_i5ftt"]
+script = ExtResource("2_i5ftt")
+points_given = 10
+event = 8
+metadata/_custom_type_script = "uid://b8w5q1k7is7sg"
+
+[resource]
+script = ExtResource("2_7b87w")
+name = "The Bomb"
+shop_cost = 2
+effects = Array[ExtResource("1_axu8e")]([SubResource("Resource_ye0gq"), SubResource("Resource_6g8fe"), SubResource("Resource_i5ftt")])
+texture = ExtResource("3_7b87w")
+in_shop = true
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"

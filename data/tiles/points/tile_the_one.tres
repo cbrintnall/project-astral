@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://bnf33xtfgr3x"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_k8te7"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_1wdqh"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_6cfp1"]
+[ext_resource type="Texture2D" uid="uid://dpqtvghgmi18j" path="res://assets/tiles/owlTile.png" id="3_6cfp1"]
+[ext_resource type="Script" uid="uid://dlil8lhl4obst" path="res://scenes/tiles/effects/destroy/tile_effect_destroy_marked.gd" id="3_r0wce"]
+[ext_resource type="Script" uid="uid://b8w5q1k7is7sg" path="res://scenes/tiles/effects/tile_effect_give_points.gd" id="4_r0wce"]
+
+[sub_resource type="Resource" id="Resource_mgkwi"]
+script = ExtResource("2_1wdqh")
+include_self = false
+every_tile = true
+matching_tile = "The One"
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_ow2wn"]
+script = ExtResource("3_r0wce")
+main_target = SubResource("Resource_mgkwi")
+metadata/_custom_type_script = "uid://dlil8lhl4obst"
+
+[sub_resource type="Resource" id="Resource_8k7m1"]
+script = ExtResource("4_r0wce")
+points_given = 200
+event = 8
+metadata/_custom_type_script = "uid://b8w5q1k7is7sg"
+
+[resource]
+script = ExtResource("2_6cfp1")
+name = "The One"
+effects = Array[ExtResource("1_k8te7")]([SubResource("Resource_ow2wn"), SubResource("Resource_8k7m1")])
+texture = ExtResource("3_6cfp1")
+in_shop = true
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="TileDef" format=3 uid="uid://c2e77u52672sg"]
+
+[ext_resource type="Script" uid="uid://c8djxs0bynuvq" path="res://scenes/tiles/effects/tile_effect.gd" id="1_hpbj3"]
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="2_5hoid"]
+[ext_resource type="Script" uid="uid://cssx7lcdl5o45" path="res://data/tile_def.gd" id="2_xbeya"]
+[ext_resource type="Script" uid="uid://bx7rqoojb7561" path="res://scenes/tiles/effects/health/tile_effect_point_per_health.gd" id="2_yc0cw"]
+[ext_resource type="Texture2D" uid="uid://b1e1nmcoq8uh7" path="res://assets/tiles/heartTile.png" id="5_5hoid"]
+
+[sub_resource type="Resource" id="Resource_nxo36"]
+script = ExtResource("2_5hoid")
+column = true
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_5hoid"]
+script = ExtResource("2_yc0cw")
+event = 4
+main_target = SubResource("Resource_nxo36")
+metadata/_custom_type_script = "uid://bx7rqoojb7561"
+
+[resource]
+script = ExtResource("2_xbeya")
+name = "Healthy"
+effects = Array[ExtResource("1_hpbj3")]([SubResource("Resource_5hoid")])
+texture = ExtResource("5_5hoid")
+in_shop = true
+metadata/_custom_type_script = "uid://cssx7lcdl5o45"

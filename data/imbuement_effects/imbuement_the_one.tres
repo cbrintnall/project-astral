@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="TileEffectSpawnMatching" format=3 uid="uid://7ohtykyha4mc"]
+
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="1_6e1a5"]
+[ext_resource type="Script" uid="uid://06ah85lxidqx" path="res://scenes/tiles/effects/spawn/tile_effect_spawn_matching.gd" id="1_6luqy"]
+
+[sub_resource type="Resource" id="Resource_m7331"]
+script = ExtResource("1_6e1a5")
+include_self = false
+empty_space = true
+pull_random_amount = Vector2i(1, 1)
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[resource]
+script = ExtResource("1_6luqy")
+tile_path = &"res://data/tiles/points/tile_the_one.tres"
+event = 256
+main_target = SubResource("Resource_m7331")
+metadata/_custom_type_script = "uid://06ah85lxidqx"

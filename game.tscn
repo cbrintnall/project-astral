@@ -24,6 +24,7 @@
 [ext_resource type="FontFile" uid="uid://bwa1eluxk04vt" path="res://assets/fonts/Habibi-Regular.ttf" id="11_215e1"]
 [ext_resource type="Script" uid="uid://beki70jb26a2h" path="res://scenes/tutorial_manager.gd" id="11_i3uta"]
 [ext_resource type="Script" uid="uid://b88mkbokfc4re" path="res://scenes/board_camera.gd" id="11_mfdv2"]
+[ext_resource type="Script" uid="uid://b8w5q1k7is7sg" path="res://scenes/tiles/effects/tile_effect_give_points.gd" id="11_nliq0"]
 [ext_resource type="AudioStream" uid="uid://d4k6gbh8djvh1" path="res://audio/music/minijam_loop.ogg" id="12_hb5m1"]
 [ext_resource type="Shader" uid="uid://cbmhcoe13d8g4" path="res://materials/shaders/grid_backing_shader.gdshader" id="12_lc2xo"]
 [ext_resource type="Script" uid="uid://iq0mu5bomd0v" path="res://scenes/hand_manager.gd" id="13_hb5m1"]
@@ -79,6 +80,8 @@
 [ext_resource type="Resource" uid="uid://b627xyk02m145" path="res://data/tiles/tile_source_tile.tres" id="40_ple6s"]
 [ext_resource type="Resource" uid="uid://b7tgr0topxpxr" path="res://data/tiles/defense/tile_row_defense.tres" id="43_66xay"]
 [ext_resource type="Shader" uid="uid://bi3dkwmqo5d3q" path="res://materials/shaders/grid_barrier_shader.gdshader" id="43_kq12w"]
+[ext_resource type="Resource" uid="uid://lhpiwo57lm2p" path="res://data/tiles/destroy/tile_destroy_around.tres" id="43_vf1qt"]
+[ext_resource type="Resource" uid="uid://c2e77u52672sg" path="res://data/tiles/health/tile_healthy.tres" id="44_j4tta"]
 [ext_resource type="Resource" uid="uid://6s0lt8orjbta" path="res://data/tiles/tile_discouragement.tres" id="45_avmo2"]
 [ext_resource type="Texture2D" uid="uid://c3mk3f4rf4v27" path="res://assets/ui/blocked-nine-patch.png" id="50_avmo2"]
 [ext_resource type="Script" uid="uid://gfxdn28hng4v" path="res://scenes/vfx_manager.gd" id="51_vyqle"]
@@ -89,15 +92,27 @@
 [ext_resource type="Texture2D" uid="uid://cu25qi8emx63x" path="res://assets/icons/shield-reflect.png" id="57_t2ssd"]
 [ext_resource type="Script" uid="uid://dqesb21oc6arv" path="res://scenes/ui/choose_tiles.gd" id="60_56gn1"]
 [ext_resource type="PackedScene" uid="uid://c54wrus6tf5mh" path="res://scenes/ui/imbuement_icon.tscn" id="62_3xib3"]
+[ext_resource type="Resource" uid="uid://cqfc7n1e1tytw" path="res://data/tiles/points/tile_group_think.tres" id="63_hsv4y"]
 [ext_resource type="Texture2D" uid="uid://gtl3ebvgt6th" path="res://assets/icons/speaker.png" id="64_lh772"]
+[ext_resource type="Resource" uid="uid://bnf33xtfgr3x" path="res://data/tiles/points/tile_the_one.tres" id="64_lrvy0"]
+[ext_resource type="Resource" uid="uid://c81cpanhvpltd" path="res://data/tiles/defense/tile_my_friends.tres" id="65_lea4x"]
+[ext_resource type="Resource" uid="uid://bkvs4vkdj408i" path="res://data/tiles/chip/tile_def_the_line.tres" id="66_oykgp"]
+[ext_resource type="Resource" uid="uid://ctv03g05l7i0s" path="res://data/tiles/destroy/tile_the_bomb.tres" id="68_5ru8x"]
 [ext_resource type="Shader" uid="uid://dvsio8wuv6cg5" path="res://materials/shaders/basic_fog_shader.gdshader" id="69_6qn5j"]
+[ext_resource type="Resource" uid="uid://bp617pjr8esyy" path="res://data/tiles/points/tile_bully.tres" id="69_oo6xx"]
 [ext_resource type="Script" uid="uid://ce3rsvy1ki3ys" path="res://scenes/fx/path_line.gd" id="71_wj41c"]
 [ext_resource type="Script" uid="uid://cbbl4wydabd3q" path="res://scenes/real_imbuement_container.gd" id="73_8jd3k"]
 [ext_resource type="Resource" uid="uid://bg8bewwp2chhu" path="res://data/imbuement_effects/imbuement_give_defense.tres" id="74_tssr6"]
 [ext_resource type="ArrayMesh" uid="uid://dakjw3wucu53r" path="res://assets/vfx/vfxArrow_Circle_001.res" id="76_5628o"]
 [ext_resource type="Shader" uid="uid://b7xdbv2tdecxj" path="res://materials/shaders/cycle_line_shader.gdshader" id="76_i3uta"]
+[ext_resource type="Resource" uid="uid://c2svk6xqoggxj" path="res://data/imbuement_effects/imbuement_give_cheer_turn.tres" id="77_ell1s"]
 [ext_resource type="Shader" uid="uid://cb0aqg2fneq8d" path="res://materials/shaders/pointer_indicator_line.gdshader" id="78_cwgap"]
+[ext_resource type="Resource" uid="uid://bsqvqkfrwnjgd" path="res://data/imbuement_effects/imbuement_give_money_basic.tres" id="78_j4tta"]
+[ext_resource type="Resource" uid="uid://dnglxnfa8wok4" path="res://data/imbuement_effects/imbuement_damage_defense.tres" id="84_epi3u"]
+[ext_resource type="Resource" uid="uid://b28budmlsxvsq" path="res://data/imbuement_effects/imbuement_damage_self.tres" id="85_n2sb7"]
 [ext_resource type="Script" uid="uid://b140lw26qadyg" path="res://otterlib/stretcher3d.gd" id="87_pwsyv"]
+[ext_resource type="Resource" uid="uid://c5e6q04e8388p" path="res://data/imbuement_effects/imbuement_max_health.tres" id="89_v78r4"]
+[ext_resource type="Resource" uid="uid://7ohtykyha4mc" path="res://data/imbuement_effects/imbuement_the_one.tres" id="90_n2sb7"]
 [ext_resource type="PackedScene" uid="uid://drqkk1gdjkcow" path="res://scenes/shop/shop_label.tscn" id="96_71bxy"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0de7l"]
@@ -193,6 +208,19 @@ metadata/_custom_type_script = "uid://di6fi4200kyxe"
 script = ExtResource("10_7x3ck")
 main_target = SubResource("Resource_vvpk2")
 metadata/_custom_type_script = "uid://dlgb7noehjano"
+
+[sub_resource type="Resource" id="Resource_5ru8x"]
+script = ExtResource("5_xoeau")
+every_tile = true
+faction = 1
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[sub_resource type="Resource" id="Resource_oo6xx"]
+script = ExtResource("11_nliq0")
+points_given = -5
+event = 512
+main_target = SubResource("Resource_5ru8x")
+metadata/_custom_type_script = "uid://b8w5q1k7is7sg"
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vyqle"]
 texture = ExtResource("50_avmo2")
@@ -796,7 +824,7 @@ selection_svp = NodePath("../TileDisplayViewport/MarginContainer/SubViewportCont
 enemy_tile_container = NodePath("../EnemyTileContainer")
 light = NodePath("../DirectionalLight3D")
 default_cycle_tasks = Array[ExtResource("4_vyqle")]([SubResource("Resource_xoeau")])
-varied_cycle_tasks = Array[ExtResource("4_vyqle")]([SubResource("Resource_baljx"), SubResource("Resource_7noa1"), SubResource("Resource_7x3ck"), SubResource("Resource_o46vb")])
+varied_cycle_tasks = Array[ExtResource("4_vyqle")]([SubResource("Resource_baljx"), SubResource("Resource_7noa1"), SubResource("Resource_7x3ck"), SubResource("Resource_o46vb"), SubResource("Resource_oo6xx")])
 
 [node name="TutorialManager" type="Node" parent="." unique_id=710761282 node_paths=PackedStringArray("cycle", "turn", "money", "score", "cycle_effects", "play_button", "deck")]
 script = ExtResource("11_i3uta")
@@ -1544,7 +1572,7 @@ resources = Array[Resource]([ExtResource("25_w37fy"), ExtResource("25_4mai8")])
 
 [node name="ShopTileContainer" type="Node" parent="." unique_id=1521082501]
 script = ExtResource("14_x5p1p")
-resources = Array[Resource]([ExtResource("43_66xay"), ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("19_4v2jo"), ExtResource("45_avmo2"), ExtResource("19_xex6t"), ExtResource("21_l1i01"), ExtResource("17_5b14r"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("22_aa0lp"), ExtResource("15_vaj68")])
+resources = Array[Resource]([ExtResource("66_oykgp"), ExtResource("65_lea4x"), ExtResource("43_66xay"), ExtResource("43_vf1qt"), ExtResource("68_5ru8x"), ExtResource("44_j4tta"), ExtResource("69_oo6xx"), ExtResource("63_hsv4y"), ExtResource("64_lrvy0"), ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("19_4v2jo"), ExtResource("45_avmo2"), ExtResource("19_xex6t"), ExtResource("21_l1i01"), ExtResource("17_5b14r"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("22_aa0lp"), ExtResource("15_vaj68")])
 
 [node name="EnemyTileContainer" type="Node" parent="." unique_id=1200513788]
 script = ExtResource("20_5b14r")
@@ -1552,11 +1580,11 @@ resources = Array[Resource]([ExtResource("23_082n1"), ExtResource("24_082n1"), E
 
 [node name="AllTileContainer" type="Node" parent="." unique_id=439354896]
 script = ExtResource("32_87ddb")
-resources = Array[Resource]([ExtResource("35_56gn1"), ExtResource("43_66xay"), ExtResource("23_082n1"), ExtResource("24_082n1"), ExtResource("22_xfvwf"), ExtResource("35_jo4nb"), ExtResource("33_mc3al"), ExtResource("33_3gvs5"), ExtResource("33_vuohh"), ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("39_jo4nb"), ExtResource("33_ib7ph"), ExtResource("19_4v2jo"), ExtResource("38_ra4rb"), ExtResource("35_3gvs5"), ExtResource("45_avmo2"), ExtResource("19_xex6t"), ExtResource("36_mc3al"), ExtResource("21_l1i01"), ExtResource("17_5b14r"), ExtResource("37_bqa6y"), ExtResource("38_du4n2"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("39_ra4rb"), ExtResource("22_aa0lp"), ExtResource("40_ple6s"), ExtResource("15_vaj68")])
+resources = Array[Resource]([ExtResource("35_56gn1"), ExtResource("66_oykgp"), ExtResource("65_lea4x"), ExtResource("43_66xay"), ExtResource("43_vf1qt"), ExtResource("68_5ru8x"), ExtResource("23_082n1"), ExtResource("24_082n1"), ExtResource("22_xfvwf"), ExtResource("44_j4tta"), ExtResource("69_oo6xx"), ExtResource("63_hsv4y"), ExtResource("64_lrvy0"), ExtResource("35_jo4nb"), ExtResource("33_mc3al"), ExtResource("33_3gvs5"), ExtResource("33_vuohh"), ExtResource("15_i2p71"), ExtResource("16_xa8c5"), ExtResource("39_jo4nb"), ExtResource("33_ib7ph"), ExtResource("19_4v2jo"), ExtResource("38_ra4rb"), ExtResource("35_3gvs5"), ExtResource("45_avmo2"), ExtResource("19_xex6t"), ExtResource("36_mc3al"), ExtResource("21_l1i01"), ExtResource("17_5b14r"), ExtResource("37_bqa6y"), ExtResource("38_du4n2"), ExtResource("16_i2p71"), ExtResource("24_r62pu"), ExtResource("22_iu0sx"), ExtResource("39_ra4rb"), ExtResource("22_aa0lp"), ExtResource("40_ple6s"), ExtResource("15_vaj68")])
 
 [node name="RealImbuementContainer" type="Node" parent="." unique_id=746442226]
 script = ExtResource("73_8jd3k")
-resources = Array[Resource]([ExtResource("74_tssr6")])
+resources = Array[Resource]([ExtResource("84_epi3u"), ExtResource("85_n2sb7"), ExtResource("77_ell1s"), ExtResource("74_tssr6"), ExtResource("78_j4tta"), ExtResource("89_v78r4"), ExtResource("90_n2sb7")])
 
 [node name="VfxManager" type="Node" parent="." unique_id=1149999827]
 script = ExtResource("51_vyqle")

@@ -39,6 +39,9 @@ var _display_tile: Tile
 func is_active() -> bool:
   return _state.current != "done"
 
+func skip():
+  _state.current = "done"
+
 func _ready() -> void:
   inst = self
   

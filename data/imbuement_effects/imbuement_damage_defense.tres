@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="TileEffectGiveDefense" format=3 uid="uid://dnglxnfa8wok4"]
+
+[ext_resource type="Script" uid="uid://di6fi4200kyxe" path="res://data/tile_target_def.gd" id="1_p4pxf"]
+[ext_resource type="Script" uid="uid://dlgb7noehjano" path="res://scenes/tiles/effects/defense/tile_effect_give_defense.gd" id="1_v1xls"]
+
+[sub_resource type="Resource" id="Resource_034bo"]
+script = ExtResource("1_p4pxf")
+metadata/_custom_type_script = "uid://di6fi4200kyxe"
+
+[resource]
+script = ExtResource("1_v1xls")
+amount = 2
+event = 512
+main_target = SubResource("Resource_034bo")
+metadata/_custom_type_script = "uid://dlgb7noehjano"
